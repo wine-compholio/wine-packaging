@@ -304,7 +304,7 @@ Description: special build of the popular Wine software
  This package includes debugging symbols useful for reporting crashes and other
  failures.
 
-Package: {{ =package }}-compat
+Package: {{ =compat_package }}
 Architecture: i386 amd64
 Depends: {{ =package }}, ${misc:Depends}
 Section: otherosfs
@@ -339,3 +339,13 @@ Description: special build of the popular Wine software
  .
  This compatibility package allows to use {{ =package }} system-wide as
  the default Wine version.
+
+{{ if staging }}
+Package: {{ =package }}-compat
+Architecture: i386 amd64
+Depends: {{ = compat_package }}, ${misc:Depends}
+Priority: extra
+Section: oldlibs
+Description: Transitional dummy package
+ This is a transitional dummy package. It can safely be removed.
+{{ endif }}

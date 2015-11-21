@@ -54,17 +54,17 @@ override_dh_install:
 	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine64-preloader
 
 	# Create compatibility symlinks
-	mkdir -p debian/{{ =package }}-compat/usr/bin
+	mkdir -p debian/{{ =compat_package }}/usr/bin
 
 	for _file in $$(ls "debian/{{ =package }}/{{ =prefix }}/bin"); do \
-		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =compat_package }}/usr/bin/$$_file"; \
 	done
 	for _file in wine wine-preloader; do \
-		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =compat_package }}/usr/bin/$$_file"; \
 	done
 ifeq ($(DEB_HOST_ARCH),amd64)
 	for _file in wine64 wine64-preloader; do \
-		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =compat_package }}/usr/bin/$$_file"; \
 	done
 endif
 

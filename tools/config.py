@@ -31,12 +31,14 @@ def _m(*x):
 
 devel_config = {
     "package" : "wine-devel",
+    "compat_package": "winehq-devel",
     "prefix"  : "/opt/wine-devel",
     "staging" : False,
 }
 
 staging_config = {
     "package" : "wine-staging",
+    "compat_package": "winehq-staging",
     "prefix"  : "/opt/wine-staging",
     "staging" : True
 }
