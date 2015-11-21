@@ -166,7 +166,7 @@ Recommends: libcapi20-3,
             libdbus-1-3,
             libfontconfig1 | libfontconfig,
             libfreetype6,
-{{ if debian_version and debian_version >= 8 }}
+{{ if debian_version >= 8 }}
             libgnutls-deb0-28,
 {{ else }}
             libgnutls26,
