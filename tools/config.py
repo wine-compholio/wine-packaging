@@ -59,6 +59,6 @@ package_configs = {
     "debian-sid-development"     : _m( devel_config,   debian_base, dict(debian_version=999, debian_codename="sid") ),
     "debian-sid-staging"         : _m( staging_config, debian_base, dict(debian_version=999, debian_codename="sid") ),
 
-    "ubuntu-any-development"     : _m( devel_config,   debian_base, dict(ubuntu_version=999) ),
-    "ubuntu-any-staging"         : _m( staging_config, debian_base, dict(ubuntu_version=999) ),
+    "ubuntu-any-development"     : _m( devel_config,   debian_base, dict(ubuntu_version=1) ),
+    "ubuntu-any-staging"         : _m( staging_config, debian_base, dict(ubuntu_version=1) ),
 }

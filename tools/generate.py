@@ -25,9 +25,13 @@ import argparse
 import copy
 import os
 import re
+import shutil
 import stat
+import subprocess
 
 import config
+
+download_queue = {}
 
 def process_template(content, namespace):
     content_blocks = []
@@ -47,6 +51,7 @@ def process_template(content, namespace):
             compiled.append("%s__result.append(__content_blocks[%d])" %
                             (indent, len(content_blocks) - 1))
             only_control = block.endswith("\n")
+
         else:
             for line in block.split("\n"):
                 line = line.strip()
@@ -96,11 +101,10 @@ def process_template(content, namespace):
                     compiled.append("%s__result.append(%s)" % (indent, line[1:]))
                     only_control = False
 
-                else:
+                elif not line.startswith("#"):
                     compiled.append("%s%s" % (indent, line))
 
     assert len(controlstack) == 0
-
     namespace["__content_blocks"] = content_blocks
     namespace["__result"] = []
     exec "\n".join(compiled) in namespace
@@ -115,16 +119,24 @@ def copy_files(src, dst, namespace_template):
         file_out = os.path.join(dst, filename)
 
         if os.path.isfile(file_in):
+            downloads = []
             namespace = copy.deepcopy(namespace_template)
             namespace["__filename"]     = filename
             namespace["os"]             = os
+            namespace["download"]       = lambda x, y: downloads.append((x, y))
 
             with open(file_in, 'r') as fp:
                 content = fp.read()
 
             content = process_template(content, namespace)
-            file_out = os.path.join(dst, namespace["__filename"])
+            if namespace["__filename"] is None: continue
 
+            for (name, url) in downloads:
+                if not download_queue.has_key(url):
+                    download_queue[url] = []
+                download_queue[url].append(os.path.join(dst, name))
+
+            file_out = os.path.join(dst, namespace["__filename"])
             with open(file_out, 'w') as fp:
                 fp.write(content)
 
@@ -138,7 +150,7 @@ def copy_files(src, dst, namespace_template):
         permissions = os.stat(file_in)[stat.ST_MODE]
         os.chmod(file_out, permissions)
 
-def generate_package(distro, version, release, daily, dst):
+def generate_package(distro, version, release, daily, boot, dst):
     if not config.package_configs.has_key(distro):
         raise RuntimeError("%s is not a supported distro" % distro)
 
@@ -146,6 +158,7 @@ def generate_package(distro, version, release, daily, dst):
     namespace["package_version"] = version
     namespace["package_release"] = release
     namespace["package_daily"]   = daily
+    namespace["package_boot"]    = boot
 
     root_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./..")
     copy_files(os.path.join(root_directory, namespace["__src"]), dst, namespace)
@@ -156,6 +169,7 @@ if __name__ == '__main__':
     parser.add_argument("--rel", help="Release number of this build", default=1)
     parser.add_argument('--out', help="Output directory for build files", required=True)
     parser.add_argument('--daily', action='store_true', help="Generate build files for a daily build")
+    parser.add_argument('--boot', action='store_true', help="Generate boot script and download dependencies")
     parser.add_argument('--skip-name', action='store_true', help="Skip distro name in output directory (works only for one distro)")
     parser.add_argument('distribution', nargs="*", help="List of distros to create packaging files for")
     args = parser.parse_args()
@@ -172,4 +186,9 @@ if __name__ == '__main__':
 
     for distro in args.distribution:
         dst = args.out if args.skip_name else os.path.join(args.out, distro)
-        generate_package(distro, args.ver, args.rel, args.daily, dst)
+        generate_package(distro, args.ver, args.rel, args.daily, args.boot, dst)
+
+    for url, filenames in download_queue.iteritems():
+        subprocess.call(["curl", "-o", filenames[0], "--", url])
+        for filename in filenames[1:]:
+            shutil.copyfile(filenames[0], filename)
