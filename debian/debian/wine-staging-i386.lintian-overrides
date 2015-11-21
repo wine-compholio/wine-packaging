@@ -1,4 +1,4 @@
-{{ __path = os.path.join(__directory, "%s-i386.lintian-overrides" % package) }}
+{{ __filename = "%s-i386.lintian-overrides" % package }}
 # Wine preloader needs static linking to reserve memory and work properly, see
 # the comments at loader/preloader.c for a fuller explanation
 {{ =package }}-i386 binary: statically-linked-binary {{ =prefix }}/bin/wine-preloader

@@ -1,4 +1,4 @@
-{{ __path = os.path.join(__directory, "%s-i386.install" % package) }}
+{{ __filename = "%s-i386.install" % package }}
 {{ =prefix }}/lib/libwine.so*
 {{ =prefix }}/lib/wine
 {{ =prefix }}/bin/wine

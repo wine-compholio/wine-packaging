@@ -116,8 +116,6 @@ def copy_files(src, dst, namespace_template):
 
         if os.path.isfile(file_in):
             namespace = copy.deepcopy(namespace_template)
-            namespace["__path"]         = file_out
-            namespace["__directory"]    = dst
             namespace["__filename"]     = filename
             namespace["os"]             = os
 
@@ -125,7 +123,7 @@ def copy_files(src, dst, namespace_template):
                 content = fp.read()
 
             content = process_template(content, namespace)
-            file_out = namespace["__path"]
+            file_out = os.path.join(dst, namespace["__filename"])
 
             with open(file_out, 'w') as fp:
                 fp.write(content)

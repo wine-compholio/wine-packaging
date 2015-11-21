@@ -1,4 +1,4 @@
-{{ __path = os.path.join(__directory, "%s-amd64.install" % package) }}
+{{ __filename = "%s-amd64.install" % package }}
 {{ =prefix }}/lib64/libwine.so*
 {{ =prefix }}/lib64/wine
 {{ =prefix }}/bin/wine64

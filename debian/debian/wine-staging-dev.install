@@ -1,2 +1,2 @@
-{{ __path = os.path.join(__directory, "%s-dev.install" % package) }}
+{{ __filename = "%s-dev.install" % package }}
 {{ =prefix }}/include

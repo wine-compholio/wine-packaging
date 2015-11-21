@@ -1,4 +1,4 @@
-{{ __path = os.path.join(__directory, "%s.install" % package) }}
+{{ __path = "%s.install" % package }}
 {{ =prefix }}/bin
 {{ =prefix }}/share/applications
 {{ =prefix }}/share/wine

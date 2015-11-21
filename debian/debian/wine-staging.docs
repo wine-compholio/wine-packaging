@@ -1,4 +1,4 @@
-{{ __path = os.path.join(__directory, "%s.docs" % package) }}
+{{ __filename = "%s.docs" % package }}
 documentation/README.*
 ANNOUNCE
 AUTHORS
