@@ -2,7 +2,6 @@ Source: {{ =package }}
 Section: otherosfs
 Priority: optional
 Maintainer: Michael Müller <michael@fds-team.de>
-XSBC-Original-Maintainer: Erich E. Hoover <erich.e.hoover@gmail.com>
 XSBC-Original-Maintainer: Scott Ritchie <scottritchie@ubuntu.com>
 Build-Depends: autotools-dev,
                autoconf,
