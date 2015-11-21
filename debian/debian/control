@@ -311,7 +311,7 @@ Depends: {{ =package }}, ${misc:Depends}
 Section: otherosfs
 Priority: optional
 Replaces:   wine, wine1.4, wine1.5, wine1.6, wine1.7, wine-i386, wine1.4-i386,
-            wine1.5-i386, wine1.6-i386, wine1.7-i386, ine-amd64, wine1.4-amd64,
+            wine1.5-i386, wine1.6-i386, wine1.7-i386, wine-amd64, wine1.4-amd64,
             wine1.5-amd64, wine1.6-amd64, wine1.7-amd64
 Conflicts:  wine, wine-i386, wine-amd64
 Provides:   wine, wine1.4, wine1.5, wine1.6, wine1.7, wine-i386, wine1.4-i386,
