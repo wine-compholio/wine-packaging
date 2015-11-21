@@ -2,4 +2,4 @@
 {{ codename = "~%s" % debian_codename if debian_codename != "" else "" }}
 {{ =package }} ({{ =package_version }}{{ =rel }}{{ =codename }}) unstable; urgency=low
   * Auto build.
- -- Sebastian Lackner <sebastian@fds-team.de>  {{ =debian_time }}
+ -- Michael Müller <michael@fds-team.de>  {{ =debian_time }}
