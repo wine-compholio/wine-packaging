@@ -35,7 +35,7 @@ def process_template(content, namespace):
     controlstack = []
     only_control = False
 
-    for i, block in enumerate(re.split("{{(.*?)}}", content)):
+    for i, block in enumerate(re.split("{{(.*?)}}", content, flags=re.DOTALL)):
         if i % 2 == 0:
             if only_control and block.startswith("\n"):
                 block = block[1:]

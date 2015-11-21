@@ -1,5 +1,8 @@
-{{ rel = "-%s" % package_release if package_release != 1 else "" }}
-{{ codename = "~%s" % debian_codename if debian_codename != "" else "" }}
-{{ =package }} ({{ =package_version }}{{ =rel }}{{ =codename }}) unstable; urgency=low
+{{
+	rel      = "-%s" % package_release if package_release != 1 else ""
+	codename = "~%s" % debian_codename if debian_codename != "" else ""
+	version  = "%s%s%s" % (package_version, rel, codename)
+}}
+{{ =package }} ({{ =version }}) unstable; urgency=low
   * Auto build.
  -- Michael Müller <michael@fds-team.de>  {{ =debian_time }}
