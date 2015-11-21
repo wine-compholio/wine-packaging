@@ -1,7 +1,8 @@
-Source: wine-staging
+Source: {{ =package }}
 Section: otherosfs
 Priority: optional
-Maintainer: Erich E. Hoover <erich.e.hoover@gmail.com>
+Maintainer: Michael Müller <michael@fds-team.de>
+XSBC-Original-Maintainer: Erich E. Hoover <erich.e.hoover@gmail.com>
 XSBC-Original-Maintainer: Scott Ritchie <scottritchie@ubuntu.com>
 Build-Depends: autotools-dev,
                autoconf,
@@ -27,7 +28,11 @@ Build-Depends: autotools-dev,
                libfreetype6-dev,
                libgl1-mesa-dev | nvidia-glx-dev | fglrx-driver-dev | libgl-dev,
                libglu1-mesa-dev | libglu-dev,
+{{ if debian_version >= 8 }}
+               libgnutls28-dev,
+{{ else }}
                libgnutls-dev,
+{{ endif }}
                libgphoto2-dev | libgphoto2-6-dev | libgphoto2-2-dev (>= 2.4.6),
                libgsm1-dev,
                libgtk-3-dev,
@@ -46,9 +51,13 @@ Build-Depends: autotools-dev,
                libssl-dev,
                libstdc++6-4.5-dev | libstdc++-dev,
                libtiff5-dev | libtiff4-dev | libtiff-dev,
+{{ if staging }}
                libtxc-dxtn-s2tc-dev,
+{{ endif }}
                libv4l-dev,
+{{ if staging }}
                libva-dev,
+{{ endif }}
                libx11-dev,
                libxcomposite-dev,
                libxcursor-dev,
@@ -71,7 +80,7 @@ Build-Depends: autotools-dev,
                x11proto-xinerama-dev
 Standards-Version: 3.9.5
 
-Package: wine-staging-i386
+Package: {{ =package }}-i386
 Architecture: i386
 Multi-Arch: foreign
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
@@ -83,20 +92,37 @@ Recommends: libcapi20-3,
             libdbus-1-3,
             libfontconfig1 | libfontconfig,
             libfreetype6,
+{{ if debian_version >= 8 }}
+            libgnutls-deb0-28,
+{{ else }}
             libgnutls26,
+{{ endif }}
+{{ if staging }}
             libgtk-3-0,
+{{ endif }}
+{{ if debian_version >= 8 }}
+            libjpeg62-turbo,
+{{ else }}
             libjpeg8,
+{{ endif }}
             libosmesa6,
             libpcap0.8,
             libpng12-0,
             libpulse0,
+{{ if debian_version < 9 }}
+{{ # libsane leads to package conflicts }}
             libsane,
+{{ endif }}
             libssl1.0.0,
             libtiff5 | libtiff4,
+{{ if staging }}
             libtxc-dxtn-s2tc0,
+{{ endif }}
             libv4l-0,
+{{ if staging }}
             libva-drm1,
             libva-x11-1,
+{{ endif }}
             libxcomposite1,
             libxcursor1,
             libxi6,
@@ -111,9 +137,11 @@ Recommends: libcapi20-3,
 Section: otherosfs
 Priority: optional
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing my current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -126,7 +154,7 @@ Description: special build of the popular Wine software
  will work, there may be some loss of functionality compared with the stable
  release provided by the regular wine package.
 
-Package: wine-staging-amd64
+Package: {{ =package }}-amd64
 Architecture: amd64
 Multi-Arch: foreign
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
@@ -138,20 +166,37 @@ Recommends: libcapi20-3,
             libdbus-1-3,
             libfontconfig1 | libfontconfig,
             libfreetype6,
+{{ if debian_version and debian_version >= 8 }}
+            libgnutls-deb0-28,
+{{ else }}
             libgnutls26,
+{{ endif }}
+{{ if staging }}
             libgtk-3-0,
+{{ endif }}
+{{ if debian_version >= 8 }}
+            libjpeg62-turbo,
+{{ else }}
             libjpeg8,
+{{ endif }}
             libosmesa6,
             libpcap0.8,
             libpng12-0,
             libpulse0,
+{{ if debian_version < 9 }}
+{{ # libsane leads to package conflicts }}
             libsane,
+{{ endif }}
             libssl1.0.0,
             libtiff5 | libtiff4,
+{{ if staging }}
             libtxc-dxtn-s2tc0,
+{{ endif }}
             libv4l-0,
+{{ if staging }}
             libva-drm1,
             libva-x11-1,
+{{ endif }}
             libxcomposite1,
             libxcursor1,
             libxi6,
@@ -166,9 +211,11 @@ Recommends: libcapi20-3,
 Section: otherosfs
 Priority: optional
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing my current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -181,19 +228,21 @@ Description: special build of the popular Wine software
  will work, there may be some loss of functionality compared with the stable
  release provided by the regular wine package.
 
-Package: wine-staging
+Package: {{ =package }}
 Architecture: i386 amd64
 Multi-Arch: foreign
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${misc:Depends}, ${shlibs:Depends},
-            wine-staging-i386  (= ${binary:Version}) [i386 amd64],
-            wine-staging-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
+            {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: otherosfs
 Priority: optional
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing my current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -208,19 +257,21 @@ Description: special build of the popular Wine software
  will work, there may be some loss of functionality compared with the stable
  release provided by the regular wine package.
 
-Package: wine-staging-dev
+Package: {{ =package }}-dev
 Architecture: i386 amd64
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    libc6-dev,
             ${shlibs:Depends},
-            wine-staging-i386  (= ${binary:Version}) [i386 amd64],
-            wine-staging-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
+            {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: libdevel
 Priority: optional
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing my current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -230,19 +281,21 @@ Description: special build of the popular Wine software
  This package consists of the development files needed to compile programs
  using wine's free version of the Microsoft Windows API.
 
-Package: wine-staging-dbg
+Package: {{ =package }}-dbg
 Architecture: i386 amd64
 Multi-Arch: same
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${shlibs:Depends},
-            wine-staging-i386  (= ${binary:Version}) [i386 amd64],
-            wine-staging-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
+            {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: debug
 Priority: optional
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing my current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -252,9 +305,9 @@ Description: special build of the popular Wine software
  This package includes debugging symbols useful for reporting crashes and other
  failures.
 
-Package: wine-staging-compat
+Package: {{ =package }}-compat
 Architecture: i386 amd64
-Depends: wine-staging, ${misc:Depends}
+Depends: {{ =package }}, ${misc:Depends}
 Section: otherosfs
 Priority: optional
 Replaces:   wine, wine1.4, wine1.5, wine1.6, wine1.7, wine-i386, wine1.4-i386,
@@ -266,9 +319,11 @@ Provides:   wine, wine1.4, wine1.5, wine1.6, wine1.7, wine-i386, wine1.4-i386,
             wine1.4-amd64 [amd64], wine1.5-amd64 [amd64], wine1.6-amd64 [amd64],
             wine1.7-amd64 [amd64]
 Description: special build of the popular Wine software
+{{ if staging }}
  The Staging Edition is a special build of the popular Wine software
  with patches representing our current staging tree for Wine.
  .
+{{ endif }}
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -283,45 +338,5 @@ Description: special build of the popular Wine software
  will work, there may be some loss of functionality compared with the stable
  release provided by the regular wine package.
  .
- This compatibility package allows to use Wine Staging system-wide as
+ This compatibility package allows to use {{ =package }} system-wide as
  the default Wine version.
-
-Package: wine-compholio
-Architecture: i386 amd64
-Depends: wine-staging, ${misc:Depends}
-Priority: extra
-Section: oldlibs
-Description: Transitional dummy package
- This is a transitional dummy package. It can safely be removed.
-
-Package: wine-compholio-i386
-Architecture: i386
-Depends: wine-staging-i386, ${misc:Depends}
-Priority: extra
-Section: oldlibs
-Description: Transitional dummy package
- This is a transitional dummy package. It can safely be removed.
-
-Package: wine-compholio-amd64
-Architecture: amd64
-Depends: wine-staging-amd64, ${misc:Depends}
-Priority: extra
-Section: oldlibs
-Description: Transitional dummy package
- This is a transitional dummy package. It can safely be removed.
-
-Package: wine-compholio-dev
-Architecture: i386 amd64
-Depends: wine-staging-dev, ${misc:Depends}
-Priority: extra
-Section: oldlibs
-Description: Transitional dummy package
- This is a transitional dummy package. It can safely be removed.
-
-Package: wine-compholio-dbg
-Architecture: i386 amd64
-Depends: wine-staging-dbg, ${misc:Depends}
-Priority: extra
-Section: oldlibs
-Description: Transitional dummy package
- This is a transitional dummy package. It can safely be removed.

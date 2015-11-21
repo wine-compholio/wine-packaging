@@ -30,13 +30,15 @@ def __m(*x):
     return u
 
 __devel_config = {
-    "package" : "wine",
-    "prefix"  : "/opt/wine-devel"
+    "package" : "wine-devel",
+    "prefix"  : "/opt/wine-devel",
+    "staging" : False
 }
 
 __staging_config = {
     "package" : "wine-staging",
-    "prefix"  : "/opt/wine-staging"
+    "prefix"  : "/opt/wine-staging",
+    "staging" : True
 }
 
 __debian_base = {

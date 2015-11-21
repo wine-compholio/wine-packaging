@@ -1,28 +1,29 @@
-/opt/wine-staging/bin
-/opt/wine-staging/share/applications
-/opt/wine-staging/share/wine
-/opt/wine-staging/share/man/de.UTF-8/man?/winemaker.?*
-/opt/wine-staging/share/man/de.UTF-8/man?/wineserver.?*
-/opt/wine-staging/share/man/fr.UTF-8/man?/winemaker.?*
-/opt/wine-staging/share/man/fr.UTF-8/man?/wineserver.?*
-/opt/wine-staging/share/man/man?/msiexec.?*
-/opt/wine-staging/share/man/man?/notepad.?*
-/opt/wine-staging/share/man/man?/regedit.?*
-/opt/wine-staging/share/man/man?/regsvr32.?*
-/opt/wine-staging/share/man/man?/widl.?*
-/opt/wine-staging/share/man/man?/wineboot.?*
-/opt/wine-staging/share/man/man?/winebuild.?*
-/opt/wine-staging/share/man/man?/winecfg.?*
-/opt/wine-staging/share/man/man?/wineconsole.?*
-/opt/wine-staging/share/man/man?/winecpp.?*
-/opt/wine-staging/share/man/man?/winedbg.?*
-/opt/wine-staging/share/man/man?/winedump.?*
-/opt/wine-staging/share/man/man?/winefile.?*
-/opt/wine-staging/share/man/man?/wineg++.?*
-/opt/wine-staging/share/man/man?/winegcc.?*
-/opt/wine-staging/share/man/man?/winemaker.?*
-/opt/wine-staging/share/man/man?/winemine.?*
-/opt/wine-staging/share/man/man?/winepath.?*
-/opt/wine-staging/share/man/man?/wineserver.?*
-/opt/wine-staging/share/man/man?/wmc.?*
-/opt/wine-staging/share/man/man?/wrc.?*
+{{ __path = os.path.join(__directory, "%s.install" % package) }}
+{{ =prefix }}/bin
+{{ =prefix }}/share/applications
+{{ =prefix }}/share/wine
+{{ =prefix }}/share/man/de.UTF-8/man?/winemaker.?*
+{{ =prefix }}/share/man/de.UTF-8/man?/wineserver.?*
+{{ =prefix }}/share/man/fr.UTF-8/man?/winemaker.?*
+{{ =prefix }}/share/man/fr.UTF-8/man?/wineserver.?*
+{{ =prefix }}/share/man/man?/msiexec.?*
+{{ =prefix }}/share/man/man?/notepad.?*
+{{ =prefix }}/share/man/man?/regedit.?*
+{{ =prefix }}/share/man/man?/regsvr32.?*
+{{ =prefix }}/share/man/man?/widl.?*
+{{ =prefix }}/share/man/man?/wineboot.?*
+{{ =prefix }}/share/man/man?/winebuild.?*
+{{ =prefix }}/share/man/man?/winecfg.?*
+{{ =prefix }}/share/man/man?/wineconsole.?*
+{{ =prefix }}/share/man/man?/winecpp.?*
+{{ =prefix }}/share/man/man?/winedbg.?*
+{{ =prefix }}/share/man/man?/winedump.?*
+{{ =prefix }}/share/man/man?/winefile.?*
+{{ =prefix }}/share/man/man?/wineg++.?*
+{{ =prefix }}/share/man/man?/winegcc.?*
+{{ =prefix }}/share/man/man?/winemaker.?*
+{{ =prefix }}/share/man/man?/winemine.?*
+{{ =prefix }}/share/man/man?/winepath.?*
+{{ =prefix }}/share/man/man?/wineserver.?*
+{{ =prefix }}/share/man/man?/wmc.?*
+{{ =prefix }}/share/man/man?/wrc.?*

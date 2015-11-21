@@ -10,12 +10,14 @@ export CC = $(shell for _cc in gcc-4.5 gcc-4.7 gcc-4.9 gcc false; do \
 
 override_dh_auto_configure:
 
+{{ if staging }}
 	# Apply our patches, reconfigure, and update the wineserver protocol request data
 	"$(CURDIR)/patches/patchinstall.sh" DESTDIR="$(CURDIR)" --all
+{{ endif }}
 
 	# Run configure
 ifeq ($(DEB_BUILD_ARCH), amd64)
-	./configure --prefix=/opt/wine-staging \
+	./configure --prefix={{ =prefix }} \
 				--libdir=\$${prefix}/lib64 \
 				--mandir=\$${prefix}/share/man \
 				--infodir=\$${prefix}/share/info \
@@ -24,7 +26,7 @@ ifeq ($(DEB_BUILD_ARCH), amd64)
 				--with-xattr \
 				$(CONFFLAGS)
 else
-	./configure --prefix=/opt/wine-staging \
+	./configure --prefix={{ =prefix }} \
 				--libdir=\$${prefix}/lib \
 				--mandir=\$${prefix}/share/man \
 				--infodir=\$${prefix}/share/info \
@@ -39,47 +41,40 @@ override_dh_auto_test:
 
 
 override_dh_installdocs:
-	dh_installdocs --link-doc=wine-staging
+	dh_installdocs --link-doc={{ =package }}
 
 
 override_dh_install:
 	dh_install --fail-missing
 
 	# These files will end up in multiple packages otherwise
-	rm -f debian/wine-staging/opt/wine-staging/bin/wine
-	rm -f debian/wine-staging/opt/wine-staging/bin/wine-preloader
-	rm -f debian/wine-staging/opt/wine-staging/bin/wine64
-	rm -f debian/wine-staging/opt/wine-staging/bin/wine64-preloader
+	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine
+	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine-preloader
+	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine64
+	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine64-preloader
 
 	# Create compatibility symlinks
-	mkdir -p debian/wine-compholio/opt/wine-compholio/bin
-	mkdir -p debian/wine-staging-compat/usr/bin
+	mkdir -p debian/{{ =package }}-compat/usr/bin
 
-	for _file in $$(ls "debian/wine-staging/opt/wine-staging/bin"); do \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-compholio/opt/wine-compholio/bin/$$_file"; \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-staging-compat/usr/bin/$$_file"; \
+	for _file in $$(ls "debian/{{ =package }}/{{ =prefix }}/bin"); do \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
 	done
-
-	# Architecture specific compatibility symlinks
-ifeq ($(DEB_HOST_ARCH),amd64)
-	for _file in wine wine-preloader wine64 wine64-preloader; do \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-compholio/opt/wine-compholio/bin/$$_file"; \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-staging-compat/usr/bin/$$_file"; \
-	done
-else
 	for _file in wine wine-preloader; do \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-compholio/opt/wine-compholio/bin/$$_file"; \
-		ln -s "/opt/wine-staging/bin/$$_file" "debian/wine-staging-compat/usr/bin/$$_file"; \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
+	done
+ifeq ($(DEB_HOST_ARCH),amd64)
+	for _file in wine64 wine64-preloader; do \
+		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =package }}-compat/usr/bin/$$_file"; \
 	done
 endif
 
 override_dh_strip:
-	dh_strip -Xwine-pthread -Xwine-kthread --dbg-package=wine-staging-dbg
+	dh_strip -Xwine-pthread -Xwine-kthread --dbg-package={{ =package }}-dbg
 
 
 override_dh_shlibdeps:
 ifeq ($(DEB_HOST_ARCH),amd64)
-	dh_shlibdeps -l $(CURDIR)/debian/tmp/opt/wine-staging/lib64/
+	dh_shlibdeps -l $(CURDIR)/debian/tmp/{{ =prefix }}/lib64/
 else
-	dh_shlibdeps -l $(CURDIR)/debian/tmp/opt/wine-staging/lib/
+	dh_shlibdeps -l $(CURDIR)/debian/tmp/{{ =prefix }}/lib/
 endif

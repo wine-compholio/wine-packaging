@@ -1,4 +1,5 @@
-/opt/wine-staging/lib64/libwine.so*
-/opt/wine-staging/lib64/wine
-/opt/wine-staging/bin/wine64
-/opt/wine-staging/bin/wine64-preloader
+{{ __path = os.path.join(__directory, "%s-amd64.install" % package) }}
+{{ =prefix }}/lib64/libwine.so*
+{{ =prefix }}/lib64/wine
+{{ =prefix }}/bin/wine64
+{{ =prefix }}/bin/wine64-preloader

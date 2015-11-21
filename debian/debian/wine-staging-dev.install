@@ -1,1 +1,2 @@
-/opt/wine-staging/include
+{{ __path = os.path.join(__directory, "%s-dev.install" % package) }}
+{{ =prefix }}/include

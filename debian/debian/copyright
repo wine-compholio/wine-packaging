@@ -1,12 +1,20 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+{{ if staging }}
 Upstream-Name: Wine Staging
 Source: http://www.winehq.com/ and http://www.wine-staging.com/
+{{ else }}
+Upstream-Name: Wine
+Source: http://www.winehq.com/
+{{ endif }}
 
 Files: *
 Copyright: 1993-2015, the Wine project authors
+{{ if staging }}
            2014-2015, the Wine Staging project authors
+{{ endif }}
 License: LGPL-2.1
 
+{{ if staging }}
 Files: patches/fonts-Missing_Fonts/0001-fonts-Add-Liberation-Sans-as-an-Arial-replacement.patch
 Copyright: 2007, Red Hat
 License: LiberationFontLicense
@@ -21,6 +29,7 @@ License: Apache-2 or GPL-3+ with font embedding exceptions
 Files: patches/fonts-Missing_Fonts/0003-fonts-Add-Courier-Prime-as-a-Courier-New-replacement
 Copyright: 2013, Quote-Unquote Apps
 License: OFL1.1
+{{ endif }}
 
 License: LGPL-2.1
  This software is free software; you can redistribute it and/or
@@ -94,6 +103,7 @@ License: LiberationFontLicense
  Copyright © 2007 Red Hat, Inc. All rights reserved. LIBERATION is a trademark
  of Red Hat, Inc.
 
+{{ if staging }}
 License: GPL-3+ with font embedding exceptions
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -224,3 +234,4 @@ License: Apache-2
  .
  On Debian systems, the complete text of the Apache License 2.0 can be
  found in /usr/share/common-licenses/Apache-2.0 file.
+{{ endif }}
