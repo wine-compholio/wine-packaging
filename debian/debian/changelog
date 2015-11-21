@@ -1,5 +1,5 @@
 {{
-	rel      = "-%s" % package_release if package_release != 1 else ""
+	rel      = "-%s" % package_release if package_release != "" else ""
 	codename = "~%s" % debian_codename if debian_codename != "" else ""
 	version  = "%s%s%s" % (package_version, rel, codename)
 }}
