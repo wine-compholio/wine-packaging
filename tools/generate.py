@@ -144,6 +144,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Package file generator for Wine")
     parser.add_argument('--version', help="Wine version to build", required=True)
+    parser.add_argument("--rel", help="Release number", default=1)
     parser.add_argument('--out', help="Output directory for build files", required=True)
     parser.add_argument('--distros', help="List of distros to create packaging files for")
     parser.add_argument('--skip-name', action='store_true', help="Skip distro name in output directory (works only for one distro)")
@@ -169,6 +170,8 @@ if __name__ == '__main__':
     for distro in distros:
         namespace = copy.deepcopy(config.package_configs[distro])
         namespace["package_version"] = args.version
+        namespace["package_release"] = args.rel
+
         distro_out = outdir
         if not args.skip_name:
             distro_out = os.path.join(distro_out, distro)

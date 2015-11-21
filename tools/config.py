@@ -21,9 +21,10 @@
 #
 
 from email.Utils import formatdate
+import copy
 
 def __m(*x):
-    u = x[0]
+    u = copy.deepcopy(x[0])
     for v in x[1:]:
         u.update(v)
     return u
@@ -42,6 +43,7 @@ __debian_base = {
     "__src"          : "debian",
     "ubuntu_version" : 0,
     "debian_version" : 0,
+    "debian_codename": "",
     "debian_time"    : formatdate()
 }
 
