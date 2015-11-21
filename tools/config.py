@@ -23,25 +23,25 @@
 from email.Utils import formatdate
 import copy
 
-def __m(*x):
+def _m(*x):
     u = copy.deepcopy(x[0])
     for v in x[1:]:
         u.update(v)
     return u
 
-__devel_config = {
+devel_config = {
     "package" : "wine-devel",
     "prefix"  : "/opt/wine-devel",
     "staging" : False
 }
 
-__staging_config = {
+staging_config = {
     "package" : "wine-staging",
     "prefix"  : "/opt/wine-staging",
     "staging" : True
 }
 
-__debian_base = {
+debian_base = {
     "__src"          : "debian",
     "ubuntu_version" : 0,
     "debian_version" : 0,
@@ -50,15 +50,15 @@ __debian_base = {
 }
 
 package_configs = {
-    "debian-wheezy-development"  : __m(__devel_config,   __debian_base, dict(debian_version=7, debian_codename="wheezy")),
-    "debian-wheezy-staging"      : __m(__staging_config, __debian_base, dict(debian_version=7, debian_codename="wheezy")),
-    "debian-jessie-development"  : __m(__devel_config,   __debian_base, dict(debian_version=8, debian_codename="jessie")),
-    "debian-jessie-staging"      : __m(__staging_config, __debian_base, dict(debian_version=8, debian_codename="jessie")),
-    "debian-stretch-development" : __m(__devel_config,   __debian_base, dict(debian_version=9, debian_codename="stretch")),
-    "debian-stretch-staging"     : __m(__staging_config, __debian_base, dict(debian_version=9, debian_codename="stretch")),
-    "debian-sid-development"     : __m(__devel_config,   __debian_base, dict(debian_version=999, debian_codename="sid")),
-    "debian-sid-staging"         : __m(__staging_config, __debian_base, dict(debian_version=999, debian_codename="sid")),
+    "debian-wheezy-development"  : _m( devel_config,   debian_base, dict(debian_version=7,   debian_codename="wheezy") ),
+    "debian-wheezy-staging"      : _m( staging_config, debian_base, dict(debian_version=7,   debian_codename="wheezy") ),
+    "debian-jessie-development"  : _m( devel_config,   debian_base, dict(debian_version=8,   debian_codename="jessie") ),
+    "debian-jessie-staging"      : _m( staging_config, debian_base, dict(debian_version=8,   debian_codename="jessie") ),
+    "debian-stretch-development" : _m( devel_config,   debian_base, dict(debian_version=9,   debian_codename="stretch") ),
+    "debian-stretch-staging"     : _m( staging_config, debian_base, dict(debian_version=9,   debian_codename="stretch") ),
+    "debian-sid-development"     : _m( devel_config,   debian_base, dict(debian_version=999, debian_codename="sid") ),
+    "debian-sid-staging"         : _m( staging_config, debian_base, dict(debian_version=999, debian_codename="sid") ),
 
-    "ubuntu-any-development"     : __m(__devel_config,   __debian_base, dict(ubuntu_version=999)),
-    "ubuntu-any-staging"         : __m(__staging_config, __debian_base, dict(ubuntu_version=999))
+    "ubuntu-any-development"     : _m( devel_config,   debian_base, dict(ubuntu_version=999) ),
+    "ubuntu-any-staging"         : _m( staging_config, debian_base, dict(ubuntu_version=999) ),
 }
