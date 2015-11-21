@@ -32,7 +32,7 @@ def _m(*x):
 devel_config = {
     "package" : "wine-devel",
     "prefix"  : "/opt/wine-devel",
-    "staging" : False
+    "staging" : False,
 }
 
 staging_config = {

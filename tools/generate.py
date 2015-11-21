@@ -140,13 +140,14 @@ def copy_files(src, dst, namespace_template):
         permissions = os.stat(file_in)[stat.ST_MODE]
         os.chmod(file_out, permissions)
 
-def generate_package(distro, ver, rel, dst):
+def generate_package(distro, version, release, daily, dst):
     if not config.package_configs.has_key(distro):
         raise RuntimeError("%s is not a supported distro" % distro)
 
     namespace = copy.deepcopy(config.package_configs[distro])
-    namespace["package_version"] = args.ver
-    namespace["package_release"] = args.rel
+    namespace["package_version"] = version
+    namespace["package_release"] = release
+    namespace["package_daily"]   = daily
 
     root_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./..")
     copy_files(os.path.join(root_directory, namespace["__src"]), dst, namespace)
@@ -156,8 +157,9 @@ if __name__ == '__main__':
     parser.add_argument('--ver', help="Wine version to build", required=True)
     parser.add_argument("--rel", help="Release number of this build", default=1)
     parser.add_argument('--out', help="Output directory for build files", required=True)
-    parser.add_argument('distribution', nargs="*", help="List of distros to create packaging files for")
+    parser.add_argument('--daily', action='store_true', help="Generate build files for a daily build")
     parser.add_argument('--skip-name', action='store_true', help="Skip distro name in output directory (works only for one distro)")
+    parser.add_argument('distribution', nargs="*", help="List of distros to create packaging files for")
     args = parser.parse_args()
 
     if len(args.distribution) == 0:
@@ -172,4 +174,4 @@ if __name__ == '__main__':
 
     for distro in args.distribution:
         dst = args.out if args.skip_name else os.path.join(args.out, distro)
-        generate_package(distro, args.ver, args.rel, dst)
+        generate_package(distro, args.ver, args.rel, args.daily, dst)
