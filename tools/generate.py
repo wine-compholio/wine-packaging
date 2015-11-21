@@ -106,7 +106,7 @@ def process_template(content, namespace):
     exec "\n".join(compiled) in namespace
     return "".join(namespace["__result"])
 
-def copy_files(src, dst, variable_replace):
+def copy_files(src, dst, namespace_template):
     if not os.path.isdir(dst):
         os.makedirs(dst)
 
@@ -115,7 +115,7 @@ def copy_files(src, dst, variable_replace):
         file_out = os.path.join(dst, filename)
 
         if os.path.isfile(file_in):
-            namespace = copy.deepcopy(variable_replace)
+            namespace = copy.deepcopy(namespace_template)
             namespace["__path"]         = file_out
             namespace["__directory"]    = dst
             namespace["__filename"]     = filename
@@ -131,7 +131,7 @@ def copy_files(src, dst, variable_replace):
                 fp.write(content)
 
         elif os.path.isdir(file_in):
-            copy_files(file_in, file_out, variable_replace)
+            copy_files(file_in, file_out, namespace_template)
 
         else:
             raise RuntimeError("Found entry which is neither a file nor a directory")
@@ -140,39 +140,36 @@ def copy_files(src, dst, variable_replace):
         permissions = os.stat(file_in)[stat.ST_MODE]
         os.chmod(file_out, permissions)
 
+def generate_package(distro, ver, rel, dst):
+    if not config.package_configs.has_key(distro):
+        raise RuntimeError("%s is not a supported distro" % distro)
+
+    namespace = copy.deepcopy(config.package_configs[distro])
+    namespace["package_version"] = args.ver
+    namespace["package_release"] = args.rel
+
+    root_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./..")
+    copy_files(os.path.join(root_directory, namespace["__src"]), dst, namespace)
+
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(description="Package file generator for Wine")
-    parser.add_argument('--version', help="Wine version to build", required=True)
-    parser.add_argument("--rel", help="Release number", default=1)
+    parser.add_argument('--ver', help="Wine version to build", required=True)
+    parser.add_argument("--rel", help="Release number of this build", default=1)
     parser.add_argument('--out', help="Output directory for build files", required=True)
-    parser.add_argument('--distros', help="List of distros to create packaging files for")
+    parser.add_argument('distribution', nargs="*", help="List of distros to create packaging files for")
     parser.add_argument('--skip-name', action='store_true', help="Skip distro name in output directory (works only for one distro)")
-
     args = parser.parse_args()
-    outdir = os.path.abspath(args.out)
 
-    # check if we got a list of valid distros
-    if args.distros is not None:
-        distros = [x.strip() for x in args.distros.split(",")]
-        for distro in distros:
-            if distro not in config.package_configs:
-                raise RuntimeError("%s is not a supported distro" % distro)
-    else:
-        distros = config.package_configs.keys()
+    if len(args.distribution) == 0:
+        args.distribution = config.package_configs.keys()
 
-    if args.skip_name and len(distros) > 1:
-        raise RuntimeError("--skip-name can only be used with one distro" % distro)
+    for distro in args.distribution:
+        if not config.package_configs.has_key(distro):
+            raise RuntimeError("%s is not a supported distro" % distro)
 
-    tools_directory = os.path.dirname(os.path.realpath(__file__))
-    os.chdir(os.path.join(tools_directory, "./.."))
+    if args.skip_name and len(args.distribution) != 1:
+        raise RuntimeError("--skip-name can only be used with one distro")
 
-    for distro in distros:
-        namespace = copy.deepcopy(config.package_configs[distro])
-        namespace["package_version"] = args.version
-        namespace["package_release"] = args.rel
-
-        distro_out = outdir
-        if not args.skip_name:
-            distro_out = os.path.join(distro_out, distro)
-        copy_files(namespace["__src"], distro_out, namespace)
+    for distro in args.distribution:
+        dst = args.out if args.skip_name else os.path.join(args.out, distro)
+        generate_package(distro, args.ver, args.rel, dst)
