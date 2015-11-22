@@ -21,6 +21,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
 #
 
+from email.Utils import formatdate
 import argparse
 import copy
 import os
@@ -29,7 +30,56 @@ import shutil
 import stat
 import subprocess
 
-import config
+def _m(*x):
+    u = copy.deepcopy(x[0])
+    for v in x[1:]:
+        u.update(v)
+    return u
+
+DEVEL_CONFIG = {
+    "package" : "wine-devel",
+    "compat_package": "winehq-devel",
+    "prefix"  : "/opt/wine-devel",
+    "staging" : False,
+}
+
+STAGING_CONFIG = {
+    "package" : "wine-staging",
+    "compat_package": "winehq-staging",
+    "prefix"  : "/opt/wine-staging",
+    "staging" : True
+}
+
+DEBIAN_BASE = {
+    "__src"          : "debian",
+    "ubuntu_version" : 0,
+    "debian_version" : 0,
+    "debian_codename": "",
+    "debian_time"    : formatdate()
+}
+
+PACKAGE_CONFIGS = {
+    # Debian Wheezy
+    "debian-wheezy-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
+    "debian-wheezy-staging"      : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
+
+    # Debian Jessie
+    "debian-jessie-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=8,   debian_codename="jessie") ),
+    "debian-jessie-staging"      : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=8,   debian_codename="jessie") ),
+
+    # Debian Stretch
+    "debian-stretch-development" : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=9,   debian_codename="stretch") ),
+    "debian-stretch-staging"     : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=9,   debian_codename="stretch") ),
+
+    # Debian Sid
+    "debian-sid-development"     : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=999, debian_codename="sid") ),
+    "debian-sid-staging"         : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=999, debian_codename="sid") ),
+
+    # Ubuntu
+    "ubuntu-any-development"     : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(ubuntu_version=1) ),
+    "ubuntu-any-staging"         : _m( STAGING_CONFIG, DEBIAN_BASE, dict(ubuntu_version=1) ),
+}
+
 
 download_queue = {}
 
@@ -151,16 +201,16 @@ def copy_files(src, dst, namespace_template):
         os.chmod(file_out, permissions)
 
 def generate_package(distro, version, release, daily, boot, dst):
-    if not config.package_configs.has_key(distro):
+    if not PACKAGE_CONFIGS.has_key(distro):
         raise RuntimeError("%s is not a supported distro" % distro)
 
-    namespace = copy.deepcopy(config.package_configs[distro])
+    namespace = copy.deepcopy(PACKAGE_CONFIGS[distro])
     namespace["package_version"] = version
     namespace["package_release"] = release
     namespace["package_daily"]   = daily
     namespace["package_boot"]    = boot
 
-    root_directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "./..")
+    root_directory = os.path.dirname(os.path.realpath(__file__))
     copy_files(os.path.join(root_directory, namespace["__src"]), dst, namespace)
 
 if __name__ == '__main__':
@@ -175,10 +225,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if len(args.distribution) == 0:
-        args.distribution = config.package_configs.keys()
+        args.distribution = PACKAGE_CONFIGS.keys()
 
     for distro in args.distribution:
-        if not config.package_configs.has_key(distro):
+        if not PACKAGE_CONFIGS.has_key(distro):
             raise RuntimeError("%s is not a supported distro" % distro)
 
     if args.skip_name and len(args.distribution) != 1:
