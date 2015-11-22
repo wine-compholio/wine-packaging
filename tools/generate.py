@@ -166,7 +166,7 @@ def generate_package(distro, version, release, daily, boot, dst):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Package file generator for Wine")
     parser.add_argument('--ver', help="Wine version to build", required=True)
-    parser.add_argument("--rel", help="Release number of this build", default="")
+    parser.add_argument('--rel', help="Release number of this build", default="")
     parser.add_argument('--out', help="Output directory for build files", required=True)
     parser.add_argument('--daily', action='store_true', help="Generate build files for a daily build")
     parser.add_argument('--boot', action='store_true', help="Generate boot script and download dependencies")
@@ -192,3 +192,5 @@ if __name__ == '__main__':
         subprocess.call(["curl", "-o", filenames[0], "--", url])
         for filename in filenames[1:]:
             shutil.copyfile(filenames[0], filename)
+
+    exit(0)
