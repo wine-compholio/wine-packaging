@@ -1,10 +1,10 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 {{ if staging }}
 Upstream-Name: Wine Staging
-Source: http://www.winehq.com/ and http://www.wine-staging.com/
+Source: http://www.winehq.org/ and http://www.wine-staging.com/
 {{ else }}
 Upstream-Name: Wine
-Source: http://www.winehq.com/
+Source: http://www.winehq.org/
 {{ endif }}
 
 Files: *
