@@ -239,7 +239,7 @@ if __name__ == '__main__':
         generate_package(distro, args.ver, args.rel, args.daily, args.boot, dst)
 
     for url, filenames in download_queue.iteritems():
-        subprocess.call(["curl", "-o", filenames[0], "--", url])
+        subprocess.call(["curl", "-L", "-o", filenames[0], "--", url])
         for filename in filenames[1:]:
             shutil.copyfile(filenames[0], filename)
 
