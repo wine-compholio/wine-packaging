@@ -58,6 +58,11 @@ DEBIAN_BASE = {
     "debian_time"    : formatdate()
 }
 
+MAGEIA_BASE = {
+    "__src"          : "mageia",
+    "mageia_version" : 0,
+}
+
 PACKAGE_CONFIGS = {
     # Debian Wheezy
     "debian-wheezy-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
@@ -78,6 +83,10 @@ PACKAGE_CONFIGS = {
     # Ubuntu
     "ubuntu-any-development"     : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(ubuntu_version=1) ),
     "ubuntu-any-staging"         : _m( STAGING_CONFIG, DEBIAN_BASE, dict(ubuntu_version=1) ),
+
+    # Mageia
+    "mageia-any-development"     : _m( DEVEL_CONFIG,   MAGEIA_BASE, dict(mageia_version=1, package="wine-development") ),
+    "mageia-any-staging"         : _m( STAGING_CONFIG, MAGEIA_BASE, dict(mageia_version=1) ),
 }
 
 
