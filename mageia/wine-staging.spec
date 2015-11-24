@@ -229,14 +229,29 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 
 %install
 %makeinstall_std LDCONFIG=/bin/true
+
 # Create compatibility symlinks
 mkdir -p "%{buildroot}/usr/bin"
-for _file in $(ls "%{buildroot}/%{_prefix}/bin"); do \
-    ln -s "%{_prefix}/bin/$_file" "%{buildroot}/usr/bin/$_file"; \
+for _file in $(ls "%{buildroot}/%{_bindir}"); do \
+    ln -s "%{_bindir}/$_file" "%{buildroot}/usr/bin/$_file"; \
+done
+mkdir -p "%{buildroot}/usr/share/applications"
+for _file in $(ls "%{buildroot}/%{_datadir}/applications"); do \
+    ln -s "%{_datadir}/applications/$_file" "%{buildroot}/usr/share/applications/$_file"; \
+done
+for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
+    mkdir -p "%{buildroot}/usr/share/man/$_dir"; \
+    for _file in $(ls "%{buildroot}/%{_mandir}/$_dir"); do \
+        ln -s "%{_mandir}/$_dir/$_file" "%{buildroot}/usr/share/man/$_dir/$_file"; \
+    done; \
 done
 %ifarch x86_64
 for _file in wine wine-preloader; do \
     ln -s "%{_prefix}/bin/$_file" "%{buildroot}/usr/bin/$_file"; \
+done
+for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
+    mkdir -p "%{buildroot}/usr/share/man/$_dir"; \
+    ln -s "%{_mandir}/$_dir/wine.1" "%{buildroot}/usr/share/man/$_dir/wine.1"; \
 done
 %endif
 
@@ -338,3 +353,4 @@ done
 
 %files -n {{ =compat_package }}
 /usr/bin/*
+/usr/share/*
