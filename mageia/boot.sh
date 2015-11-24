@@ -2,7 +2,7 @@
 #!/bin/bash
 set -e -x
 
-# urpmi --auto-update
+urpmi --auto-update
 
 {{
 	url = "https://source.winehq.org/git/wine.git/snapshot"

@@ -230,29 +230,37 @@ export CFLAGS="%{optflags} -fno-omit-frame-pointer"
 %install
 %makeinstall_std LDCONFIG=/bin/true
 
-# Create compatibility symlinks
+# Compat symlinks for bindir
 mkdir -p "%{buildroot}/usr/bin"
 for _file in $(ls "%{buildroot}/%{_bindir}"); do \
     ln -s "%{_bindir}/$_file" "%{buildroot}/usr/bin/$_file"; \
-done
-mkdir -p "%{buildroot}/usr/share/applications"
-for _file in $(ls "%{buildroot}/%{_datadir}/applications"); do \
-    ln -s "%{_datadir}/applications/$_file" "%{buildroot}/usr/share/applications/$_file"; \
-done
-for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
-    mkdir -p "%{buildroot}/usr/share/man/$_dir"; \
-    for _file in $(ls "%{buildroot}/%{_mandir}/$_dir"); do \
-        ln -s "%{_mandir}/$_dir/$_file" "%{buildroot}/usr/share/man/$_dir/$_file"; \
-    done; \
 done
 %ifarch x86_64
 for _file in wine wine-preloader; do \
     ln -s "%{_prefix}/bin/$_file" "%{buildroot}/usr/bin/$_file"; \
 done
-for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
-    mkdir -p "%{buildroot}/usr/share/man/$_dir"; \
-    ln -s "%{_mandir}/$_dir/wine.1" "%{buildroot}/usr/share/man/$_dir/wine.1"; \
+%endif
+
+# Compat symlinks for desktop file
+mkdir -p "%{buildroot}/usr/share/applications"
+for _file in $(ls "%{buildroot}/%{_datadir}/applications"); do \
+    ln -s "%{_datadir}/applications/$_file" "%{buildroot}/usr/share/applications/$_file"; \
 done
+
+# Compat manpages
+for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
+    if [ -d "%{buildroot}/%{_mandir}/$_dir" ]; then \
+        mkdir -p "$(dirname "%{buildroot}/usr/share/man/$_dir")"; \
+        cp -pr "%{buildroot}/%{_mandir}/$_dir" "%{buildroot}/usr/share/man/$_dir"; \
+    else \
+        mkdir -p "%{buildroot}/usr/share/man/$_dir"; \
+    fi; \
+done
+%ifarch x86_64
+install -p -m 0644 loader/wine.man          "%{buildroot}/usr/share/man/man1/wine.1"
+install -p -m 0644 loader/wine.de.UTF-8.man "%{buildroot}/usr/share/man/de.UTF-8/man1/wine.1"
+install -p -m 0644 loader/wine.fr.UTF-8.man "%{buildroot}/usr/share/man/fr.UTF-8/man1/wine.1"
+install -p -m 0644 loader/wine.pl.UTF-8.man "%{buildroot}/usr/share/man/pl.UTF-8/man1/wine.1"
 %endif
 
 %files -n %{wine}
@@ -261,26 +269,45 @@ done
 %{_bindir}/wine64
 %{_bindir}/wine64-preloader
 %endif
-%{_bindir}/winecfg
-%{_bindir}/wineconsole*
-%{_bindir}/wineserver
-%{_bindir}/wineboot
 %{_bindir}/function_grep.pl
-%{_bindir}/msiexec
 {{ if staging }}
 %{_bindir}/msidb
 {{ endif }}
+%{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit
+%{_bindir}/regsvr32
+%{_bindir}/widl
+%{_bindir}/wineboot
+%{_bindir}/winebuild
+%{_bindir}/winecfg
+%{_bindir}/wineconsole*
+%{_bindir}/winecpp
+%{_bindir}/winedbg
+%{_bindir}/winedump
+%{_bindir}/winefile
+%{_bindir}/wineg++
+%{_bindir}/winegcc
+%{_bindir}/winemaker
 %{_bindir}/winemine
 %{_bindir}/winepath
-%{_bindir}/regsvr32
-%{_bindir}/winefile
+%{_bindir}/wineserver
+%{_bindir}/wmc
+%{_bindir}/wrc
 %lang(de) %{_mandir}/de.UTF-8/man?/winemaker.?*
 %lang(de) %{_mandir}/de.UTF-8/man?/wineserver.?*
 %lang(fr) %{_mandir}/fr.UTF-8/man?/winemaker.?*
 %lang(fr) %{_mandir}/fr.UTF-8/man?/wineserver.?*
-%{_mandir}/man?/wineserver.?*
+%{_mandir}/man?/widl.1*
+%{_mandir}/man?/winebuild.1*
+%{_mandir}/man?/winecpp.1*
+%{_mandir}/man?/winedbg.1*
+%{_mandir}/man?/winedump.1*
+%{_mandir}/man?/wineg++.1*
+%{_mandir}/man?/winegcc.1*
+%{_mandir}/man?/winemaker.1*
+%{_mandir}/man?/wmc.1*
+%{_mandir}/man?/wrc.1*
 %{_mandir}/man?/msiexec.?*
 %{_mandir}/man?/notepad.?*
 %{_mandir}/man?/regedit.?*
@@ -291,6 +318,7 @@ done
 %{_mandir}/man?/winefile.?*
 %{_mandir}/man?/winemine.?*
 %{_mandir}/man?/winepath.?*
+%{_mandir}/man?/wineserver.?*
 %dir %{_datadir}/wine
 %{_datadir}/wine/wine.inf
 %{_datadir}/wine/l_intl.nls
@@ -310,47 +338,31 @@ done
 
 %{_libdir}/libwine*.so.%{lib_major}*
 %dir %{_libdir}/wine
-%{_libdir}/wine/*.cpl.so
-%{_libdir}/wine/*.drv.so
-%{_libdir}/wine/*.dll.so
-%{_libdir}/wine/*.exe.so
-%{_libdir}/wine/*.acm.so
-%{_libdir}/wine/*.ocx.so
 %ifarch %{ix86}
 %{_libdir}/wine/*.vxd.so
 %{_libdir}/wine/*16.so
 %endif
-%{_libdir}/wine/*.tlb.so
+%{_libdir}/wine/*.a
+%{_libdir}/wine/*.acm.so
+%{_libdir}/wine/*.cpl.so
+%{_libdir}/wine/*.def
+%{_libdir}/wine/*.dll.so
+%{_libdir}/wine/*.drv.so
 %{_libdir}/wine/*.ds.so
+%{_libdir}/wine/*.exe.so
+%{_libdir}/wine/*.ocx.so
 %{_libdir}/wine/*.sys.so
+%{_libdir}/wine/*.tlb.so
 %{_libdir}/wine/fakedlls
+%{_libdir}/libwine*.so
 
 %files -n %{wine}-devel
-%{_libdir}/wine/*.a
-%{_libdir}/libwine*.so
-%{_libdir}/wine/*.def
 %{_includedir}/*
-%{_bindir}/wmc
-%{_bindir}/wrc
-%{_bindir}/winebuild
-%{_bindir}/winegcc
-%{_bindir}/wineg++
-%{_bindir}/winecpp
-%{_bindir}/widl
-%{_bindir}/winedbg
-%{_bindir}/winemaker
-%{_bindir}/winedump
-%{_mandir}/man1/wmc.1*
-%{_mandir}/man1/wrc.1*
-%{_mandir}/man1/winebuild.1*
-%{_mandir}/man1/winemaker.1*
-%{_mandir}/man1/winedump.1*
-%{_mandir}/man1/widl.1*
-%{_mandir}/man1/winedbg.1*
-%{_mandir}/man1/wineg++.1*
-%{_mandir}/man1/winegcc.1*
-%{_mandir}/man1/winecpp.1*
 
 %files -n {{ =compat_package }}
 /usr/bin/*
-/usr/share/*
+/usr/share/applications/*.desktop
+/usr/share/man/man?/*
+%lang(de) /usr/share/man/de.UTF-8/man?/*
+%lang(fr) /usr/share/man/fr.UTF-8/man?/*
+%lang(pl) /usr/share/man/pl.UTF-8/man?/*
