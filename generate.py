@@ -63,6 +63,11 @@ MAGEIA_BASE = {
     "mageia_version" : 0,
 }
 
+FEDORA_BASE = {
+    "__src"          : "fedora",
+    "fedora_version" : 0,
+}
+
 PACKAGE_CONFIGS = {
     # Debian Wheezy
     "debian-wheezy-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
@@ -87,6 +92,10 @@ PACKAGE_CONFIGS = {
     # Mageia
     "mageia-any-development"     : _m( DEVEL_CONFIG,   MAGEIA_BASE, dict(mageia_version=1, package="wine-development") ),
     "mageia-any-staging"         : _m( STAGING_CONFIG, MAGEIA_BASE, dict(mageia_version=1) ),
+
+    # Fedora
+    "fedora-any-development"     : _m( DEVEL_CONFIG,   FEDORA_BASE, dict(fedora_version=1, package="wine-development") ),
+    "fedora-any-staging"         : _m( STAGING_CONFIG, FEDORA_BASE, dict(fedora_version=1) ),
 }
 
 
