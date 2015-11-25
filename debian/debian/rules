@@ -53,9 +53,8 @@ override_dh_install:
 	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine64
 	rm -f debian/{{ =package }}/{{ =prefix }}/bin/wine64-preloader
 
-	# Create compatibility symlinks
+	# Compat symlinks for bindir
 	mkdir -p debian/{{ =compat_package }}/usr/bin
-
 	for _file in $$(ls "debian/{{ =package }}/{{ =prefix }}/bin"); do \
 		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =compat_package }}/usr/bin/$$_file"; \
 	done
@@ -67,6 +66,23 @@ ifeq ($(DEB_HOST_ARCH),amd64)
 		ln -s "{{ =prefix }}/bin/$$_file" "debian/{{ =compat_package }}/usr/bin/$$_file"; \
 	done
 endif
+
+	# Compat symlinks for desktop file
+	mkdir -p "debian/{{ =compat_package }}/usr/share/applications"
+	for _file in $$(ls "debian/{{ =package }}/{{ =prefix }}/share/applications"); do \
+		ln -s "{{ =prefix }}/share/applications/$$_file" "debian/{{ =compat_package }}/usr/share/applications/$$_file"; \
+	done
+
+	# Compat manpages
+	for _dir in man1 de.UTF-8/man1 fr.UTF-8/man1 pl.UTF-8/man1; do \
+		mkdir -p "debian/{{ =compat_package }}/usr/share/man/$$_dir"; \
+		if [ -d "debian/{{ =package }}/{{ =prefix }}/share/man/$$_dir" ]; then \
+			for _file in $$(ls "debian/{{ =package }}/{{ =prefix }}/share/man/$$_dir"); do \
+				ln -s "{{ =prefix }}/share/man/$$_dir/$$_file" "debian/{{ =compat_package }}/usr/share/man/$$_dir/$$_file"; \
+			done; \
+		fi; \
+		ln -s "{{ =prefix }}/share/man/$$_dir/wine.1" "debian/{{ =compat_package }}/usr/share/man/$$_dir/wine.1"; \
+	done
 
 override_dh_strip:
 	dh_strip -Xwine-pthread -Xwine-kthread --dbg-package={{ =package }}-dbg
