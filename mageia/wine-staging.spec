@@ -45,52 +45,65 @@ Source0:    wine.tar.bz2
 %define _prefix {{ =prefix }}
 Prefix:         {{ =prefix }}
 
-BuildRequires:  bison flex
-BuildRequires:  gpm-devel
-BuildRequires:  perl-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  cups-devel
-BuildRequires:  sane-devel
-BuildRequires:  png-devel
-BuildRequires:  lcms2-devel
-BuildRequires:  autoconf
-BuildRequires:  docbook-utils docbook-dtd-sgml sgml-tools
-BuildRequires:  pulseaudio-devel
-BuildRequires:  libmpg123-devel
-BuildRequires:  openal-devel
-BuildRequires:  icoutils
-BuildRequires:  libalsa-devel
-BuildRequires:  isdn4k-utils-devel
-BuildRequires:  glibc-static-devel
-BuildRequires:  chrpath
-BuildRequires:  ungif-devel xpm-devel
-BuildRequires:  tiff-devel
-BuildRequires:  librsvg
-BuildRequires:  imagemagick
-BuildRequires:  gphoto2-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  openldap-devel
-BuildRequires:  libxslt-devel
-BuildRequires:  dbus-devel
-BuildRequires:  valgrind-devel
-BuildRequires:  gsm-devel
-BuildRequires:  unixODBC-devel
-BuildRequires:  gnutls-devel
-BuildRequires:  prelink
-BuildRequires:  gettext-devel
-BuildRequires:  mesaglu-devel
-BuildRequires:  libv4l-devel
-BuildRequires:  libxcursor-devel libxcomposite-devel
-BuildRequires:  libxinerama-devel libxrandr-devel
-BuildRequires:  libx11-devel libxrender-devel
-BuildRequires:  libxext-devel libsm-devel
-BuildRequires:  fontforge fontconfig-devel freetype2-devel
-BuildRequires:  libxi-devel
-BuildRequires:  osmesa-devel
-BuildRequires:  opencl-devel
 BuildRequires:  attr-devel
+BuildRequires:  autoconf
+BuildRequires:  bison
+BuildRequires:  chrpath
+BuildRequires:  coreutils
+BuildRequires:  cups-devel
+BuildRequires:  dbus-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-dtd-sgml
+BuildRequires:  docbook-utils
+BuildRequires:  flex
+BuildRequires:  fontconfig-devel
+BuildRequires:  fontforge
+BuildRequires:  freetype2-devel
+BuildRequires:  gawk
+BuildRequires:  gettext-devel
+BuildRequires:  glibc-static-devel
+BuildRequires:  gnutls-devel
+BuildRequires:  gphoto2-devel
+BuildRequires:  gpm-devel
+BuildRequires:  gsm-devel
+BuildRequires:  icoutils
+BuildRequires:  imagemagick
+BuildRequires:  isdn4k-utils-devel
+BuildRequires:  lcms2-devel
+BuildRequires:  libalsa-devel
+BuildRequires:  libmpg123-devel
 BuildRequires:  libpcap-devel
-BuildRequires:  gawk unzip coreutils util-linux
+BuildRequires:  librsvg
+BuildRequires:  libsm-devel
+BuildRequires:  libv4l-devel
+BuildRequires:  libx11-devel
+BuildRequires:  libxcomposite-devel
+BuildRequires:  libxcursor-devel
+BuildRequires:  libxext-devel
+BuildRequires:  libxi-devel
+BuildRequires:  libxinerama-devel
+BuildRequires:  libxrandr-devel
+BuildRequires:  libxrender-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  mesaglu-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  openal-devel
+BuildRequires:  opencl-devel
+BuildRequires:  openldap-devel
+BuildRequires:  osmesa-devel
+BuildRequires:  perl-devel
+BuildRequires:  png-devel
+BuildRequires:  prelink
+BuildRequires:  pulseaudio-devel
+BuildRequires:  sane-devel
+BuildRequires:  sgml-tools
+BuildRequires:  tiff-devel
+BuildRequires:  ungif-devel
+BuildRequires:  unixODBC-devel
+BuildRequires:  unzip
+BuildRequires:  util-linux
+BuildRequires:  valgrind-devel
+BuildRequires:  xpm-devel
 
 %ifarch x86_64
 %package -n %{wine}
@@ -115,32 +128,32 @@ Requires:   %{name}-bin = %{epoch}:%{version}-%{release}
 %endif
 
 %define dlopenreq() %(F=/usr/%{_lib}/lib%{1}.so;[ -e $F ] && (file $F|grep -q ASCII && grep -o 'lib[^ ]*' $F|sed -e "s/\$/%{mark64}/"||objdump -p $F | grep SONAME | awk '{ print $2 "%{mark64}" }') || echo "wine-missing-buildrequires-on-%{1}")
-Requires:   %dlopenreq freetype
 Requires:   %dlopenreq asound
-Requires:   %dlopenreq fontconfig
-Requires:   %dlopenreq ncurses
-Requires:   %dlopenreq Xrender
-Requires:   %dlopenreq png
-Requires:   %dlopenreq Xcursor
-Requires:   %dlopenreq Xi
-Requires:   %dlopenreq Xxf86vm
-Requires:   %dlopenreq Xrandr
-Requires:   %dlopenreq Xinerama
-Requires:   %dlopenreq Xcomposite
-Requires:   %dlopenreq xslt
-Requires:   %dlopenreq dbus-1
-Requires:   %dlopenreq gnutls
-Requires:   %dlopenreq sane
-Requires:   %dlopenreq v4l1
-Requires:   %dlopenreq cups
-Requires:   %dlopenreq ssl
+Requires:   %dlopenreq attr
 Requires:   %dlopenreq crypto
+Requires:   %dlopenreq cups
+Requires:   %dlopenreq dbus-1
+Requires:   %dlopenreq fontconfig
+Requires:   %dlopenreq freetype
+Requires:   %dlopenreq gnutls
 Requires:   %dlopenreq gsm
 Requires:   %dlopenreq jpeg
-Requires:   %dlopenreq tiff
+Requires:   %dlopenreq ncurses
 Requires:   %dlopenreq odbc
 Requires:   %dlopenreq OSMesa
-Requires:   %dlopenreq attr
+Requires:   %dlopenreq png
+Requires:   %dlopenreq sane
+Requires:   %dlopenreq ssl
+Requires:   %dlopenreq tiff
+Requires:   %dlopenreq v4l1
+Requires:   %dlopenreq Xcomposite
+Requires:   %dlopenreq Xcursor
+Requires:   %dlopenreq Xi
+Requires:   %dlopenreq Xinerama
+Requires:   %dlopenreq Xrandr
+Requires:   %dlopenreq Xrender
+Requires:   %dlopenreq xslt
+Requires:   %dlopenreq Xxf86vm
 Suggests:   sane-frontends
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
