@@ -30,7 +30,7 @@ fi
 
 # Create symlinks
 ln -s /build/source/rpmmacros /home/builder/.rpmmacros
-ln -s /build RPMS/i586
+ln -s /build RPMS/i686
 ln -s /build RPMS/x86_64
 ln -s /build RPMS/noarch
 ln -s /build/source SOURCES
