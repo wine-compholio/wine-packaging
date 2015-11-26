@@ -224,9 +224,6 @@ make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 {{ endif }}
 
 %build
-%ifarch %{ix86}
-export CFLAGS="%{optflags} -fno-omit-frame-pointer"
-%endif
 %configure2_5x \
     --with-x \
     --without-gstreamer \
