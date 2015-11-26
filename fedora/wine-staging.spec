@@ -226,8 +226,8 @@ tar -xvf "%{SOURCE1}" --strip-components 1
 {{ endif }}
 
 %build
-%ifarch %{ix86}
-export CFLAGS="%{optflags} -fno-omit-frame-pointer"
+%ifarch x86_64
+export CFLAGS="$(echo "%{optflags}" | sed -e 's/-O2//') -O0"
 %endif
 %configure \
     --with-x \
