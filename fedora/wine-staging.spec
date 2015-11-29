@@ -15,6 +15,7 @@
 %define lib_major       1
 %define lib_name        lib{{ =package }}1
 %define lib_name_devel  lib{{ =package }}-devel
+%undefine _hardened_build
 
 Name:       {{ =package }}
 Version:    {{ =version }}
@@ -105,7 +106,6 @@ BuildRequires:  ocl-icd-devel
 BuildRequires:  openal-soft-devel
 BuildRequires:  opencl-headers
 BuildRequires:  openldap-devel
-BuildRequires:  prelink
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  sane-backends-devel
 BuildRequires:  unixODBC-devel
@@ -227,7 +227,9 @@ tar -xvf "%{SOURCE1}" --strip-components 1
 
 %build
 %ifarch x86_64
-export CFLAGS="$(echo "%{optflags}" | sed -e 's/-O2//') -O0"
+export CFLAGS="$(echo "%{optflags}" | sed -e 's/-O2//' -e 's/-Wp,-D_FORTIFY_SOURCE=2//') -O0"
+%else
+export CFLAGS="$(echo "%{optflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//')"
 %endif
 %configure \
     --with-x \
