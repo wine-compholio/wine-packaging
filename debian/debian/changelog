@@ -1,7 +1,14 @@
 {{
-	rel      = "-%s" % package_release if package_release != "" else ""
-	codename = "~%s" % debian_codename if debian_codename != "" else ""
-	version  = "%s%s%s" % (package_version.replace("-rc", "~rc"), rel, codename)
+	if "-rc" in package_version
+		assert package_version.count(".") == 1
+		version = package_version.replace("-rc", "~rc")
+	else
+		assert package_version.count(".") <= 2
+		version = package_version
+		version += ".0" * (2 - version.count("."))
+	endif
+	version += "-%s" % package_release if package_release != "" else ""
+	version += "~%s" % debian_codename if debian_codename != "" else ""
 }}
 {{ =package }} ({{ =version }}) unstable; urgency=low
   * Auto build.
