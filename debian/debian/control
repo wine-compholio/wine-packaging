@@ -27,11 +27,8 @@ Build-Depends: autotools-dev,
                libfreetype6-dev,
                libgl1-mesa-dev | nvidia-glx-dev | fglrx-driver-dev | libgl-dev,
                libglu1-mesa-dev | libglu-dev,
-{{ if debian_version >= 8 }}
-               libgnutls28-dev,
-{{ else }}
-               libgnutls-dev,
-{{ endif }}
+{{ ="               libgnutls28-dev,\n"                  if debian_version >= 8 else "" }}
+{{ ="               libgnutls-dev,\n"                    if debian_version < 8 else "" }}
                libgphoto2-dev | libgphoto2-6-dev | libgphoto2-2-dev (>= 2.4.6),
                libgsm1-dev,
                libgtk-3-dev,
@@ -50,13 +47,9 @@ Build-Depends: autotools-dev,
                libssl-dev,
                libstdc++6-4.5-dev | libstdc++-dev,
                libtiff5-dev | libtiff4-dev | libtiff-dev,
-{{ if staging }}
-               libtxc-dxtn-s2tc-dev,
-{{ endif }}
+{{ ="               libtxc-dxtn-s2tc-dev,\n"             if staging else "" }}
                libv4l-dev,
-{{ if staging }}
-               libva-dev,
-{{ endif }}
+{{ ="               libva-dev,\n"                        if staging else "" }}
                libx11-dev,
                libxcomposite-dev,
                libxcursor-dev,
@@ -91,37 +84,22 @@ Recommends: libcapi20-3,
             libdbus-1-3,
             libfontconfig1 | libfontconfig,
             libfreetype6,
-{{ if debian_version >= 8 }}
-            libgnutls-deb0-28,
-{{ else }}
-            libgnutls26,
-{{ endif }}
-{{ if staging }}
-            libgtk-3-0,
-{{ endif }}
-{{ if debian_version >= 8 }}
-            libjpeg62-turbo,
-{{ else }}
-            libjpeg8,
-{{ endif }}
+{{ ="            libgnutls-deb0-28,\n"                if debian_version >= 8 else "" }}
+{{ ="            libgnutls26,\n"                      if debian_version < 8 else "" }}
+{{ ="            libgtk-3-0,\n"                       if staging else "" }}
+{{ ="            libjpeg62-turbo,\n"                  if debian_version >= 8 else "" }}
+{{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
             libosmesa6,
             libpcap0.8,
             libpng12-0,
             libpulse0,
-{{ if debian_version < 9 }}
-{{ # libsane leads to package conflicts }}
-            libsane,
-{{ endif }}
+{{ ="            libsane,\n"                          if debian_version < 9 else "" }}
             libssl1.0.0,
             libtiff5 | libtiff4,
-{{ if staging }}
-            libtxc-dxtn-s2tc0,
-{{ endif }}
+{{ ="            libtxc-dxtn-s2tc0,\n"                if staging else "" }}
             libv4l-0,
-{{ if staging }}
-            libva-drm1,
-            libva-x11-1,
-{{ endif }}
+{{ ="            libva-drm1,\n"                       if staging else "" }}
+{{ ="            libva-x11-1,\n"                      if staging else "" }}
             libxcomposite1,
             libxcursor1,
             libxi6,
@@ -165,37 +143,22 @@ Recommends: libcapi20-3,
             libdbus-1-3,
             libfontconfig1 | libfontconfig,
             libfreetype6,
-{{ if debian_version >= 8 }}
-            libgnutls-deb0-28,
-{{ else }}
-            libgnutls26,
-{{ endif }}
-{{ if staging }}
-            libgtk-3-0,
-{{ endif }}
-{{ if debian_version >= 8 }}
-            libjpeg62-turbo,
-{{ else }}
-            libjpeg8,
-{{ endif }}
+{{ ="            libgnutls-deb0-28,\n"                if debian_version >= 8 else "" }}
+{{ ="            libgnutls26,\n"                      if debian_version < 8 else "" }}
+{{ ="            libgtk-3-0,\n"                       if staging else "" }}
+{{ ="            libjpeg62-turbo,\n"                  if debian_version >= 8 else "" }}
+{{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
             libosmesa6,
             libpcap0.8,
             libpng12-0,
             libpulse0,
-{{ if debian_version < 9 }}
-{{ # libsane leads to package conflicts }}
-            libsane,
-{{ endif }}
+{{ ="            libsane,\n"                          if debian_version < 9 else "" }}
             libssl1.0.0,
             libtiff5 | libtiff4,
-{{ if staging }}
-            libtxc-dxtn-s2tc0,
-{{ endif }}
+{{ ="            libtxc-dxtn-s2tc0,\n"                if staging else "" }}
             libv4l-0,
-{{ if staging }}
-            libva-drm1,
-            libva-x11-1,
-{{ endif }}
+{{ ="            libva-drm1,\n"                       if staging else "" }}
+{{ ="            libva-x11-1,\n"                      if staging else "" }}
             libxcomposite1,
             libxcursor1,
             libxi6,

@@ -163,11 +163,9 @@ def process_template(content, namespace):
 
                 elif line.startswith("print "):
                     compiled.append("%s__result.append(%s)" % (indent, line[6:]))
-                    only_control = False
 
                 elif line.startswith("="):
                     compiled.append("%s__result.append(%s)" % (indent, line[1:]))
-                    only_control = False
 
                 elif not line.startswith("#"):
                     compiled.append("%s%s" % (indent, line))
