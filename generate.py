@@ -36,18 +36,28 @@ def _m(*x):
         u.update(v)
     return u
 
+STABLE_CONFIG = {
+    "package"           : "wine-stable",
+    "compat_package"    : "winehq-stable",
+    "prefix"            : "/opt/wine-stable",
+    "staging"           : False,
+    "devel"             : False,
+}
+
 DEVEL_CONFIG = {
-    "package" : "wine-devel",
-    "compat_package": "winehq-devel",
-    "prefix"  : "/opt/wine-devel",
-    "staging" : False,
+    "package"           : "wine-devel",
+    "compat_package"    : "winehq-devel",
+    "prefix"            : "/opt/wine-devel",
+    "staging"           : False,
+    "devel"             : True,
 }
 
 STAGING_CONFIG = {
-    "package" : "wine-staging",
-    "compat_package": "winehq-staging",
-    "prefix"  : "/opt/wine-staging",
-    "staging" : True
+    "package"           : "wine-staging",
+    "compat_package"    : "winehq-staging",
+    "prefix"            : "/opt/wine-staging",
+    "staging"           : True,
+    "devel"             : True,
 }
 
 DEBIAN_BASE = {
@@ -70,30 +80,37 @@ FEDORA_BASE = {
 
 PACKAGE_CONFIGS = {
     # Debian Wheezy
+    "debian-wheezy-stable"       : _m( STABLE_CONFIG,  DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
     "debian-wheezy-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
     "debian-wheezy-staging"      : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=7,   debian_codename="wheezy") ),
 
     # Debian Jessie
+    "debian-jessie-stable"       : _m( STABLE_CONFIG,  DEBIAN_BASE, dict(debian_version=8,   debian_codename="jessie") ),
     "debian-jessie-development"  : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=8,   debian_codename="jessie") ),
     "debian-jessie-staging"      : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=8,   debian_codename="jessie") ),
 
     # Debian Stretch
+    "debian-stretch-stable"      : _m( STABLE_CONFIG,  DEBIAN_BASE, dict(debian_version=9,   debian_codename="stretch") ),
     "debian-stretch-development" : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=9,   debian_codename="stretch") ),
     "debian-stretch-staging"     : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=9,   debian_codename="stretch") ),
 
     # Debian Sid
+    "debian-sid-stable"          : _m( STABLE_CONFIG,  DEBIAN_BASE, dict(debian_version=999, debian_codename="sid") ),
     "debian-sid-development"     : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(debian_version=999, debian_codename="sid") ),
     "debian-sid-staging"         : _m( STAGING_CONFIG, DEBIAN_BASE, dict(debian_version=999, debian_codename="sid") ),
 
     # Ubuntu
+    "ubuntu-any-stable"          : _m( STABLE_CONFIG,  DEBIAN_BASE, dict(ubuntu_version=1) ),
     "ubuntu-any-development"     : _m( DEVEL_CONFIG,   DEBIAN_BASE, dict(ubuntu_version=1) ),
     "ubuntu-any-staging"         : _m( STAGING_CONFIG, DEBIAN_BASE, dict(ubuntu_version=1) ),
 
     # Mageia
+    "mageia-any-stable"          : _m( STABLE_CONFIG,  MAGEIA_BASE, dict(mageia_version=1) ),
     "mageia-any-development"     : _m( DEVEL_CONFIG,   MAGEIA_BASE, dict(mageia_version=1, package="wine-development") ),
     "mageia-any-staging"         : _m( STAGING_CONFIG, MAGEIA_BASE, dict(mageia_version=1) ),
 
     # Fedora
+    "fedora-any-stable"          : _m( STABLE_CONFIG,  FEDORA_BASE, dict(fedora_version=1) ),
     "fedora-any-development"     : _m( DEVEL_CONFIG,   FEDORA_BASE, dict(fedora_version=1, package="wine-development") ),
     "fedora-any-staging"         : _m( STAGING_CONFIG, FEDORA_BASE, dict(fedora_version=1) ),
 }
