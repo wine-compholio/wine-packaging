@@ -63,9 +63,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  giflib-devel
 BuildRequires:  gnutls-devel
 BuildRequires:  gsm-devel
-{{ if staging }}
-BuildRequires:  gtk3-devel
-{{ endif }}
+{{ ="BuildRequires:  gtk3-devel\n"      if staging else "" }}
 BuildRequires:  icoutils
 BuildRequires:  ImageMagick-devel
 BuildRequires:  isdn4k-utils-devel
@@ -82,9 +80,7 @@ BuildRequires:  libstdc++-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  libusb-devel
 BuildRequires:  libv4l-devel
-{{ if staging }}
-BuildRequires:  libva-devel
-{{ endif }}
+{{ ="BuildRequires:  libva-devel\n"     if staging else "" }}
 BuildRequires:  libX11-devel
 BuildRequires:  libXcomposite-devel
 BuildRequires:  libXcursor-devel
@@ -286,9 +282,7 @@ install -p -m 0644 loader/wine.pl.UTF-8.man "%{buildroot}/usr/share/man/pl.UTF-8
 %{_bindir}/wine64-preloader
 %endif
 %{_bindir}/function_grep.pl
-{{ if staging }}
-%{_bindir}/msidb
-{{ endif }}
+{{ ="%{_bindir}/msidb\n"                if staging else "" }}
 %{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit

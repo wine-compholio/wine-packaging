@@ -280,9 +280,7 @@ install -p -m 0644 loader/wine.pl.UTF-8.man "%{buildroot}/usr/share/man/pl.UTF-8
 %{_bindir}/wine64-preloader
 %endif
 %{_bindir}/function_grep.pl
-{{ if staging }}
-%{_bindir}/msidb
-{{ endif }}
+{{ ="%{_bindir}/msidb\n"                if staging else "" }}
 %{_bindir}/msiexec
 %{_bindir}/notepad
 %{_bindir}/regedit
