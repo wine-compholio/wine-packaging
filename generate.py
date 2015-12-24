@@ -61,7 +61,7 @@ STAGING_CONFIG = {
 }
 
 DEBIAN_BASE = {
-    "__src"          : "debian",
+    "__src"          : "debian/wine",
     "ubuntu_version" : 0,
     "debian_version" : 0,
     "debian_codename": "",
@@ -69,12 +69,12 @@ DEBIAN_BASE = {
 }
 
 MAGEIA_BASE = {
-    "__src"          : "mageia",
+    "__src"          : "mageia/wine",
     "mageia_version" : 0,
 }
 
 FEDORA_BASE = {
-    "__src"          : "fedora",
+    "__src"          : "fedora/wine",
     "fedora_version" : 0,
 }
 
