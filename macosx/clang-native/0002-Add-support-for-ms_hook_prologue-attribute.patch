@@ -1,0 +1,137 @@
+From f2efcf8c57ca903cbaf40e587a29beb7898274ce Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Thu, 9 Jul 2015 01:36:46 +0200
+Subject: Add support for ms_hook_prologue attribute.
+
+---
+ include/llvm/IR/Attributes.h         |  1 +
+ lib/AsmParser/LLLexer.cpp            |  1 +
+ lib/AsmParser/LLParser.cpp           |  1 +
+ lib/AsmParser/LLToken.h              |  1 +
+ lib/IR/Attributes.cpp                |  3 +++
+ lib/Target/CppBackend/CPPBackend.cpp |  1 +
+ lib/Target/X86/X86FrameLowering.cpp  | 13 +++++++++++++
+ 7 files changed, 21 insertions(+)
+
+diff --git a/include/llvm/IR/Attributes.h b/include/llvm/IR/Attributes.h
+index 5ff48d6..53dd8ac 100644
+--- a/include/llvm/IR/Attributes.h
++++ b/include/llvm/IR/Attributes.h
+@@ -77,6 +77,7 @@ public:
+     InReg,                 ///< Force argument to be passed in register
+     JumpTable,             ///< Build jump-instruction tables and replace refs.
+     MinSize,               ///< Function must be optimized for size first
++    MsHookPrologue,        ///< Add hook sequence in function prologue
+     Naked,                 ///< Naked function
+     Nest,                  ///< Nested function static chain
+     NoAlias,               ///< Considered to not alias after call
+diff --git a/lib/AsmParser/LLLexer.cpp b/lib/AsmParser/LLLexer.cpp
+index 962298f..ab266a6 100644
+--- a/lib/AsmParser/LLLexer.cpp
++++ b/lib/AsmParser/LLLexer.cpp
+@@ -617,6 +617,7 @@ lltok::Kind LLLexer::LexIdentifier() {
+   KEYWORD(inreg);
+   KEYWORD(jumptable);
+   KEYWORD(minsize);
++  KEYWORD(ms_hook_prologue);
+   KEYWORD(naked);
+   KEYWORD(nest);
+   KEYWORD(noalias);
+diff --git a/lib/AsmParser/LLParser.cpp b/lib/AsmParser/LLParser.cpp
+index ac6e0e5..4f0603d 100644
+--- a/lib/AsmParser/LLParser.cpp
++++ b/lib/AsmParser/LLParser.cpp
+@@ -1021,6 +1021,7 @@ bool LLParser::ParseFnAttributeValuePairs(AttrBuilder &B,
+     case lltok::kw_inlinehint:        B.addAttribute(Attribute::InlineHint); break;
+     case lltok::kw_jumptable:         B.addAttribute(Attribute::JumpTable); break;
+     case lltok::kw_minsize:           B.addAttribute(Attribute::MinSize); break;
++    case lltok::kw_ms_hook_prologue:  B.addAttribute(Attribute::MsHookPrologue); break;
+     case lltok::kw_naked:             B.addAttribute(Attribute::Naked); break;
+     case lltok::kw_nobuiltin:         B.addAttribute(Attribute::NoBuiltin); break;
+     case lltok::kw_noduplicate:       B.addAttribute(Attribute::NoDuplicate); break;
+diff --git a/lib/AsmParser/LLToken.h b/lib/AsmParser/LLToken.h
+index 2f02606..b78da3e 100644
+--- a/lib/AsmParser/LLToken.h
++++ b/lib/AsmParser/LLToken.h
+@@ -111,6 +111,7 @@ namespace lltok {
+     kw_inreg,
+     kw_jumptable,
+     kw_minsize,
++    kw_ms_hook_prologue,
+     kw_naked,
+     kw_nest,
+     kw_noalias,
+diff --git a/lib/IR/Attributes.cpp b/lib/IR/Attributes.cpp
+index 04545ea..91e1418 100644
+--- a/lib/IR/Attributes.cpp
++++ b/lib/IR/Attributes.cpp
+@@ -191,6 +191,8 @@ std::string Attribute::getAsString(bool InAttrGrp) const {
+     return "jumptable";
+   if (hasAttribute(Attribute::MinSize))
+     return "minsize";
++  if (hasAttribute(Attribute::MsHookPrologue))
++    return "ms_hook_prologue";
+   if (hasAttribute(Attribute::Naked))
+     return "naked";
+   if (hasAttribute(Attribute::Nest))
+@@ -426,6 +428,7 @@ uint64_t AttributeImpl::getAttrMask(Attribute::AttrKind Val) {
+   case Attribute::InAlloca:        return 1ULL << 43;
+   case Attribute::NonNull:         return 1ULL << 44;
+   case Attribute::JumpTable:       return 1ULL << 45;
++  case Attribute::MsHookPrologue:  return 1ULL << 46;
+   case Attribute::Dereferenceable:
+     llvm_unreachable("dereferenceable attribute not supported in raw format");
+   }
+diff --git a/lib/Target/CppBackend/CPPBackend.cpp b/lib/Target/CppBackend/CPPBackend.cpp
+index f610fbb..9d3490f 100644
+--- a/lib/Target/CppBackend/CPPBackend.cpp
++++ b/lib/Target/CppBackend/CPPBackend.cpp
+@@ -510,6 +510,7 @@ void CppWriter::printAttributes(const AttributeSet &PAL,
+       HANDLE_ATTR(StackProtect);
+       HANDLE_ATTR(StackProtectReq);
+       HANDLE_ATTR(StackProtectStrong);
++      HANDLE_ATTR(MsHookPrologue);
+       HANDLE_ATTR(NoCapture);
+       HANDLE_ATTR(NoRedZone);
+       HANDLE_ATTR(NoImplicitFloat);
+diff --git a/lib/Target/X86/X86FrameLowering.cpp b/lib/Target/X86/X86FrameLowering.cpp
+index 8c029a8..c570e5b 100644
+--- a/lib/Target/X86/X86FrameLowering.cpp
++++ b/lib/Target/X86/X86FrameLowering.cpp
+@@ -455,6 +455,7 @@ void X86FrameLowering::emitPrologue(MachineFunction &MF) const {
+       MF.getTarget().getMCAsmInfo()->getExceptionHandlingType() ==
+       ExceptionHandling::WinEH; // Not necessarily synonymous with IsWin64.
+   bool NeedsWinEH = IsWinEH && Fn->needsUnwindTableEntry();
++  bool IsMsHookPrologue = (Fn->hasFnAttribute(Attribute::MsHookPrologue) && !Is64Bit);
+   bool NeedsDwarfCFI =
+       !IsWinEH && (MMI.hasDebugInfo() || Fn->needsUnwindTableEntry());
+   bool UseLEA = STI.useLeaForSP();
+@@ -476,6 +477,11 @@ void X86FrameLowering::emitPrologue(MachineFunction &MF) const {
+       MaxAlign = SlotSize;
+   }
+ 
++  // In order to be fully hook compatible, we need to keep the stack
++  // frame setup even if it is unecessary.
++  if (IsMsHookPrologue)
++    HasFP = true;
++
+   // Add RETADDR move area to callee saved frame size.
+   int TailCallReturnAddrDelta = X86FI->getTCReturnAddrDelta();
+   if (TailCallReturnAddrDelta < 0)
+@@ -532,6 +538,13 @@ void X86FrameLowering::emitPrologue(MachineFunction &MF) const {
+   uint64_t NumBytes = 0;
+   int stackGrowth = -SlotSize;
+ 
++  if (IsMsHookPrologue) {
++    // Add MOV EDI, EDI instruction.
++    BuildMI(MBB, MBBI, DL, TII.get(X86::MOV32rr), X86::EDI)
++        .addReg(X86::EDI)
++        .setMIFlag(MachineInstr::FrameSetup);
++  }
++
+   if (HasFP) {
+     // Calculate required stack adjustment.
+     uint64_t FrameSize = StackSize - SlotSize;
+-- 
+2.1.0
+

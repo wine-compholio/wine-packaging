@@ -1,0 +1,47 @@
+From e5066a08cb2a3b090ad545ba34813dbe30abf5b7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Sat, 11 Jul 2015 18:28:35 +0200
+Subject: Use MOV32rr_REV for ms_hook_prologue to be binary compatible.
+
+---
+ lib/Target/X86/X86FrameLowering.cpp | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/lib/Target/X86/X86FrameLowering.cpp b/lib/Target/X86/X86FrameLowering.cpp
+index c570e5b..ec94d6f 100644
+--- a/lib/Target/X86/X86FrameLowering.cpp
++++ b/lib/Target/X86/X86FrameLowering.cpp
+@@ -540,7 +540,7 @@ void X86FrameLowering::emitPrologue(MachineFunction &MF) const {
+ 
+   if (IsMsHookPrologue) {
+     // Add MOV EDI, EDI instruction.
+-    BuildMI(MBB, MBBI, DL, TII.get(X86::MOV32rr), X86::EDI)
++    BuildMI(MBB, MBBI, DL, TII.get(X86::MOV32rr_REV), X86::EDI)
+         .addReg(X86::EDI)
+         .setMIFlag(MachineInstr::FrameSetup);
+   }
+@@ -592,10 +592,17 @@ void X86FrameLowering::emitPrologue(MachineFunction &MF) const {
+     }
+ 
+     // Update EBP with the new base value.
+-    BuildMI(MBB, MBBI, DL,
+-            TII.get(Is64Bit ? X86::MOV64rr : X86::MOV32rr), FramePtr)
+-        .addReg(StackPtr)
+-        .setMIFlag(MachineInstr::FrameSetup);
++    if (IsMsHookPrologue) {
++      BuildMI(MBB, MBBI, DL,
++              TII.get(Is64Bit ? X86::MOV64rr_REV : X86::MOV32rr_REV), FramePtr)
++          .addReg(StackPtr)
++          .setMIFlag(MachineInstr::FrameSetup);
++    }else{
++      BuildMI(MBB, MBBI, DL,
++              TII.get(Is64Bit ? X86::MOV64rr : X86::MOV32rr), FramePtr)
++          .addReg(StackPtr)
++          .setMIFlag(MachineInstr::FrameSetup);
++    }
+ 
+     if (NeedsDwarfCFI) {
+       // Mark effective beginning of when frame pointer becomes valid.
+-- 
+2.1.0
+

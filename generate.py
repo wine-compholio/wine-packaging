@@ -63,11 +63,24 @@ WINE_STAGING_CONFIG = {
     "devel"             : True,
 }
 
+CLANG_CONFIG = {
+    "__src"             : "clang-native",
+    "package"           : "clang",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
     "debian_version" : 0,
     "debian_codename": "",
+    "debian_time"    : formatdate(),
+}
+
+MACOSX_BASE = {
+    "distribution"   : "macosx",
+    "ubuntu_version" : 0,
+    "debian_version" : 8,
+    "debian_codename": "jessie",
     "debian_time"    : formatdate()
 }
 
@@ -116,6 +129,9 @@ PACKAGE_CONFIGS = {
     "fedora-any-stable"          : _m( WINE_STABLE_CONFIG,  FEDORA_BASE, dict(fedora_version=1) ),
     "fedora-any-development"     : _m( WINE_DEVEL_CONFIG,   FEDORA_BASE, dict(fedora_version=1, package="wine-development") ),
     "fedora-any-staging"         : _m( WINE_STAGING_CONFIG, FEDORA_BASE, dict(fedora_version=1) ),
+
+    # Mac OS X
+    "macosx-clang-native"        : _m( CLANG_CONFIG,        MACOSX_BASE ),
 }
 
 

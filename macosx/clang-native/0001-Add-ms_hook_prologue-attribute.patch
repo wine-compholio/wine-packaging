@@ -1,0 +1,72 @@
+From 3062c675d5f2b659c1615aaaada7c465946c4e01 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Thu, 9 Jul 2015 02:02:28 +0200
+Subject: Add ms_hook_prologue attribute.
+
+---
+ include/clang/Basic/Attr.td               | 6 ++++++
+ lib/CodeGen/CodeGenModule.cpp             | 3 +++
+ lib/Sema/SemaDeclAttr.cpp                 | 3 +++
+ test/Index/recursive-cxx-member-calls.cpp | 1 +
+ 4 files changed, 13 insertions(+)
+
+diff --git a/clang/include/clang/Basic/Attr.td b/clang/include/clang/Basic/Attr.td
+index fb1eb58..1891a5b 100644
+--- a/clang/include/clang/Basic/Attr.td
++++ b/clang/include/clang/Basic/Attr.td
+@@ -849,6 +849,12 @@ def Naked : InheritableAttr {
+   let Documentation = [Undocumented];
+ }
+ 
++def MsHookPrologue : InheritableAttr {
++  let Spellings = [GNU<"ms_hook_prologue">];
++  let Subjects = SubjectList<[Function]>;
++  let Documentation = [Undocumented];
++}
++
+ def NeonPolyVectorType : TypeAttr {
+   let Spellings = [GNU<"neon_polyvector_type">];
+   let Args = [IntArgument<"NumElements">];
+diff --git a/clang/lib/CodeGen/CodeGenModule.cpp b/clang/lib/CodeGen/CodeGenModule.cpp
+index b905bd2..f7bf10d 100644
+--- a/clang/lib/CodeGen/CodeGenModule.cpp
++++ b/clang/lib/CodeGen/CodeGenModule.cpp
+@@ -737,6 +737,9 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
+   if (!hasUnwindExceptions(LangOpts))
+     B.addAttribute(llvm::Attribute::NoUnwind);
+ 
++  if (D->hasAttr<MsHookPrologueAttr>())
++    B.addAttribute(llvm::Attribute::MsHookPrologue);
++
+   if (D->hasAttr<NakedAttr>()) {
+     // Naked implies noinline: we should not be inlining such functions.
+     B.addAttribute(llvm::Attribute::Naked);
+diff --git a/clang/lib/Sema/SemaDeclAttr.cpp b/clang/lib/Sema/SemaDeclAttr.cpp
+index b8d0830..9448160 100644
+--- a/clang/lib/Sema/SemaDeclAttr.cpp
++++ b/clang/lib/Sema/SemaDeclAttr.cpp
+@@ -4737,6 +4737,9 @@ static void ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D,
+   case AttributeList::AT_Hot:
+     handleHotAttr(S, D, Attr);
+     break;
++  case AttributeList::AT_MsHookPrologue:
++    handleSimpleAttribute<MsHookPrologueAttr>(S, D, Attr);
++    break;
+   case AttributeList::AT_Naked:
+     handleSimpleAttribute<NakedAttr>(S, D, Attr);
+     break;
+diff --git a/clang/test/Index/recursive-cxx-member-calls.cpp b/clang/test/Index/recursive-cxx-member-calls.cpp
+index 34a5652..ad72379 100644
+--- a/clang/test/Index/recursive-cxx-member-calls.cpp
++++ b/clang/test/Index/recursive-cxx-member-calls.cpp
+@@ -122,6 +122,7 @@ AttributeList::Kind AttributeList::getKind(const IdentifierInfo * Name) {
+     .Case("unused", AT_unused)
+     .Case("aligned", AT_aligned)
+     .Case("cleanup", AT_cleanup)
++    .Case("ms_hook_prologue", AT_MsHookPrologue)
+     .Case("naked", AT_naked)
+     .Case("nodebug", AT_nodebug)
+     .Case("nonnull", AT_nonnull)
+-- 
+2.1.0
+
