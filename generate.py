@@ -123,7 +123,7 @@ download_queue = {}
 
 def process_template(filename, namespace):
     content_blocks = []
-    compiled = []
+    compiled = ["global __filename"]
     controlstack = []
     only_control = False
 
@@ -194,11 +194,18 @@ def process_template(filename, namespace):
                     compiled.append("%s%s" % (indent, line))
 
     assert len(controlstack) == 0
-    namespace["__content_blocks"] = content_blocks
-    namespace["__result"]         = []
-    namespace["__filename"]       = os.path.basename(filename)
-    exec "\n".join(compiled) in namespace
-    return "".join(namespace["__result"])
+
+    if not namespace.has_key("__filename"):
+        namespace["__filename"] = os.path.basename(filename)
+
+    local_namespace = {
+        "include"          : lambda x: process_template(os.path.join(os.path.dirname(filename), x), namespace),
+        "__content_blocks" : content_blocks,
+        "__result"         : [],
+    }
+
+    exec "\n".join(compiled) in namespace, local_namespace
+    return "".join(local_namespace["__result"])
 
 def copy_files(src, dst, namespace_template):
     if not os.path.isdir(dst):
