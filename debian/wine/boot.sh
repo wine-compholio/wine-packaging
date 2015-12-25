@@ -12,6 +12,7 @@ apt-get install -y git devscripts build-essential
 	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version))
 }}
 su builder -c "tar -xvf wine.tar.bz2 --strip-components 1"
+rm wine.tar.bz2
 
 {{ if staging }}
 {{
@@ -20,6 +21,7 @@ su builder -c "tar -xvf wine.tar.bz2 --strip-components 1"
 	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version))
 }}
 su builder -c "tar -xvf wine-staging.tar.gz --strip-components 1"
+rm wine-staging.tar.gz
 {{ endif }}
 
 mk-build-deps -i -r -t "apt-get -y" debian/control
