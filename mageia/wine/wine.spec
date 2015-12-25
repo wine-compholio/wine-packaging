@@ -207,6 +207,7 @@ Summary:    WINE Is Not An Emulator - runs MS Windows programs
 Group:      Emulators
 Requires:   %{wine} = %{epoch}:%{version}-%{release}
 Conflicts:  wine wine64
+Provides:   wine-bin
 
 %description -n {{ =compat_package }}
 Wine is a program which allows running Microsoft Windows programs
