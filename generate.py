@@ -121,11 +121,14 @@ PACKAGE_CONFIGS = {
 
 download_queue = {}
 
-def process_template(content, namespace):
+def process_template(filename, namespace):
     content_blocks = []
     compiled = []
     controlstack = []
     only_control = False
+
+    with open(filename, 'r') as fp:
+        content = fp.read()
 
     for i, block in enumerate(re.split("{{(.*?)}}", content, flags=re.DOTALL)):
         if i % 2 == 0:
@@ -192,7 +195,8 @@ def process_template(content, namespace):
 
     assert len(controlstack) == 0
     namespace["__content_blocks"] = content_blocks
-    namespace["__result"] = []
+    namespace["__result"]         = []
+    namespace["__filename"]       = os.path.basename(filename)
     exec "\n".join(compiled) in namespace
     return "".join(namespace["__result"])
 
@@ -207,14 +211,11 @@ def copy_files(src, dst, namespace_template):
         if os.path.isfile(file_in):
             downloads = []
             namespace = copy.deepcopy(namespace_template)
-            namespace["__filename"]     = filename
             namespace["os"]             = os
             namespace["download"]       = lambda x, y: downloads.append((x, y))
+            assert not namespace.has_key("__filename")
 
-            with open(file_in, 'r') as fp:
-                content = fp.read()
-
-            content = process_template(content, namespace)
+            content = process_template(file_in, namespace)
             if namespace["__filename"] is None: continue
 
             for (name, url) in downloads:
