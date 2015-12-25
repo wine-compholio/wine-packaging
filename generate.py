@@ -78,6 +78,11 @@ CCTOOLS_CONFIG = {
     "package"           : "cctools",
 }
 
+XAR_CONFIG = {
+    "__src"             : "xar-native",
+    "package"           : "xar",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -144,6 +149,7 @@ PACKAGE_CONFIGS = {
     "macosx-clang-native"        : _m( CLANG_CONFIG,        MACOSX_BASE ),
     "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
     "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
+    "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
 }
 
 

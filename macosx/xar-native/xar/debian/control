@@ -1,0 +1,12 @@
+Source: xar
+Maintainer: Michael Mueller <michael@fds-team.de>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8), gcc, libacl1-dev, zlib1g-dev, libbz2-dev, libssl-dev, libxml2-dev, autoconf
+Homepage: http://mackyle.github.io/xar/
+
+Package: xar
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: eXtensible ARchiver
