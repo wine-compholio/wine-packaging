@@ -73,6 +73,11 @@ BOMUTILS_CONFIG = {
     "package"           : "bomutils",
 }
 
+CCTOOLS_CONFIG = {
+    "__src"             : "cctools-native",
+    "package"           : "cctools",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -138,6 +143,7 @@ PACKAGE_CONFIGS = {
     # Mac OS X
     "macosx-clang-native"        : _m( CLANG_CONFIG,        MACOSX_BASE ),
     "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
+    "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
 }
 
 
