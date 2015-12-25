@@ -68,6 +68,11 @@ CLANG_CONFIG = {
     "package"           : "clang",
 }
 
+BOMUTILS_CONFIG = {
+    "__src"             : "bomutils-native",
+    "package"           : "bomutils",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -132,6 +137,7 @@ PACKAGE_CONFIGS = {
 
     # Mac OS X
     "macosx-clang-native"        : _m( CLANG_CONFIG,        MACOSX_BASE ),
+    "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
 }
 
 

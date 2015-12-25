@@ -1,0 +1,14 @@
+Source: bomutils
+Maintainer: Michael Mueller <michael@fds-team.de>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8), g++
+Homepage: http://hogliux.github.io/bomutils/index.html
+Vcs-Git: https://github.com/hogliux/bomutils.git
+Vcs-Browser: https://github.com/hogliux/bomutils
+
+Package: bomutils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Open source version Mac OS X BOM tools
