@@ -143,11 +143,14 @@ PACKAGE_CONFIGS = {
 
 download_queue = {}
 
-def process_template(content, namespace):
+def process_template(filename, namespace):
     content_blocks = []
-    compiled = []
+    compiled = ["global __filename"]
     controlstack = []
     only_control = False
+
+    with open(filename, 'r') as fp:
+        content = fp.read()
 
     for i, block in enumerate(re.split("{{(.*?)}}", content, flags=re.DOTALL)):
         if i % 2 == 0:
@@ -213,10 +216,18 @@ def process_template(content, namespace):
                     compiled.append("%s%s" % (indent, line))
 
     assert len(controlstack) == 0
-    namespace["__content_blocks"] = content_blocks
-    namespace["__result"] = []
-    exec "\n".join(compiled) in namespace
-    return "".join(namespace["__result"])
+
+    if not namespace.has_key("__filename"):
+        namespace["__filename"] = os.path.basename(filename)
+
+    local_namespace = {
+        "include"          : lambda x: process_template(os.path.join(os.path.dirname(filename), x), namespace),
+        "__content_blocks" : content_blocks,
+        "__result"         : [],
+    }
+
+    exec "\n".join(compiled) in namespace, local_namespace
+    return "".join(local_namespace["__result"])
 
 def copy_files(src, dst, namespace_template):
     if not os.path.isdir(dst):
@@ -229,14 +240,11 @@ def copy_files(src, dst, namespace_template):
         if os.path.isfile(file_in):
             downloads = []
             namespace = copy.deepcopy(namespace_template)
-            namespace["__filename"]     = filename
             namespace["os"]             = os
             namespace["download"]       = lambda x, y: downloads.append((x, y))
+            assert not namespace.has_key("__filename")
 
-            with open(file_in, 'r') as fp:
-                content = fp.read()
-
-            content = process_template(content, namespace)
+            content = process_template(file_in, namespace)
             if namespace["__filename"] is None: continue
 
             for (name, url) in downloads:
