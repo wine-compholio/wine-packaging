@@ -24,11 +24,13 @@
 from email.Utils import formatdate
 import argparse
 import copy
+import hashlib
 import os
 import re
 import shutil
 import stat
 import subprocess
+import tempfile
 
 def _m(*x):
     u = copy.deepcopy(x[0])
@@ -253,16 +255,16 @@ def copy_files(src, dst, namespace_template):
             downloads = []
             namespace = copy.deepcopy(namespace_template)
             namespace["os"]             = os
-            namespace["download"]       = lambda x, y: downloads.append((x, y))
+            namespace["download"]       = lambda name, url, sha=None: downloads.append((name, url, sha))
             assert not namespace.has_key("__filename")
 
             content = process_template(file_in, namespace)
             if namespace["__filename"] is None: continue
 
-            for (name, url) in downloads:
+            for name, url, sha in downloads:
                 if not download_queue.has_key(url):
                     download_queue[url] = []
-                download_queue[url].append(os.path.join(dst, name))
+                download_queue[url].append((os.path.join(dst, name), sha))
 
             file_out = os.path.join(dst, namespace["__filename"])
             with open(file_out, 'w') as fp:
@@ -318,8 +320,27 @@ if __name__ == '__main__':
         generate_package(distro, args.ver, args.rel, args.daily, args.boot, dst)
 
     for url, filenames in download_queue.iteritems():
-        subprocess.call(["curl", "-L", "-o", filenames[0], "--", url])
-        for filename in filenames[1:]:
-            shutil.copyfile(filenames[0], filename)
+        fp = None
+        try:
+            fp = tempfile.NamedTemporaryFile(prefix="download-", delete=False)
+            fp.close()
+
+            subprocess.call(["curl", "-L", "-o", fp.name, "--", url])
+
+            m = hashlib.sha256()
+            with open(fp.name, "rb") as fp2:
+                while True:
+                    buf = fp2.read(16384)
+                    if buf == "": break
+                    m.update(buf)
+            found_sha = m.hexdigest()
+
+            for filename, sha in filenames:
+                assert sha is None or sha == found_sha
+                shutil.copyfile(fp.name, filename)
+
+        finally:
+            if fp is not None:
+                os.unlink(fp.name)
 
     exit(0)
