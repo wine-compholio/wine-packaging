@@ -1,0 +1,30 @@
+From da329668f55a01845e75e5a8dc4635b10c80cb18 Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sat, 26 Dec 2015 02:06:05 +0100
+Subject: configure: Test for -Wl,-map option at compile time.
+
+---
+ configure.ac | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 6a55474..e31afc7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -241,6 +241,13 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+    AC_MSG_RESULT([yes (GNU style)])],
+   [])
+ if test "x$VERSION_SCRIPT_FLAG" = "x"; then
++  LDFLAGS="$SAVED_LDFLAGS -Wl,-map,conftest.map"
++  AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
++    [VERSION_SCRIPT_FLAG=-Wl,-map,;
++     AC_MSG_RESULT([yes (cctools style)])],
++    [])
++fi
++if test "x$VERSION_SCRIPT_FLAG" = "x"; then
+   LDFLAGS="$SAVED_LDFLAGS -Wl,-M,conftest.map"
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+     [VERSION_SCRIPT_FLAG=-Wl,-M,;
+-- 
+2.6.4
+

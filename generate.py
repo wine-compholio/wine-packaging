@@ -85,6 +85,12 @@ XAR_CONFIG = {
     "package"           : "xar",
 }
 
+LIBJPEG_TURBO_CONFIG = {
+    "__src"             : "libjpeg-turbo",
+    "package"           : "libjpeg-turbo",
+}
+
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -152,6 +158,7 @@ PACKAGE_CONFIGS = {
     "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
     "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
+    "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
 }
 
 
