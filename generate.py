@@ -90,6 +90,11 @@ LIBJPEG_TURBO_CONFIG = {
     "package"           : "libjpeg-turbo",
 }
 
+LIBTIFF_CONFIG = {
+    "__src"             : "libtiff",
+    "package"           : "libtiff",
+}
+
 
 DEBIAN_BASE = {
     "distribution"   : "debian",
@@ -159,6 +164,7 @@ PACKAGE_CONFIGS = {
     "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
     "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
+    "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
 }
 
 
