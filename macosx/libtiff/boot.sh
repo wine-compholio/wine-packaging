@@ -4,9 +4,12 @@ set -e -x
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y git devscripts build-essential nasm automake
+apt-get install -y git devscripts build-essential
 
 {{ =include("../macosx-common.sh") }}
+(
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
+) > /build/source/deps/filelist.txt
 
 # ./configure expects that dsymutil is present, although its not
 # really used afterwards. Create a stub to make it happy.
@@ -28,4 +31,5 @@ su builder -c "./configure --prefix=/usr --host i686-apple-darwin12"
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 su builder -c "(cd /build/tmp/; tar -cvzf /build/libtiff-4.0.6-osx.tar.gz .)"
