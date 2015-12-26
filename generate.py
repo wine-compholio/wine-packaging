@@ -95,6 +95,11 @@ LIBTIFF_CONFIG = {
     "package"           : "libtiff",
 }
 
+LIBLCMS2_CONFIG = {
+    "__src"             : "liblcms2",
+    "package"           : "liblcms2",
+}
+
 
 DEBIAN_BASE = {
     "distribution"   : "debian",
@@ -165,6 +170,7 @@ PACKAGE_CONFIGS = {
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
     "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
     "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
+    "macosx-liblcms2"            : _m( LIBLCMS2_CONFIG,     MACOSX_BASE ),
 }
 
 
