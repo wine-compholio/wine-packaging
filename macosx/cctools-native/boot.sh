@@ -9,7 +9,8 @@ apt-get install -y git devscripts build-essential
 {{ =include("../clang-common.sh") }}
 
 {{
-	download("cctools.tar.gz", "https://github.com/tpoechtrager/cctools-port/archive/7d405492b09fa27546caaa989b8493829365deab.tar.gz")
+	download("cctools.tar.gz", "https://github.com/tpoechtrager/cctools-port/archive/7d405492b09fa27546caaa989b8493829365deab.tar.gz",
+			 "d443a058de338384391d6594f8c895fc32b18414a4027dca7a45a4d1bdc29478")
 }}
 
 su builder -c "tar -xvf cctools.tar.gz --strip-components 1"
