@@ -34,3 +34,4 @@ su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 su builder -c "(cd /build/tmp/; tar -cvzf /build/libtiff-4.0.6-osx.tar.gz .)"
+cp /build/source/config.log /build/

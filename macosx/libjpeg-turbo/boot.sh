@@ -25,3 +25,4 @@ su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --verbose"
 su builder -c "(cd /build/tmp/; tar -cvzf /build/libjpeg-turbo-1.4.2-osx.tar.gz .)"
+cp /build/source/config.log /build/
