@@ -115,6 +115,11 @@ LIBXSLT_CONFIG = {
     "package"           : "libxslt",
 }
 
+LIBTXC_DXTN_S2TC_CONFIG = {
+    "__src"             : "libtxc-dxtn-s2tc",
+    "package"           : "libtxc-dxtn-s2tc",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -188,6 +193,7 @@ PACKAGE_CONFIGS = {
     "macosx-liblzma"             : _m( LIBLZMA_CONFIG,      MACOSX_BASE ),
     "macosx-libxml2"             : _m( LIBXML2_CONFIG,      MACOSX_BASE ),
     "macosx-libxslt"             : _m( LIBXSLT_CONFIG,      MACOSX_BASE ),
+    "macosx-libtxc-dxtn-s2tc"    : _m( LIBTXC_DXTN_S2TC_CONFIG, MACOSX_BASE ),
 }
 
 

@@ -1,0 +1,67 @@
+From c9db0be86a50b72c36b17712145aa24a3ba15776 Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sun, 27 Dec 2015 09:13:11 +0100
+Subject: Adjust OpenGL include path for OSX.
+
+---
+ configure.ac      | 2 +-
+ s2tc_compress.c   | 2 +-
+ s2tc_decompress.c | 2 +-
+ txc_dxtn.h        | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index ff27b6f..57e8c1e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,7 +25,7 @@ AM_CONDITIONAL(ENABLE_RUNTIME_LINKING, [test x"$enable_runtime_linking" != xno])
+ AM_CONDITIONAL(ENABLE_TOOLS, [test x"$enable_tools" != xno])
+ AM_CONDITIONAL(ENABLE_LIB, [test x"$enable_lib" != xno])
+ 
+-AC_CHECK_HEADERS([GL/gl.h], , [AC_MSG_ERROR([OpenGL includes not found])])
++AC_CHECK_HEADERS([OpenGL/gl.h], , [AC_MSG_ERROR([OpenGL includes not found])])
+ 
+ AS_IF([test x"$enable_runtime_linking" = xno], ,
+ 	[AS_IF([test x"$enable_dlopen" != xno], ,
+diff --git a/s2tc_compress.c b/s2tc_compress.c
+index bb486ff..d9b93ae 100644
+--- a/s2tc_compress.c
++++ b/s2tc_compress.c
+@@ -31,7 +31,7 @@
+ 
+ #ifdef ENABLE_RUNTIME_LINKING
+ #include <dlfcn.h>
+-#include <GL/gl.h>
++#include <OpenGL/gl.h>
+ typedef void (tx_compress_dxtn_t)(GLint srccomps, GLint width, GLint height,
+ 		      const GLubyte *srcPixData, GLenum destformat,
+ 		      GLubyte *dest, GLint dstRowStride);
+diff --git a/s2tc_decompress.c b/s2tc_decompress.c
+index 82ec1e1..a40df1a 100644
+--- a/s2tc_decompress.c
++++ b/s2tc_decompress.c
+@@ -30,7 +30,7 @@
+ 
+ #ifdef ENABLE_RUNTIME_LINKING
+ #include <dlfcn.h>
+-#include <GL/gl.h>
++#include <OpenGL/gl.h>
+ typedef void (fetch_2d_texel_rgb_dxt1_t)(GLint srcRowStride, const GLubyte *pixdata,
+ 		     GLint i, GLint j, GLvoid *texel);
+ typedef void (fetch_2d_texel_rgba_dxt1_t)(GLint srcRowStride, const GLubyte *pixdata,
+diff --git a/txc_dxtn.h b/txc_dxtn.h
+index cd1095b..12b7b81 100644
+--- a/txc_dxtn.h
++++ b/txc_dxtn.h
+@@ -25,7 +25,7 @@
+ #ifndef _TXC_DXTN_H
+ #define _TXC_DXTN_H
+ 
+-#include <GL/gl.h>
++#include <OpenGL/gl.h>
+ 
+ typedef GLubyte GLchan;
+ #define UBYTE_TO_CHAN(b)  (b)
+-- 
+2.6.4
+

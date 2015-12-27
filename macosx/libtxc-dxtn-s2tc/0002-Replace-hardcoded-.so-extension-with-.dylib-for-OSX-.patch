@@ -1,0 +1,112 @@
+From 16c2fb3431fde0bf9ea7973187affabaf92c82bb Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Sun, 27 Dec 2015 09:13:37 +0100
+Subject: Replace hardcoded .so extension with .dylib, for OSX compatibility.
+
+---
+ configure.ac      | 2 +-
+ s2tc_compress.c   | 6 +++---
+ s2tc_decompress.c | 6 +++---
+ tests/test.sh     | 4 ++--
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 57e8c1e..7315114 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -14,7 +14,7 @@ fi
+ 
+ AC_PROG_LIBTOOL
+ 
+-# Disable dependency on libstdc++ for the .so library.
++# Disable dependency on libstdc++ for the .dylib library.
+ postdeps_CXX=`echo " $postdeps_CXX " | sed 's, -lstdc++ , ,g'`
+ 
+ AC_ARG_ENABLE(runtime-linking, AS_HELP_STRING([--disable-runtime-linking], [Do not load the library at runtime (faster startup, more dependencies)]), [enable_runtime_linking=$enableval], [enable_runtime_linking=yes])
+diff --git a/s2tc_compress.c b/s2tc_compress.c
+index d9b93ae..8331326 100644
+--- a/s2tc_compress.c
++++ b/s2tc_compress.c
+@@ -47,7 +47,7 @@ bool load_libraries(const char *n)
+ 	tx_compress_dxtn = (tx_compress_dxtn_t *) dlsym(l, "tx_compress_dxtn");
+ 	if(!tx_compress_dxtn)
+ 	{
+-		fprintf(stderr, "The selected libtxc_dxtn.so does not contain all required symbols.");
++		fprintf(stderr, "The selected libtxc_dxtn.dylib does not contain all required symbols.");
+ 		dlclose(l);
+ 		return false;
+ 	}
+@@ -556,7 +556,7 @@ int usage(const char *me)
+ 			"    [-o outfile.dds]\n"
+ 			"    [-t {DXT1|DXT3|DXT5}]\n"
+ #ifdef ENABLE_RUNTIME_LINKING
+-			"    [-l path_to_libtxc_dxtn.so]\n"
++			"    [-l path_to_libtxc_dxtn.dylib]\n"
+ #endif
+ 			,
+ 			me);
+@@ -574,7 +574,7 @@ int main(int argc, char **argv)
+ 	GLenum dxt = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+ 
+ #ifdef ENABLE_RUNTIME_LINKING
+-	const char *library = "libtxc_dxtn.so";
++	const char *library = "libtxc_dxtn.dylib";
+ #endif
+ 
+ 	int opt;
+diff --git a/s2tc_decompress.c b/s2tc_decompress.c
+index a40df1a..2b902ac 100644
+--- a/s2tc_decompress.c
++++ b/s2tc_decompress.c
+@@ -57,7 +57,7 @@ bool load_libraries(const char *n)
+ 	fetch_2d_texel_rgba_dxt5 = (fetch_2d_texel_rgba_dxt5_t *) dlsym(l, "fetch_2d_texel_rgba_dxt5");
+ 	if(!fetch_2d_texel_rgb_dxt1 || !fetch_2d_texel_rgba_dxt1 || !fetch_2d_texel_rgba_dxt3 || !fetch_2d_texel_rgba_dxt5)
+ 	{
+-		fprintf(stderr, "The selected libtxc_dxtn.so does not contain all required symbols.");
++		fprintf(stderr, "The selected libtxc_dxtn.dylib does not contain all required symbols.");
+ 		dlclose(l);
+ 		return false;
+ 	}
+@@ -89,7 +89,7 @@ int usage(const char *me)
+ 			"    [-i infile.tga]\n"
+ 			"    [-o outfile.dds]\n"
+ #ifdef ENABLE_RUNTIME_LINKING
+-			"    [-l path_to_libtxc_dxtn.so]\n"
++			"    [-l path_to_libtxc_dxtn.dylib]\n"
+ #endif
+ 			,
+ 			me);
+@@ -106,7 +106,7 @@ int main(int argc, char **argv)
+ 	unsigned char *buf;
+ 
+ #ifdef ENABLE_RUNTIME_LINKING
+-	const char *library = "libtxc_dxtn.so";
++	const char *library = "libtxc_dxtn.dylib";
+ #endif
+ 
+ 	int opt;
+diff --git a/tests/test.sh b/tests/test.sh
+index a1803bf..74326e6 100644
+--- a/tests/test.sh
++++ b/tests/test.sh
+@@ -170,7 +170,7 @@ if $use_external && which wine >/dev/null 2>&1 && [ -f "$HOME/.wine/drive_c/Prog
+ else
+ 	: ${use_compressonator:=false}
+ fi
+-if $use_external && [ -f /usr/lib/libtxc_dxtn.so ]; then
++if $use_external && [ -f /usr/lib/libtxc_dxtn.dylib ]; then
+ 	: ${use_libtxc_dxtn:=true}
+ else
+ 	: ${use_libtxc_dxtn:=false}
+@@ -235,7 +235,7 @@ for i in dxtfail floor_tread01_norm fract001 base_concrete1a disabled lift02 sun
+ 	S2TC_DITHER_MODE=FLOYDSTEINBERG S2TC_COLORDIST_MODE=$goodmetric S2TC_RANDOM_COLORS=32 S2TC_REFINE_COLORS=LOOP \
+ 	t "$i".tga "$i"-rand32-mrgb-l.dds bin/s2tc_compress -t $fourcc
+ 	if $use_libtxc_dxtn; then
+-		t "$i".tga "$i"-libtxc_dxtn.dds   bin/s2tc_compress -t $fourcc -l /usr/lib/libtxc_dxtn.so
++		t "$i".tga "$i"-libtxc_dxtn.dds   bin/s2tc_compress -t $fourcc -l /usr/lib/libtxc_dxtn.dylib
+ 		timing bin/s2tc_from_s3tc -i "$i"-libtxc_dxtn.dds -o "$i"-libtxc_dxtn-s2tc.dds
+ 		html "$i"-libtxc_dxtn-s2tc.dds
+ 	fi
+-- 
+2.6.4
+
