@@ -110,6 +110,11 @@ LIBXML2_CONFIG = {
     "package"           : "libxml2",
 }
 
+LIBXSLT_CONFIG = {
+    "__src"             : "libxslt",
+    "package"           : "libxslt",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -182,6 +187,7 @@ PACKAGE_CONFIGS = {
     "macosx-liblcms2"            : _m( LIBLCMS2_CONFIG,     MACOSX_BASE ),
     "macosx-liblzma"             : _m( LIBLZMA_CONFIG,      MACOSX_BASE ),
     "macosx-libxml2"             : _m( LIBXML2_CONFIG,      MACOSX_BASE ),
+    "macosx-libxslt"             : _m( LIBXSLT_CONFIG,      MACOSX_BASE ),
 }
 
 
