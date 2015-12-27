@@ -24,7 +24,6 @@ apt-get install -y git devscripts build-essential
 ) > /usr/bin/i686-apple-darwin12-dsymutil
 chmod +x /usr/bin/i686-apple-darwin12-dsymutil
 
-
 su builder -c "tar -xvf xz.tar.gz --strip-components 1"
 rm xz.tar.gz
 
