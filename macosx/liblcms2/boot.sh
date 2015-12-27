@@ -7,6 +7,10 @@ apt-get upgrade -y
 apt-get install -y git devscripts build-essential nasm automake
 
 {{ =include("../macosx-common.sh") }}
+(
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx.tar.gz
+) > /build/source/deps/filelist.txt
 
 {{
 	download("liblcms2.tar.gz", "http://downloads.sourceforge.net/sourceforge/lcms/lcms2-2.7.tar.gz",
@@ -20,4 +24,5 @@ su builder -c "./configure --prefix=/usr --host i686-apple-darwin12"
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 su builder -c "(cd /build/tmp/; tar -cvzf /build/liblcms2-2.7-osx.tar.gz .)"
