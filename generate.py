@@ -105,6 +105,11 @@ LIBLZMA_CONFIG = {
     "package"           : "liblzma",
 }
 
+LIBXML2_CONFIG = {
+    "__src"             : "libxml2",
+    "package"           : "libxml2",
+}
+
 DEBIAN_BASE = {
     "distribution"   : "debian",
     "ubuntu_version" : 0,
@@ -176,6 +181,7 @@ PACKAGE_CONFIGS = {
     "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
     "macosx-liblcms2"            : _m( LIBLCMS2_CONFIG,     MACOSX_BASE ),
     "macosx-liblzma"             : _m( LIBLZMA_CONFIG,      MACOSX_BASE ),
+    "macosx-libxml2"             : _m( LIBXML2_CONFIG,      MACOSX_BASE ),
 }
 
 
