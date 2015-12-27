@@ -11,15 +11,6 @@ apt-get install -y git devscripts build-essential
 	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
 ) > /build/source/deps/filelist.txt
 
-# ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy. Fixes
-# detection of multiple functions and build errors.
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	download("libxml2.tar.gz", "ftp://xmlsoft.org/libxml2/libxml2-2.9.3.tar.gz",
 		     "4de9e31f46b44d34871c22f54bfc54398ef124d6f7cafb1f4a5958fbcd3ba12d")

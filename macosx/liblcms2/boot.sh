@@ -12,16 +12,6 @@ apt-get install -y git devscripts build-essential nasm automake
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx.tar.gz
 ) > /build/source/deps/filelist.txt
 
-# ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy. Fixes
-# "checking for jpeg_read_header in -ljpeg... no" and other similar
-# errors.
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	download("liblcms2.tar.gz", "http://downloads.sourceforge.net/sourceforge/lcms/lcms2-2.7.tar.gz",
 			 "4524234ae7de185e6b6da5d31d6875085b2198bc63b1211f7dde6e2d197d6a53")

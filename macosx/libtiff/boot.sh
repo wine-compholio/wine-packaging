@@ -12,15 +12,6 @@ apt-get install -y git devscripts build-essential
 	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
 ) > /build/source/deps/filelist.txt
 
-# ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy. Fixes
-# detection of snprintf(), which causes a build failure otherwise.
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	download("libtiff.tar.gz", "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz",
 		     "4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c")

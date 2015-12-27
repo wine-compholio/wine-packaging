@@ -36,6 +36,13 @@ ln -s /usr/bin/i686-apple-darwin12-clang++ /usr/bin/i686-apple-darwin12-cpp
 ) > /usr/bin/i686-apple-darwin12-pkg-config
 chmod +x /usr/bin/i686-apple-darwin12-pkg-config
 
+# Create stub for dsymutil
+(
+  echo "#!/bin/bash"
+  echo "echo \"dsymutil stub: \$@\" >&2"
+) > /usr/bin/i686-apple-darwin12-dsymutil
+chmod +x /usr/bin/i686-apple-darwin12-dsymutil
+
 chown root:builder /build/macos-rootfs
 chmod 0775 /build/macos-rootfs
 

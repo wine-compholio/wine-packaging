@@ -20,15 +20,6 @@ tar --skip-old-files -C /build/macos-rootfs -xf /build/source/deps/xquartz-*.tar
 {{ endif }}
 ) > /build/source/deps/filelist.txt
 
-# ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy. Fixes
-# detection of multiple functions and build errors.
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	url = "https://source.winehq.org/git/wine.git/snapshot"
 	version = "master" if package_daily else "wine-%s" % package_version

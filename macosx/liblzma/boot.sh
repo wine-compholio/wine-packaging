@@ -8,17 +8,6 @@ apt-get install -y git devscripts build-essential
 
 {{ =include("../macosx-common.sh") }}
 
-# ./configure fails to find the SHA256 darwin functions if dsymutil is not present
-# and runs into a compiling issue as it mixes the system header files with it's own
-# SA256 implementation. To prevent the following error, we can just create a stub
-# as the extracted symbols are not used at all.
-# check/sha256.c:121:32: error: no member named 'state' in 'struct CC_SHA256state_st'
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	download("liblzma.tar.gz", "http://tukaani.org/xz/xz-5.2.2.tar.gz",
 		     "73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2")

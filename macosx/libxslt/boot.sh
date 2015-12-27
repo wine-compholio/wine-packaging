@@ -11,15 +11,6 @@ apt-get install -y git devscripts build-essential
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx.tar.gz
 ) > /build/source/deps/filelist.txt
 
-# ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy. Fixes
-# detection of multiple functions.
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/i686-apple-darwin12-dsymutil
-chmod +x /usr/bin/i686-apple-darwin12-dsymutil
-
 {{
 	download("libxslt.tar.gz", "http://xmlsoft.org/sources/libxslt-1.1.28.tar.gz",
 		     "5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c")
