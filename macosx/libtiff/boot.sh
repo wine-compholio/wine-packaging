@@ -9,6 +9,7 @@ apt-get install -y git devscripts build-essential
 {{ =include("../macosx-common.sh") }}
 (
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
 ) > /build/source/deps/filelist.txt
 
 # ./configure expects that dsymutil is present, although its not
