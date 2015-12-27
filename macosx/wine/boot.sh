@@ -34,7 +34,7 @@ chmod +x /usr/bin/i686-apple-darwin12-dsymutil
 	version = "master" if package_daily else "wine-%s" % package_version
 	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version))
 }}
-su builder -c "tar -xvf wine.tar.bz2 --strip-components 1"
+su builder -c "tar -xf wine.tar.bz2 --strip-components 1"
 rm wine.tar.bz2
 
 {{ if staging }}
@@ -43,8 +43,9 @@ rm wine.tar.bz2
 	version = "master" if package_daily else "v%s" % package_version
 	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version))
 }}
-su builder -c "tar -xvf wine-staging.tar.gz --strip-components 1"
+su builder -c "tar -xf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
+make -C "patches" DESTDIR="$(pwd)" install
 {{ endif }}
 
 # FIXME: We don't explicitly install dependencies for the host system yet,
@@ -62,12 +63,11 @@ su builder -c "mkdir /build/wine-cross"
 cd /build/wine-cross
 su builder -c "../source/configure --prefix=/usr --host i686-apple-darwin12 --with-wine-tools=../wine-tools \
 				--x-includes=/build/macos-rootfs/opt/X11/include --x-libraries=/build/macos-rootfs/opt/X11/lib \
-				CFLAGS='-I/build/macos-rootfs/opt/X11/include/freetype2 -I/build/macos-rootfs/opt/X11/include/libpng15' \
-				LDFLAGS='-L/build/macos-rootfs/opt/X11/lib -Wl,-rpath,/opt/x11/lib'"
+				LDFLAGS='-Wl,-rpath,/opt/x11/lib'"
 cp /build/wine-cross/config.log /build/config-cross.log
-#su builder -c "make"
-#su builder -c "mkdir /build/tmp"
-#su builder -c "make install DESTDIR=/build/tmp/"
-#su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
+su builder -c "make -j3"
+su builder -c "mkdir /build/tmp"
+su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "/build/source/fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 {{ version = package_version + ("-%s" % package_release if package_release != "" else "") }}
-#su builder -c "(cd /build/tmp/; tar -cvzf /build/{{ =package }}-{{ =version }}-osx.tar.gz .)"
+su builder -c "(cd /build/tmp/; tar -cvzf /build/{{ =compat_package }}-{{ =version }}-osx.tar.gz .)"

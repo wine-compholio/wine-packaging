@@ -103,6 +103,10 @@ def is_macho_file(path):
     if path.endswith(".dylib"):
         return True
 
+    # Wine also creates libraries with .so extension
+    if path.endswith(".so"):
+        return True
+
     # check if executable
     mode = os.stat(path).st_mode
     if not stat.S_IXUSR & mode:

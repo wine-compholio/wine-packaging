@@ -26,6 +26,16 @@ chmod +x /usr/bin/i686-apple-darwin12-clang++
 ln -s /usr/bin/i686-apple-darwin12-clang++ /usr/bin/i686-apple-darwin12-g++
 ln -s /usr/bin/i686-apple-darwin12-clang++ /usr/bin/i686-apple-darwin12-cpp
 
+# Create wrapper for pkg config
+(
+  echo "#!/bin/bash"
+  echo "export PKG_CONFIG_DIR="
+  echo "export PKG_CONFIG_SYSROOT_DIR=/build/macos-rootfs"
+  echo "export PKG_CONFIG_LIBDIR=/build/macos-rootfs/usr/lib/pkgconfig:/build/macos-rootfs/opt/X11/lib/pkgconfig"
+  echo "pkg-config \"\$@\""
+) > /usr/bin/i686-apple-darwin12-pkg-config
+chmod +x /usr/bin/i686-apple-darwin12-pkg-config
+
 chown root:builder /build/macos-rootfs
 chmod 0775 /build/macos-rootfs
 
