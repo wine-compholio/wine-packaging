@@ -194,6 +194,9 @@ PACKAGE_CONFIGS = {
     "macosx-libxml2"             : _m( LIBXML2_CONFIG,      MACOSX_BASE ),
     "macosx-libxslt"             : _m( LIBXSLT_CONFIG,      MACOSX_BASE ),
     "macosx-libtxc-dxtn-s2tc"    : _m( LIBTXC_DXTN_S2TC_CONFIG, MACOSX_BASE ),
+    "macosx-wine-stable"         : _m( WINE_STABLE_CONFIG,  MACOSX_BASE ),
+    "macosx-wine-development"    : _m( WINE_DEVEL_CONFIG,   MACOSX_BASE ),
+    "macosx-wine-staging"        : _m( WINE_STAGING_CONFIG, MACOSX_BASE ),
 }
 
 
