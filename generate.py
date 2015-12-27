@@ -100,6 +100,10 @@ LIBLCMS2_CONFIG = {
     "package"           : "liblcms2",
 }
 
+XZ_CONFIG = {
+    "__src"             : "xz",
+    "package"           : "xz",
+}
 
 DEBIAN_BASE = {
     "distribution"   : "debian",
@@ -171,6 +175,7 @@ PACKAGE_CONFIGS = {
     "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
     "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
     "macosx-liblcms2"            : _m( LIBLCMS2_CONFIG,     MACOSX_BASE ),
+    "macosx-xz"                  : _m( XZ_CONFIG,           MACOSX_BASE ),
 }
 
 
