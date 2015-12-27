@@ -12,7 +12,8 @@ apt-get install -y git devscripts build-essential
 ) > /build/source/deps/filelist.txt
 
 # ./configure expects that dsymutil is present, although its not
-# really used afterwards. Create a stub to make it happy.
+# really used afterwards. Create a stub to make it happy. Fixes
+# detection of snprintf(), which causes a build failure otherwise.
 (
   echo "#!/bin/bash"
   echo "echo \"dsymutil stub: \$@\" >&2"
