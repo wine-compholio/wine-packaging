@@ -1,0 +1,36 @@
+From 582bb0e0eb7c47f57ddc46c73d4ba6bb17acf85f Mon Sep 17 00:00:00 2001
+From: Sebastian Lackner <sebastian@fds-team.de>
+Date: Mon, 28 Dec 2015 23:12:28 +0100
+Subject: CMakeLists: Fix crosscompilation of coreaudio backend.
+
+---
+ CMakeLists.txt | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 78059db..91082c4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -957,8 +957,17 @@ IF(COREAUDIO_FRAMEWORK)
+         SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/coreaudio.c)
+         SET(BACKENDS  "${BACKENDS} CoreAudio,")
+         SET(EXTRA_LIBS ${COREAUDIO_FRAMEWORK} ${EXTRA_LIBS})
+-        SET(EXTRA_LIBS /System/Library/Frameworks/AudioUnit.framework ${EXTRA_LIBS})
+-        SET(EXTRA_LIBS /System/Library/Frameworks/ApplicationServices.framework ${EXTRA_LIBS})
++        FIND_LIBRARY(AUDIOUNIT_FRAMEWORK
++                     NAMES AudioUnit
++                     PATHS /System/Library/Frameworks
++        )
++        SET(EXTRA_LIBS ${AUDIOUNIT_FRAMEWORK} ${EXTRA_LIBS})
++        FIND_LIBRARY(APPLICATIONSERVICES_FRAMEWORK
++                     NAMES ApplicationServices
++                     PATHS /System/Library/Frameworks
++        )
++        SET(EXTRA_LIBS ${APPLICATIONSERVICES_FRAMEWORK} ${EXTRA_LIBS})
++        SET_SOURCE_FILES_PROPERTIES(Alc/backends/coreaudio.c PROPERTIES COMPILE_FLAGS "-msse2")
+ 
+         # Some versions of OSX may need the AudioToolbox framework. Add it if
+         # it's found.
+-- 
+2.6.4
+
