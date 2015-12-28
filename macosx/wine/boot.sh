@@ -10,9 +10,10 @@ apt-get install -y git devscripts build-essential
 tar --skip-old-files -C /build/macos-rootfs -xf /build/source/deps/xquartz-*.tar.xz
 (
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx.tar.gz
 	tar -C /build/macos-rootfs -xvf /build/source/deps/liblcms2-*-osx.tar.gz
 	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libopenal-soft-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx.tar.gz
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx.tar.gz
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libxslt-*-osx.tar.gz
 {{ if staging }}
