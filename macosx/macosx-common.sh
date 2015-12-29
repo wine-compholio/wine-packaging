@@ -1,4 +1,5 @@
 {{ =include("clang-common.sh") }}
+{{ =include("clean-deps.sh") }}
 
 dpkg -i /build/source/deps/cctools-i686-darwin12_877.5-1~jessie_i386.deb \
         /build/source/deps/bomutils_0.2-1~jessie_i386.deb \
