@@ -4,7 +4,7 @@ set -e -x
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y git devscripts build-essential
+apt-get install -y git devscripts build-essential python-magic python-lxml
 
 {{ =include("../macosx-common.sh") }}
 tar --skip-old-files -C /build/macos-rootfs -xf /build/source/deps/xquartz-*.tar.xz
@@ -63,3 +63,50 @@ su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 {{ version = package_version + ("-%s" % package_release if package_release != "" else "") }}
 su builder -c "(cd /build/tmp/; tar -cvzf /build/{{ =compat_package }}-{{ =version }}-osx.tar.gz .)"
+
+# Create OSX package
+
+# add dependencies
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libjpeg-turbo-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/liblcms2-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/liblzma-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libopenal-soft-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libtiff-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libxml2-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libxslt-*-osx.tar.gz"
+{{ if staging }}
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc_dxtn_s2tc-*-osx.tar.gz"
+{{ endif }}
+
+# create payload
+su builder -c "cp -ar /build/source/osx-package/payload-wine /build/tmp-osx-payload"
+su builder -c "cp -ar /build/tmp/usr /build/tmp-osx-payload/Contents/wine"
+
+# create tmp dir for package
+su builder -c "mkdir /build/tmp-osx-pkg"
+
+# assemble package
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg init"
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg resources \
+				--add /build/source/osx-package/resources"
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg settings \
+				--title '{{ =package }} Installer' \
+				--welcome 'welcome.html' \
+				--architecture i386 x86_64 \
+				--allow-customization false \
+				--allow-external-scripts false \
+				--target-any-volume true \
+				--target-user-home true \
+				--target-local-system true \
+				--script /build/source/osx-package/install-script \
+				--installation-check 'pm_install_check();'"
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg pkg-add \
+				--identifier org.winehq.{{ =package }} \
+				--version {{ =version }} \
+				--install-location '/Applications/{{ =package }}.app' \
+				--payload /build/tmp-osx-payload"
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg choice-add \
+				--id choice1 --title '{{ =package }}' --description 'Installs {{ =package }}' \
+				--pkgs org.winehq.{{ =package }}"
+su builder -c "/build/source/osx-package/osx-package.py -C /build/tmp-osx-pkg generate \
+				--output /build/{{ =compat_package }}-{{ =version }}.pkg"

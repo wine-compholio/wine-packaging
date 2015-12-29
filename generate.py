@@ -303,6 +303,12 @@ def copy_files(src, dst, namespace_template):
         file_out = os.path.join(dst, filename)
 
         if os.path.isfile(file_in):
+
+            # Do not interpret binary files
+            if file_in.endswith(".icns"):
+                shutil.copy2(file_in, file_out)
+                continue
+
             downloads = []
             namespace = copy.deepcopy(namespace_template)
             namespace["os"]             = os
@@ -325,7 +331,7 @@ def copy_files(src, dst, namespace_template):
             copy_files(file_in, file_out, namespace_template)
 
         else:
-            raise RuntimeError("Found entry which is neither a file nor a directory")
+            raise RuntimeError("Found entry which is neither a file nor a directory: %s" % file_in)
 
         # Copy file permissions to make sure we don't remove execute permissions
         permissions = os.stat(file_in)[stat.ST_MODE]

@@ -1,0 +1,19 @@
+function pm_install_check() {
+    if(!(system.compareVersions(system.version.ProductVersion,'$minver') >= 0)) {
+        my.result.title = 'Failure';
+        my.result.message = 'You need at least Mac OS X $minver to install $title.';
+        my.result.type = 'Fatal';
+        return false;
+    }
+
+    xquartz = system.files.bundleAtPath('/Applications/Utilities/XQuartz.app');
+    if (!xquartz || !(system.compareVersions(xquartz.CFBundleShortVersionString, '2.7.7') >= 0))
+    {
+        my.result.title = 'Failure';
+        my.result.message = 'You need to install XQuartz 2.7.7 or higher first.';
+        my.result.type = 'Fatal';
+        return false;
+    }
+
+    return true;
+}
