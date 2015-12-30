@@ -8,8 +8,9 @@ apt-get install -y git devscripts build-essential
 
 {{
 	url = "https://source.winehq.org/git/wine.git/snapshot"
+	sha = None if package_daily else wine_sha
 	version = "master" if package_daily else "wine-%s" % package_version
-	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version))
+	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version), sha)
 }}
 su builder -c "tar -xvf wine.tar.bz2 --strip-components 1"
 rm wine.tar.bz2
@@ -17,8 +18,9 @@ rm wine.tar.bz2
 {{ if staging }}
 {{
 	url = "https://github.com/wine-compholio/wine-staging/archive"
+	sha = None if package_daily else staging_sha
 	version = "master" if package_daily else "v%s" % package_version
-	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version))
+	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version), sha)
 }}
 su builder -c "tar -xvf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
