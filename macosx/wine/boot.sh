@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (compat_package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -61,8 +65,7 @@ su builder -c "make -j3"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-{{ version = package_version + ("-%s" % package_release if package_release != "" else "") }}
-su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =compat_package }}-{{ =version }}-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
 
 # Install dependencies in DESTDIR
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libjpeg-turbo-*-osx.tar.gz"
@@ -75,7 +78,7 @@ su builder -c "tar -C /build/tmp -xf /build/source/deps/libxslt-*-osx.tar.gz"
 {{ if staging }}
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz"
 {{ endif }}
-su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =compat_package }}-portable-{{ =version }}-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/portable-{{ =output }}-osx.tar.gz .)"
 
 # Create payload directory
 su builder -c "cp -ar /build/source/osx-package/payload-wine /build/tmp-osx-payload"
@@ -106,7 +109,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
 				--identifier org.winehq.{{ =package }} \
-				--version {{ =version }} \
+				--version {{ =package_version }} \
 				--install-location '/Applications/{{ =package }}.app' \
 				--payload /build/tmp-osx-payload"
 
@@ -117,4 +120,4 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--pkgs org.winehq.{{ =package }}"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg generate \
-				--output /build/{{ =compat_package }}-{{ =version }}.pkg"
+				--output /build/{{ =output }}.pkg"
