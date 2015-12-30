@@ -264,7 +264,7 @@ def cmd_pkg_add(args):
             raise RuntimeError("Preinstall script is not part of the script archive (or no script archive at all)")
 
         scripts = get_or_create(pkg_xml, "scripts")
-        preinstall = get_or_create(pkg_xml, "preinstall")
+        preinstall = get_or_create(scripts, "preinstall")
         preinstall.set("file", args.preinstall_script)
 
     if args.postinstall_script is not None:
@@ -272,7 +272,7 @@ def cmd_pkg_add(args):
             raise RuntimeError("Postinstall script is not part of the script archive (or no script archive at all)")
 
         scripts = get_or_create(pkg_xml, "scripts")
-        postinstall = get_or_create(pkg_xml, "postinstall")
+        postinstall = get_or_create(scripts, "postinstall")
         postinstall.set("file", args.postinstall_script)
 
     save_xml(pkg_xml, os.path.join(pkg_path, "PackageInfo"))
