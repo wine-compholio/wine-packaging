@@ -22,13 +22,18 @@
 /usr/bin/python2 - <<END
 import os, re, sys
 
-DEPENDENCIES = "/build/source/deps"
+DEPENDENCIES = "/nfs/share/macosx-builds/deps"
+
+def parse_subversion(v):
+    for i, c in enumerate(re.split("([0-9]+)", v)):
+        if i % 2 == 0: yield c
+        else: yield int(c)
 
 def parse_version(v):
-    try:
-        return {"": 0, ".": 2, "-": 1, "~": -1}[v]
-    except KeyError:
-        return int(v)
+    for i, c in enumerate(re.split("([-.~])", v)):
+        if i % 2 == 0: yield tuple(parse_subversion(c))
+        else: yield {".": 2, "-": 1, "~": -1}[c]
+    yield 0
 
 packages = {}
 
@@ -40,14 +45,10 @@ for filename in os.listdir(DEPENDENCIES):
     parts = filename[:-11].split("-")
     for i in xrange(1, len(parts)):
         version = "-".join(parts[i:])
-        m = re.match("^([-.~0-9]+)$", version)
-        if m is None: continue
-
+        if re.match("^([-.~0-9]+)$", version) is None: continue
         name = "-".join(parts[:i])
-        version = [parse_version(v) for v in re.split("([-.~])", version)] + [0]
-
         if not packages.has_key(name): packages[name] = []
-        packages[name].append((full_path, tuple(version)))
+        packages[name].append((full_path, tuple(parse_version(version))))
         break
 
 for name, candidates in packages.iteritems():
