@@ -65,7 +65,7 @@ function help()
     echo " If you want to configure wine:"
     printf "  \e[1;31m winecfg\e[0m\n"
     echo ""
-    echo " To get information about app compability:"
+    echo " To get information about app compatibility:"
     printf "  \e[1;31m appdb\e[0m\e[1;90m Program Name\e[0m\n"
     echo ""
 }
