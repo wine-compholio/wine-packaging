@@ -21,6 +21,15 @@
 
 WINE_VERSION="$(wine --version)"
 
+# Use "xdg-open" instead of "open" on Linux
+if command -v xdg-open >/dev/null 2>&1; then
+    function open()
+    {
+        xdg-open "$1"
+    }
+fi
+
+# Encode special characters in an URL
 function _urlencode()
 {
     local length="${#1}"
@@ -35,6 +44,7 @@ function _urlencode()
     done
 }
 
+# Search AppDB for a specific program
 function appdb()
 {
     local name_encoded=$(_urlencode "$*")
@@ -42,6 +52,7 @@ function appdb()
     open "https://appdb.winehq.org/objectManager.php?$args" &> /dev/null
 }
 
+# Start screen
 clear
 echo "################################################################################"
 echo "#                           Wine Is Not an Emulator                            #"
