@@ -17,7 +17,7 @@ tar --skip-old-files -C /build/macos-rootfs -xf /build/source/deps/xquartz-*.tar
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx.tar.gz
 	tar -C /build/macos-rootfs -xvf /build/source/deps/libxslt-*-osx.tar.gz
 {{ if staging }}
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libtxc_dxtn_s2tc-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz
 {{ endif }}
 ) > /build/source/deps/filelist.txt
 
@@ -73,7 +73,7 @@ su builder -c "tar -C /build/tmp -xf /build/source/deps/libtiff-*-osx.tar.gz"
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libxml2-*-osx.tar.gz"
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libxslt-*-osx.tar.gz"
 {{ if staging }}
-su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc_dxtn_s2tc-*-osx.tar.gz"
+su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz"
 {{ endif }}
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =compat_package }}-portable-{{ =version }}-osx.tar.gz .)"
 

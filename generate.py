@@ -129,6 +129,8 @@ LIBXSLT_CONFIG = {
 LIBTXC_DXTN_S2TC_CONFIG = {
     "__src"             : "libtxc-dxtn-s2tc",
     "package"           : "libtxc-dxtn-s2tc",
+    "package_version"   : "1.0",
+    "sha"               : "6de218388bb371c279b8e0069598b946e173ae6ca300bf14ec199ff04d5f57f4",
 }
 
 LIBOPENAL_SOFT_CONFIG = {
