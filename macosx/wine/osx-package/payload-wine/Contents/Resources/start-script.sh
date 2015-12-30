@@ -38,8 +38,8 @@ function _urlencode()
 function appdb()
 {
     local name_encoded=$(_urlencode "$*")
-    local url="http://appdb.winehq.org/objectManager.php?sClass=application&bIsQueue=false&bIsRejected=false&sTitle=Browse%20Applications&iItemsPerPage=25&iPage=1&iappFamily-appNameOp0=2&sappFamily-appNameData0=$name_encoded"
-    open "$url" &> /dev/null
+    local args="sClass=application&sTitle=Browse%20Applications&iappFamily-appNameOp0=2&sappFamily-appNameData0=$name_encoded"
+    open "https://appdb.winehq.org/objectManager.php?$args" &> /dev/null
 }
 
 clear
