@@ -111,7 +111,9 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
 				--identifier org.winehq.{{ =package }} \
 				--version {{ =package_version }} \
 				--install-location '/Applications/{{ =package }}.app' \
-				--payload /build/tmp-osx-payload"
+				--payload /build/tmp-osx-payload \
+				--scripts /build/source/osx-package/scripts-wine \
+				--preinstall-script preinstall.sh"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--id choice1 \
