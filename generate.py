@@ -103,6 +103,8 @@ LIBTIFF_CONFIG = {
 LIBLCMS2_CONFIG = {
     "__src"             : "liblcms2",
     "package"           : "liblcms2",
+    "package_version"   : "2.7",
+    "sha"               : "4524234ae7de185e6b6da5d31d6875085b2198bc63b1211f7dde6e2d197d6a53",
 }
 
 LIBLZMA_CONFIG = {

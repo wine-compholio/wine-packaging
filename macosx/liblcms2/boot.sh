@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -13,8 +17,9 @@ apt-get install -y git devscripts build-essential nasm automake
 ) > /build/source/deps/filelist.txt
 
 {{
-	download("liblcms2.tar.gz", "http://downloads.sourceforge.net/sourceforge/lcms/lcms2-2.7.tar.gz",
-			 "4524234ae7de185e6b6da5d31d6875085b2198bc63b1211f7dde6e2d197d6a53")
+	# FIXME: package_daily is ignored so far
+	url = "http://downloads.sourceforge.net/sourceforge/lcms"
+	download("liblcms2.tar.gz", "%s/lcms2-%s.tar.gz" % (url, package_version), sha)
 }}
 
 su builder -c "tar -xvf liblcms2.tar.gz --strip-components 1"
@@ -26,4 +31,4 @@ su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/liblcms2-2.7-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
