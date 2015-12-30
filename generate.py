@@ -132,6 +132,8 @@ LIBTXC_DXTN_S2TC_CONFIG = {
 LIBOPENAL_SOFT_CONFIG = {
     "__src"             : "libopenal-soft",
     "package"           : "libopenal-soft",
+    "package_version"   : "1.17.1",
+    "sha"               : "aa0232ef47c278a52e8a58f676614400172520358440c2c79a24133b4cc046df",
 }
 
 DEBIAN_BASE = {

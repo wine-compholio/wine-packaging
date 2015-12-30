@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -9,9 +13,11 @@ apt-get install -y git devscripts build-essential cmake
 {{ =include("../macosx-common.sh") }}
 
 {{
-	# We also need commit "Use Apple's pthread_setname_np before GNU's".
-	download("libopenal-soft.tar.gz", "https://github.com/kcat/openal-soft/archive/bce20d1f6be43dcf3a5be0ec97b35cbe335844e7.tar.gz",
-			 "aa0232ef47c278a52e8a58f676614400172520358440c2c79a24133b4cc046df")
+	url = "https://github.com/kcat/openal-soft/archive"
+	sha = None if package_daily else sha
+	version = "master" if package_daily else "openal-soft-%s" % package_version
+	version = "bce20d1f6be43dcf3a5be0ec97b35cbe335844e7" # HACK
+	download("libopenal-soft.tar.gz", "%s/%s.tar.gz" % (url, version), sha)
 }}
 
 su builder -c "tar -xvf libopenal-soft.tar.gz --strip-components 1"
@@ -27,4 +33,4 @@ su builder -c "make VERBOSE=1"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/libopenal-soft-1.17.1-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
