@@ -418,7 +418,8 @@ if __name__ == '__main__':
             found_sha = m.hexdigest()
 
             for filename, sha in filenames:
-                assert sha is None or sha == found_sha
+                if not args.daily and args.ver is None:
+                    assert sha is None or sha == found_sha
                 shutil.copyfile(fp.name, filename)
 
         finally:

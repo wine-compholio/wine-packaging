@@ -14,7 +14,6 @@ apt-get install -y git devscripts build-essential
 
 {{
 	url = "https://github.com/divVerent/s2tc/archive"
-	sha = None if package_daily else sha
 	version = "master" if package_daily else "v%s" % package_version
 	version = "e0dcdcb802c81e2ac4b1b49a2b39c984fb8f3604" # HACK
 	download("libtxc-dxtn-s2tc.tar.gz", "%s/%s.tar.gz" % (url, version), sha)

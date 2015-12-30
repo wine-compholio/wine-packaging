@@ -6,17 +6,15 @@ urpmi --auto-update
 
 {{
 	url = "https://source.winehq.org/git/wine.git/snapshot"
-	sha = None if package_daily else wine_sha
 	version = "master" if package_daily else "wine-%s" % package_version
-	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version), sha)
+	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version), wine_sha)
 }}
 
 {{ if staging }}
 {{
 	url = "https://github.com/wine-compholio/wine-staging/archive"
-	sha = None if package_daily else staging_sha
 	version = "master" if package_daily else "v%s" % package_version
-	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version), sha)
+	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version), staging_sha)
 }}
 {{ endif }}
 

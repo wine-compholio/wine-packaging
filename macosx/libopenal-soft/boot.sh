@@ -14,7 +14,6 @@ apt-get install -y git devscripts build-essential cmake
 
 {{
 	url = "https://github.com/kcat/openal-soft/archive"
-	sha = None if package_daily else sha
 	version = "master" if package_daily else "openal-soft-%s" % package_version
 	version = "bce20d1f6be43dcf3a5be0ec97b35cbe335844e7" # HACK
 	download("libopenal-soft.tar.gz", "%s/%s.tar.gz" % (url, version), sha)

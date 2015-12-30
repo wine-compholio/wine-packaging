@@ -14,7 +14,6 @@ apt-get install -y git devscripts build-essential nasm automake
 
 {{
 	url = "https://github.com/libjpeg-turbo/libjpeg-turbo/archive"
-	sha = None if package_daily else sha
 	version = "master" if package_daily else "%s" % package_version
 	download("libjpeg-turbo.tar.gz", "%s/%s.tar.gz" % (url, version), sha)
 }}
