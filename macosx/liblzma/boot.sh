@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -9,8 +13,9 @@ apt-get install -y git devscripts build-essential
 {{ =include("../macosx-common.sh") }}
 
 {{
-	download("liblzma.tar.gz", "http://tukaani.org/xz/xz-5.2.2.tar.gz",
-		     "73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2")
+	# FIXME: package_daily is ignored so far
+	url = "http://tukaani.org/xz"
+	download("liblzma.tar.gz", "%s/xz-%s.tar.gz" % (url, package_version), sha)
 }}
 
 su builder -c "tar -xvf liblzma.tar.gz --strip-components 1"
@@ -22,4 +27,4 @@ su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/liblzma-5.2.2-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"

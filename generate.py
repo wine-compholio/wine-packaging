@@ -110,6 +110,8 @@ LIBLCMS2_CONFIG = {
 LIBLZMA_CONFIG = {
     "__src"             : "liblzma",
     "package"           : "liblzma",
+    "package_version"   : "5.2.2",
+    "sha"               : "73df4d5d34f0468bd57d09f2d8af363e95ed6cc3a4a86129d2f2c366259902a2",
 }
 
 LIBXML2_CONFIG = {
