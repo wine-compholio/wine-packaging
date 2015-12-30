@@ -91,6 +91,8 @@ XAR_CONFIG = {
 LIBJPEG_TURBO_CONFIG = {
     "__src"             : "libjpeg-turbo",
     "package"           : "libjpeg-turbo",
+    "package_version"   : "1.4.2",
+    "sha"               : "7b5e45fbbe9ccb7ae25b4969d663ff5d837a5d8e83956bfadedcd31bd9756599",
 }
 
 LIBTIFF_CONFIG = {
