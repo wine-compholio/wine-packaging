@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -12,8 +16,9 @@ apt-get install -y git devscripts build-essential
 ) > /build/source/deps/filelist.txt
 
 {{
-	download("libxml2.tar.gz", "ftp://xmlsoft.org/libxml2/libxml2-2.9.3.tar.gz",
-		     "4de9e31f46b44d34871c22f54bfc54398ef124d6f7cafb1f4a5958fbcd3ba12d")
+	# FIXME: package_daily is ignored so far
+	url = "ftp://xmlsoft.org/libxml2"
+	download("libxml2.tar.gz", "%s/libxml2-%s.tar.gz" % (url, package_version), sha)
 }}
 
 su builder -c "tar -xvf libxml2.tar.gz --strip-components 1"
@@ -27,4 +32,4 @@ su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/libxml2-2.9.3-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"

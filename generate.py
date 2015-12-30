@@ -119,6 +119,8 @@ LIBLZMA_CONFIG = {
 LIBXML2_CONFIG = {
     "__src"             : "libxml2",
     "package"           : "libxml2",
+    "package_version"   : "2.9.3",
+    "sha"               : "4de9e31f46b44d34871c22f54bfc54398ef124d6f7cafb1f4a5958fbcd3ba12d",
 }
 
 LIBXSLT_CONFIG = {
