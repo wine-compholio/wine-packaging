@@ -52,21 +52,27 @@ function appdb()
     open "https://appdb.winehq.org/objectManager.php?$args" &> /dev/null
 }
 
+# Show useful commands
+function help()
+{
+    echo ""
+    echo " Welcome to $WINE_VERSION"
+    echo ""
+    echo " In order to start a program:"
+    printf "   .exe:\e[1;31m wine\e[0m\e[1;90m program.exe\e[0m\n"
+    printf "   .msi:\e[1;31m wine msiexec /i\e[0m\e[1;90m program.msi\e[0m\n"
+    echo ""
+    echo " If you want to configure wine:"
+    printf "  \e[1;31m winecfg\e[0m\n"
+    echo ""
+    echo " To get information about app compability:"
+    printf "  \e[1;31m appdb\e[0m\e[1;90m Program Name\e[0m\n"
+    echo ""
+}
+
 # Start screen
 clear
 echo "################################################################################"
 echo "#                           Wine Is Not an Emulator                            #"
 echo "################################################################################"
-echo ""
-echo " Welcome to $WINE_VERSION"
-echo ""
-echo " In order to start a program:"
-printf "   .exe:\e[1;31m wine\e[0m\e[1;90m program.exe\e[0m\n"
-printf "   .msi:\e[1;31m wine msiexec /i\e[0m\e[1;90m program.msi\e[0m\n"
-echo ""
-echo " If you want to configure wine:"
-printf "  \e[1;31m winecfg\e[0m\n"
-echo ""
-echo " To get information about app compability:"
-printf "  \e[1;31m appdb\e[0m\e[1;90m Program Name\e[0m\n"
-echo ""
+help
