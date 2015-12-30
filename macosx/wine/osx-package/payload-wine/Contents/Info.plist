@@ -22,5 +22,24 @@
 	<string>WINE</string>
 	<key>CFBundleVersion</key>
 	<string>{{ =package_version }}</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>exe</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>winehq.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Windows executable</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+		</dict>
+	</array>
 </dict>
 </plist>

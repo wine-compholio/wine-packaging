@@ -79,7 +79,10 @@ su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =compat_package }}-portable-{
 
 # Create payload directory
 su builder -c "cp -ar /build/source/osx-package/payload-wine /build/tmp-osx-payload"
-su builder -c "cp -ar /build/tmp/usr /build/tmp-osx-payload/Contents/wine"
+su builder -c "cp -ar /build/tmp/usr /build/tmp-osx-payload/Contents/Resources/wine"
+su builder -c "i686-apple-darwin12-clang -msse2 -framework Cocoa \
+               -o /build/tmp-osx-payload/Contents/MacOS/wine \
+               /build/source/osx-package/wrapper.m"
 
 # Assemble package
 cd /build/source/osx-package
