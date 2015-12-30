@@ -126,6 +126,8 @@ LIBXML2_CONFIG = {
 LIBXSLT_CONFIG = {
     "__src"             : "libxslt",
     "package"           : "libxslt",
+    "package_version"   : "1.1.28",
+    "sha"               : "5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c"
 }
 
 LIBTXC_DXTN_S2TC_CONFIG = {

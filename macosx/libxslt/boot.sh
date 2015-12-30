@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -12,8 +16,9 @@ apt-get install -y git devscripts build-essential
 ) > /build/source/deps/filelist.txt
 
 {{
-	download("libxslt.tar.gz", "http://xmlsoft.org/sources/libxslt-1.1.28.tar.gz",
-		     "5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c")
+	# FIXME: package_daily is ignored so far
+	url = "http://xmlsoft.org/sources"
+	download("libxslt.tar.gz", "%s/libxslt-%s.tar.gz" % (url, package_version), sha)
 }}
 
 su builder -c "tar -xvf libxslt.tar.gz --strip-components 1"
@@ -25,4 +30,4 @@ su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/libxslt-1.1.28-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
