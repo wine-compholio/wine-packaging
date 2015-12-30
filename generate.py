@@ -41,6 +41,7 @@ def _m(*x):
 WINE_STABLE_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-stable",
+    "package_version"   : "1.8",
     "compat_package"    : "winehq-stable",
     "prefix"            : "/opt/wine-stable",
     "staging"           : False,
@@ -50,6 +51,7 @@ WINE_STABLE_CONFIG = {
 WINE_DEVEL_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-devel",
+    "package_version"   : "1.9.0",
     "compat_package"    : "winehq-devel",
     "prefix"            : "/opt/wine-devel",
     "staging"           : False,
@@ -59,6 +61,7 @@ WINE_DEVEL_CONFIG = {
 WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
+    "package_version"   : "1.9.0",
     "compat_package"    : "winehq-staging",
     "prefix"            : "/opt/wine-staging",
     "staging"           : True,
@@ -342,8 +345,10 @@ def generate_package(distro, version, release, daily, boot, dst):
         raise RuntimeError("%s is not a supported distro" % distro)
 
     namespace = copy.deepcopy(PACKAGE_CONFIGS[distro])
-    namespace["package_version"] = version
-    namespace["package_release"] = release
+    if version is not None: namespace["package_version"] = version
+    if release is not None: namespace["package_release"] = release
+    if not namespace.has_key("package_version"): namespace["package_version"] = "0.0.0"
+    if not namespace.has_key("package_release"): namespace["package_release"] = ""
     namespace["package_daily"]   = daily
     namespace["package_boot"]    = boot
 
@@ -353,8 +358,8 @@ def generate_package(distro, version, release, daily, boot, dst):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Package file generator for Wine")
-    parser.add_argument('--ver', help="Wine version to build", required=True)
-    parser.add_argument('--rel', help="Release number of this build", default="")
+    parser.add_argument('--ver', help="Override version number", default=None)
+    parser.add_argument('--rel', help="Override release number", default=None)
     parser.add_argument('--out', help="Output directory for build files", required=True)
     parser.add_argument('--daily', action='store_true', help="Generate build files for a daily build")
     parser.add_argument('--boot', action='store_true', help="Generate boot script and download dependencies")
