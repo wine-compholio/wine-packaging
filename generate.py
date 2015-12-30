@@ -98,6 +98,8 @@ LIBJPEG_TURBO_CONFIG = {
 LIBTIFF_CONFIG = {
     "__src"             : "libtiff",
     "package"           : "libtiff",
+    "package_version"   : "4.0.6",
+    "sha"               : "4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c",
 }
 
 LIBLCMS2_CONFIG = {

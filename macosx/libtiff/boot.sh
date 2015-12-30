@@ -1,4 +1,8 @@
 {{ __filename = __filename if package_boot else None }}
+{{
+	output = "%s-%s" % (package, package_version)
+	output += "-%s" % package_release if package_release != "" else ""
+}}
 #!/bin/bash
 set -e -x
 
@@ -13,8 +17,9 @@ apt-get install -y git devscripts build-essential
 ) > /build/source/deps/filelist.txt
 
 {{
-	download("libtiff.tar.gz", "http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz",
-		     "4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c")
+	# FIXME: package_daily is ignored so far
+	url = "http://download.osgeo.org/libtiff"
+	download("libtiff.tar.gz", "%s/tiff-%s.tar.gz" % (url, package_version), sha)
 }}
 
 su builder -c "tar -xvf libtiff.tar.gz --strip-components 1"
@@ -26,4 +31,4 @@ su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/libtiff-4.0.6-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
