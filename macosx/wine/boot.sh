@@ -65,9 +65,9 @@ su builder -c "make -j3"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "mkdir -p /build/tmp/usr/share/doc/wine"
-su builder -c "cp -a ANNOUNCE LICENSE COPYING.* /build/tmp/usr/share/doc/wine"
+su builder -c "cp -a /build/source/{ANNOUNCE,LICENSE,COPYING.*} /build/tmp/usr/share/doc/wine"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
-su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
 
 # Install dependencies in DESTDIR
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libjpeg-turbo-*-osx.tar.gz"
@@ -80,7 +80,7 @@ su builder -c "tar -C /build/tmp -xf /build/source/deps/libxslt-*-osx.tar.gz"
 {{ if staging }}
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz"
 {{ endif }}
-su builder -c "(cd /build/tmp; tar -cvzf /build/portable-{{ =output }}-osx.tar.gz .)"
+su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/portable-{{ =output }}-osx.tar.gz .)"
 
 # Create payload directory
 su builder -c "cp -ar /build/source/osx-package/payload-wine /build/tmp-osx-payload"
@@ -98,8 +98,9 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg resources \
 				--add /build/source/osx-package/resources"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
-				--title '{{ =package }} Installer' \
+				--title '{{ =pretty_name }}' \
 				--welcome 'welcome.html' \
+				--conclusion 'conclusion.html' \
 				--architecture i386 x86_64 \
 				--allow-customization false \
 				--allow-external-scripts false \
@@ -112,14 +113,14 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
 				--identifier org.winehq.{{ =package }} \
 				--version {{ =package_version }} \
-				--install-location '/Applications/{{ =package }}.app' \
+				--install-location '/Applications/{{ =pretty_name }}.app' \
 				--payload /build/tmp-osx-payload \
 				--scripts /build/source/osx-package/scripts-wine \
 				--preinstall-script preinstall.sh"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--id choice1 \
-				--title '{{ =package }}' \
+				--title '{{ =pretty_name }}' \
 				--description 'Installs {{ =package }}' \
 				--pkgs org.winehq.{{ =package }}"
 

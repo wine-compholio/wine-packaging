@@ -22,7 +22,7 @@
 /usr/bin/python2 - <<END
 import os, re, sys
 
-DEPENDENCIES = "/nfs/share/macosx-builds/deps"
+DEPENDENCIES = "/build/source/deps"
 
 def parse_subversion(v):
     for i, c in enumerate(re.split("([0-9]+)", v)):
