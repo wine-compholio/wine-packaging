@@ -31,5 +31,7 @@ cp /build/source/build/CMakeCache.txt /build/
 su builder -c "make VERBOSE=1"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "mkdir -p /build/tmp/usr/share/doc/openal-soft"
+su builder -c "cp -a COPYING /build/tmp/usr/share/doc/openal-soft"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --verbose"
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"

@@ -29,5 +29,6 @@ cp /build/source/config.log /build/
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "cp -a LICENSE.txt /build/tmp/usr/share/doc/libjpeg-turbo"
 su builder -c "./fixup-import.py --destdir /build/tmp --verbose"
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"

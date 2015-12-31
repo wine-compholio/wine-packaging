@@ -64,6 +64,8 @@ cp /build/wine-cross/config.log /build/config-cross.log
 su builder -c "make -j3"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "mkdir -p /build/tmp/usr/share/doc/wine"
+su builder -c "cp -a ANNOUNCE LICENSE COPYING.* /build/tmp/usr/share/doc/wine"
 su builder -c "/build/source/fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
 

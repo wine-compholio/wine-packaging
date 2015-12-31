@@ -30,5 +30,7 @@ cp /build/source/config.log /build/
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "mkdir -p /build/tmp/usr/share/doc/libtxc_dxtn"
+su builder -c "cp -a COPYING /build/tmp/usr/share/doc/libtxc_dxtn"
 su builder -c "./fixup-import.py --destdir /build/tmp --verbose"
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"

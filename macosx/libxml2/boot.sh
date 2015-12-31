@@ -31,5 +31,6 @@ cp /build/source/config.log /build/
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
+# "make install" already copies license files to usr/share/doc/libxml2-2.9.3
 su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
 su builder -c "(cd /build/tmp; tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
