@@ -45,7 +45,7 @@ for filename in os.listdir(DEPENDENCIES):
     parts = filename[:-11].split("-")
     for i in xrange(1, len(parts)):
         version = "-".join(parts[i:])
-        if re.match("^([-.~0-9]+)$", version) is None: continue
+        if re.match("^[0-9]+([-.~][a-z]*[0-9]+)*$", version) is None: continue
         name = "-".join(parts[:i])
         if not packages.has_key(name): packages[name] = []
         packages[name].append((full_path, tuple(parse_version(version))))
