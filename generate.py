@@ -47,6 +47,7 @@ WINE_STABLE_CONFIG = {
     "prefix"            : "/opt/wine-stable",
     "staging"           : False,
     "devel"             : False,
+    "pretty_name"       : "Wine Stable",
 }
 
 WINE_DEVEL_CONFIG = {
@@ -58,6 +59,7 @@ WINE_DEVEL_CONFIG = {
     "prefix"            : "/opt/wine-devel",
     "staging"           : False,
     "devel"             : True,
+    "pretty_name"       : "Wine Devel",
 }
 
 WINE_STAGING_CONFIG = {
@@ -70,6 +72,7 @@ WINE_STAGING_CONFIG = {
     "prefix"            : "/opt/wine-staging",
     "staging"           : True,
     "devel"             : True,
+    "pretty_name"       : "Wine Staging",
 }
 
 CLANG_CONFIG = {
