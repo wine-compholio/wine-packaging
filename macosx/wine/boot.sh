@@ -98,7 +98,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg resources \
 				--add /build/source/osx-package/resources"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
-				--title '{{ =package }} Installer' \
+				--title '{{ =pretty_name }}' \
 				--welcome 'welcome.html' \
 				--architecture i386 x86_64 \
 				--allow-customization false \
@@ -112,14 +112,14 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
 				--identifier org.winehq.{{ =package }} \
 				--version {{ =package_version }} \
-				--install-location '/Applications/{{ =package }}.app' \
+				--install-location '/Applications/{{ =pretty_name }}.app' \
 				--payload /build/tmp-osx-payload \
 				--scripts /build/source/osx-package/scripts-wine \
 				--preinstall-script preinstall.sh"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--id choice1 \
-				--title '{{ =package }}' \
+				--title '{{ =pretty_name }}' \
 				--description 'Installs {{ =package }}' \
 				--pkgs org.winehq.{{ =package }}"
 
