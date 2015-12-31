@@ -100,6 +100,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg resources \
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
 				--title '{{ =pretty_name }}' \
 				--welcome 'welcome.html' \
+				--conclusion 'conclusion.html' \
 				--architecture i386 x86_64 \
 				--allow-customization false \
 				--allow-external-scripts false \
