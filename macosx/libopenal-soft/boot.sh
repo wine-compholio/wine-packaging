@@ -25,7 +25,8 @@ rm libopenal-soft.tar.gz
 su builder -c "cat *.patch | patch -p1"
 
 cd build
-su builder -c "cmake -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_BUILD_TYPE=Release \
+su builder -c "cmake -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_INSTALL_NAME_DIR=/usr/lib \
+				-D CMAKE_BUILD_TYPE=Release \
 				-D CMAKE_TOOLCHAIN_FILE=../toolchain-i686-apple-darwin12.cmake ../"
 cp /build/source/build/CMakeCache.txt /build/
 su builder -c "make VERBOSE=1"
