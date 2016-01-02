@@ -80,6 +80,7 @@ su builder -c "tar -C /build/tmp -xf /build/source/deps/libxslt-*-osx.tar.gz"
 {{ if staging }}
 su builder -c "tar -C /build/tmp -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz"
 {{ endif }}
+su builder -c "/build/source/fixup-import.py --destdir /build/tmp --install_name --verbose"
 su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/portable-{{ =output }}-osx.tar.gz .)"
 
 # Create payload directory
