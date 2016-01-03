@@ -78,10 +78,12 @@ echo " Welcome to $WINE_VERSION."
 help
 
 # Mac OS X:
-# Tell Terminal to activate the front window which should
-# hopefully be the window running this script. This is
-# necessary if no terminal is started at all, otherwise
-# the window starts minimized.
+# Start Terminal, which will just raise the top most
+# window in case it is already started. Since we started
+# the terminal, the top most window should hopefully be
+# the window running this script. This is necessary if no
+# terminal is started at all, otherwise the script starts
+# minimized.
 if command -v osascript >/dev/null 2>&1; then
-    osascript  -e "tell application \"Terminal\" to activate front window"
+    open -a "Terminal"
 fi
