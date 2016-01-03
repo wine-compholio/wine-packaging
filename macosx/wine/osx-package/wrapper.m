@@ -2,6 +2,7 @@
  * Wrapper to start Wine executable
  *
  * Copyright 2015 Michael Müller
+ * Copyright 2016 Sebastian Lackner
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -60,8 +61,14 @@ static void open_with_wine(NSString *filename)
 {
     NSBundle *bundle = [NSBundle mainBundle];
     NSString *wine_bin = [NSString stringWithFormat:@"%@/wine/bin/wine", bundle.resourcePath];
+    NSTask *task = [NSTask new];
 
-    [NSTask launchedTaskWithLaunchPath:wine_bin arguments:[NSArray arrayWithObjects:filename, nil]];
+    [task setLaunchPath:wine_bin];
+    [task setArguments:[NSArray arrayWithObjects:filename, nil]];
+    [task setCurrentDirectoryPath:[filename stringByDeletingLastPathComponent]];
+    [task launch];
+    [task release];
+
     wine_started = TRUE;
 }
 
