@@ -2,7 +2,7 @@
 #
 # Start help screen for terminal
 #
-# Copyright (C) 2015 Michael Müller
+# Copyright (C) 2015-2016 Michael Müller
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -76,3 +76,12 @@ echo "##########################################################################
 echo ""
 echo " Welcome to $WINE_VERSION."
 help
+
+# Mac OS X:
+# Tell Terminal to activate the front window which should
+# hopefully be the window running this script. This is
+# necessary if no terminal is started at all, otherwise
+# the window starts minimized.
+if command -v osascript >/dev/null 2>&1; then
+    osascript  -e "tell application \"Terminal\" to activate front window"
+fi
