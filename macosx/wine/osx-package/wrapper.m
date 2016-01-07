@@ -39,7 +39,7 @@ static void start_wine()
         /* Let's talk with the terminal to open a new window */
         NSString *script = [NSString stringWithFormat:
              @"tell application \"Terminal\" to do script \
-             \"export PATH=\\\"%@\\\":$PATH; source \\\"%@\\\"\"", wine_bin_dir, start_script];
+             \"export PATH=\\\"%@:$PATH\\\"; source \\\"%@\\\"\"", wine_bin_dir, start_script];
 
         NSAppleScript *as = [[NSAppleScript alloc] initWithSource: script];
         [as executeAndReturnError:nil];
