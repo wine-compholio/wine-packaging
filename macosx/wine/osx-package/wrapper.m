@@ -33,13 +33,14 @@ static void start_wine()
     if ([arguments count] <= 1)
     {
         /* If no arguments have been passed, start a terminal */
-        NSString *start_script = [NSString stringWithFormat:@"%@/start-script.sh", bundle.resourcePath];
+        NSString *start_bin_dir = [NSString stringWithFormat:@"%@/start/bin", bundle.resourcePath];
         NSString *wine_bin_dir = [NSString stringWithFormat:@"%@/wine/bin", bundle.resourcePath];
 
         /* Let's talk with the terminal to open a new window */
         NSString *script = [NSString stringWithFormat:
              @"tell application \"Terminal\" to do script \
-             \"export PATH=\\\"%@:$PATH\\\"; source \\\"%@\\\"\"", wine_bin_dir, start_script];
+             \"test \\\"$?BASH_VERSION\\\" = \\\"0\\\" || eval 'setenv() { export \\\"$1=$2\\\"; }'; \
+               setenv PATH \\\"%@:%@:$PATH\\\"; winehelp --clear\"", start_bin_dir, wine_bin_dir];
 
         NSAppleScript *as = [[NSAppleScript alloc] initWithSource: script];
         [as executeAndReturnError:nil];

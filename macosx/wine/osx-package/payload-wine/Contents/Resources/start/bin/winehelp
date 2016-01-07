@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Start help screen for terminal
+#
+# Copyright (C) 2015-2016 Michael Müller
+# Copyright (C) 2016 Sebastian Lackner
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
+#
+
+if [ "$1" == "--clear" ]; then
+    clear
+
+    # Mac OS X:
+    # Start Terminal, which will just raise the top most
+    # window in case it is already started. Since we started
+    # the terminal, the top most window should hopefully be
+    # the window running this script. This is necessary if no
+    # terminal is started at all, otherwise the script starts
+    # minimized.
+    if command -v osascript >/dev/null 2>&1; then
+        open -a "Terminal"
+    fi
+
+    echo "################################################################################"
+    echo "#                           Wine Is Not an Emulator                            #"
+    echo "################################################################################"
+    echo ""
+    echo " Welcome to $(wine --version)."
+fi
+
+echo   ""
+echo   " In order to start a program:"
+printf "   .exe:\e[1;31m wine\e[0m\e[1;90m program.exe\e[0m\n"
+printf "   .msi:\e[1;31m wine msiexec /i\e[0m\e[1;90m program.msi\e[0m\n"
+echo   ""
+echo   " If you want to configure wine:"
+printf "  \e[1;31m winecfg\e[0m\n"
+echo   ""
+echo   " To get information about app compatibility:"
+printf "  \e[1;31m appdb\e[0m\e[1;90m Program Name\e[0m\n"
+echo   ""
