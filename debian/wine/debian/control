@@ -113,23 +113,14 @@ Recommends: libcapi20-3,
             libgsm1
 Section: otherosfs
 Priority: optional
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing my current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
  does not require Microsoft Windows, however it can use native system dll
  files in place of its own if they are available.
  .
- This package provides support for loading 32-bit x86 Windows applications
- .
- This package is based on a recent Wine beta.  While many more applications
- will work, there may be some loss of functionality compared with the stable
- release provided by the regular wine package.
+ This package provides support for loading 32-bit x86 Windows applications.
 
 Package: {{ =package }}-amd64
 Architecture: amd64
@@ -172,23 +163,14 @@ Recommends: libcapi20-3,
             libgsm1
 Section: otherosfs
 Priority: optional
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing my current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
  does not require Microsoft Windows, however it can use native system dll
  files in place of its own if they are available.
  .
- This package provides support for loading 64-bit x86 Windows applications
- .
- This package is based on a recent Wine beta.  While many more applications
- will work, there may be some loss of functionality compared with the stable
- release provided by the regular wine package.
+ This package provides support for loading 64-bit x86 Windows applications.
 
 Package: {{ =package }}
 Architecture: i386 amd64
@@ -199,12 +181,7 @@ Depends:    ${misc:Depends}, ${shlibs:Depends},
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: otherosfs
 Priority: optional
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing my current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -214,10 +191,6 @@ Description: special build of the popular Wine software
  This package includes a program loader for running unmodified Windows
  executables as well as the Wine project's free version of the Windows API
  for running programs ported from Windows.
- .
- This package is based on a recent Wine beta.  While many more applications
- will work, there may be some loss of functionality compared with the stable
- release provided by the regular wine package.
 
 Package: {{ =package }}-dev
 Architecture: i386 amd64
@@ -228,12 +201,7 @@ Depends:    libc6-dev,
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: libdevel
 Priority: optional
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing my current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
@@ -252,20 +220,15 @@ Depends:    ${shlibs:Depends},
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
 Section: debug
 Priority: optional
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing my current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
  does not require Microsoft Windows, however it can use native system dll
  files in place of its own if they are available.
  .
- This package includes debugging symbols useful for reporting crashes and other
- failures.
+ This package includes debugging symbols useful for reporting crashes and
+ other failures.
 
 Package: {{ =compat_package }}
 Architecture: i386 amd64
@@ -280,25 +243,12 @@ Provides:   wine, wine1.4, wine1.5, wine1.6, wine1.7, wine-i386, wine1.4-i386,
             wine1.5-i386, wine1.6-i386, wine1.7-i386, wine-amd64 [amd64],
             wine1.4-amd64 [amd64], wine1.5-amd64 [amd64], wine1.6-amd64 [amd64],
             wine1.7-amd64 [amd64], wine32, wine64 [amd64]
-Description: special build of the popular Wine software
-{{ if staging }}
- The Staging Edition is a special build of the popular Wine software
- with patches representing our current staging tree for Wine.
- .
-{{ endif }}
+Description: official WineHQ build of the popular Wine software
  Microsoft Windows Compatibility Layer (Binary Emulator and Library)
  Wine is a compatibility layer for running Windows applications on Linux.
  Applications are run at full speed without the need of cpu emulation. Wine
  does not require Microsoft Windows, however it can use native system dll
  files in place of its own if they are available.
- .
- This package includes a program loader for running unmodified Windows
- executables as well as the Wine project's free version of the Windows API
- for running programs ported from Windows.
- .
- This package is based on a recent Wine beta.  While many more applications
- will work, there may be some loss of functionality compared with the stable
- release provided by the regular wine package.
  .
  This compatibility package allows to use {{ =package }} system-wide as
  the default Wine version.

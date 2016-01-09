@@ -8,9 +8,9 @@ Source: http://www.winehq.org/
 {{ endif }}
 
 Files: *
-Copyright: 1993-2015, the Wine project authors
+Copyright: 1993-2016, the Wine project authors
 {{ if staging }}
-           2014-2015, the Wine Staging project authors
+           2014-2016, the Wine Staging project authors
 {{ endif }}
 License: LGPL-2.1
 
