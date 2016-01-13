@@ -1,0 +1,8 @@
+{{ __filename = "%s-arm.install" % package }}
+{{ =prefix }}/lib/libwine.so*
+{{ =prefix }}/lib/wine
+{{ =prefix }}/bin/wine
+{{ =prefix }}/share/man/man?/wine.?*
+{{ =prefix }}/share/man/de.UTF-8/man?/wine.?*
+{{ =prefix }}/share/man/fr.UTF-8/man?/wine.?*
+{{ =prefix }}/share/man/pl.UTF-8/man?/wine.?*

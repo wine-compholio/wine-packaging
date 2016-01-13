@@ -172,8 +172,58 @@ Description: official WineHQ build of the popular Wine software
  .
  This package provides support for loading 64-bit x86 Windows applications.
 
+Package: {{ =package }}-arm
+Architecture: armhf
+Multi-Arch: foreign
+Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
+Depends:    ${shlibs:Depends},
+            libasound2-plugins,
+            libncurses5
+Recommends: libcapi20-3,
+            libcups2,
+            libdbus-1-3,
+            libfontconfig1 | libfontconfig,
+            libfreetype6,
+{{ ="            libgnutls-deb0-28,\n"                if debian_version >= 8 else "" }}
+{{ ="            libgnutls26,\n"                      if debian_version < 8 else "" }}
+{{ ="            libgtk-3-0,\n"                       if staging else "" }}
+{{ ="            libjpeg62-turbo,\n"                  if debian_version >= 8 else "" }}
+{{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
+            libosmesa6,
+            libpcap0.8,
+            libpng12-0,
+            libpulse0,
+{{ ="            libsane,\n"                          if debian_version < 9 else "" }}
+            libssl1.0.0,
+            libtiff5 | libtiff4,
+{{ ="            libtxc-dxtn-s2tc0,\n"                if staging else "" }}
+            libv4l-0,
+{{ ="            libva-drm1,\n"                       if staging else "" }}
+{{ ="            libva-x11-1,\n"                      if staging else "" }}
+            libxcomposite1,
+            libxcursor1,
+            libxi6,
+            libxinerama1,
+            libxrandr2,
+            libxrender1,
+            libxslt1.1,
+            libxt6,
+            libxxf86vm1,
+            libodbc1,
+            libgsm1
+Section: otherosfs
+Priority: optional
+Description: official WineHQ build of the popular Wine software
+ Microsoft Windows Compatibility Layer (Binary Emulator and Library)
+ Wine is a compatibility layer for running Windows applications on Linux.
+ Applications are run at full speed without the need of cpu emulation. Wine
+ does not require Microsoft Windows, however it can use native system dll
+ files in place of its own if they are available.
+ .
+ This package provides support for loading 32-bit x86 Windows applications.
+
 Package: {{ =package }}
-Architecture: i386 amd64
+Architecture: i386 amd64 armhf
 Multi-Arch: foreign
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${misc:Depends}, ${shlibs:Depends},
@@ -193,7 +243,7 @@ Description: official WineHQ build of the popular Wine software
  for running programs ported from Windows.
 
 Package: {{ =package }}-dev
-Architecture: i386 amd64
+Architecture: i386 amd64 armhf
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    libc6-dev,
             ${shlibs:Depends},
@@ -212,7 +262,7 @@ Description: official WineHQ build of the popular Wine software
  using wine's free version of the Microsoft Windows API.
 
 Package: {{ =package }}-dbg
-Architecture: i386 amd64
+Architecture: i386 amd64 armhf
 Multi-Arch: same
 Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${shlibs:Depends},
@@ -231,7 +281,7 @@ Description: official WineHQ build of the popular Wine software
  other failures.
 
 Package: {{ =compat_package }}
-Architecture: i386 amd64
+Architecture: i386 amd64 armhf
 Depends: {{ =package }}, ${misc:Depends}
 Section: otherosfs
 Priority: optional
