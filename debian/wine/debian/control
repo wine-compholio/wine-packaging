@@ -229,6 +229,7 @@ Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${misc:Depends}, ${shlibs:Depends},
             {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-arm   (= ${binary:Version}) [armhf],
 Section: otherosfs
 Priority: optional
 Description: official WineHQ build of the popular Wine software
@@ -249,6 +250,7 @@ Depends:    libc6-dev,
             ${shlibs:Depends},
             {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-arm   (= ${binary:Version}) [armhf],
 Section: libdevel
 Priority: optional
 Description: official WineHQ build of the popular Wine software
@@ -268,6 +270,7 @@ Pre-Depends: dpkg (>= 1.14.12ubuntu3), ${misc:Pre-Depends}
 Depends:    ${shlibs:Depends},
             {{ =package }}-i386  (= ${binary:Version}) [i386 amd64],
             {{ =package }}-amd64 (= ${binary:Version}) [amd64],
+            {{ =package }}-arm   (= ${binary:Version}) [armhf],
 Section: debug
 Priority: optional
 Description: official WineHQ build of the popular Wine software
