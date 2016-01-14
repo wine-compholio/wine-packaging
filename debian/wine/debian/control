@@ -220,7 +220,7 @@ Description: official WineHQ build of the popular Wine software
  does not require Microsoft Windows, however it can use native system dll
  files in place of its own if they are available.
  .
- This package provides support for loading 32-bit x86 Windows applications.
+ This package provides support for loading 32-bit ARM Windows applications.
 
 Package: {{ =package }}
 Architecture: i386 amd64 armhf
