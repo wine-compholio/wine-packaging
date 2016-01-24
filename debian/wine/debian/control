@@ -31,6 +31,8 @@ Build-Depends: autotools-dev,
 {{ ="               libgnutls-dev,\n"                    if debian_version < 8 else "" }}
                libgphoto2-dev | libgphoto2-6-dev | libgphoto2-2-dev (>= 2.4.6),
                libgsm1-dev,
+{{ ="               libgstreamer1.0-dev,\n"              if ubuntu_version or debian_version >= 8 else "" }}
+{{ ="               libgstreamer-plugins-base1.0-dev,\n" if ubuntu_version or debian_version >= 8 else "" }}
                libgtk-3-dev,
                libice-dev,
                libjpeg-dev,
