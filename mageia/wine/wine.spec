@@ -71,6 +71,13 @@ BuildRequires:  imagemagick
 BuildRequires:  isdn4k-utils-devel
 BuildRequires:  lcms2-devel
 BuildRequires:  libalsa-devel
+%ifarch x86_64
+BuildRequires:  lib64gstreamer1.0-devel
+BuildRequires:  lib64gstreamer-plugins-base1.0-devel
+%else
+BuildRequires:  libgstreamer1.0-devel
+BuildRequires:  libgstreamer-plugins-base1.0-devel
+%endif
 BuildRequires:  libmpg123-devel
 BuildRequires:  libpcap-devel
 BuildRequires:  librsvg
@@ -227,7 +234,7 @@ make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 %build
 %configure2_5x \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
 {{ if staging }}
     --with-xattr \
     --without-gtk3 \
