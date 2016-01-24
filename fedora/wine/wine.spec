@@ -63,6 +63,8 @@ BuildRequires:  gettext-devel
 BuildRequires:  giflib-devel
 BuildRequires:  gnutls-devel
 BuildRequires:  gsm-devel
+BuildRequires:  gstreamer1-devel
+BuildRequires:  gstreamer1-plugins-base-devel
 {{ ="BuildRequires:  gtk3-devel\n"      if staging else "" }}
 BuildRequires:  icoutils
 BuildRequires:  ImageMagick-devel
@@ -229,7 +231,7 @@ export CFLAGS="$(echo "%{optflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//')"
 %endif
 %configure \
     --with-x \
-    --without-gstreamer \
+    --with-gstreamer \
 {{ if staging }}
     --with-xattr \
 {{ endif }}
