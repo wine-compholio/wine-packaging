@@ -231,7 +231,11 @@ export CFLAGS="$(echo "%{optflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//')"
 %endif
 %configure \
     --with-x \
+{{ if stable }}
+    --without-gstreamer \
+{{ else }}
     --with-gstreamer \
+{{ endif }}
 {{ if staging }}
     --with-xattr \
 {{ endif }}

@@ -234,7 +234,11 @@ make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 %build
 %configure2_5x \
     --with-x \
+{{ if stable }}
+    --without-gstreamer \
+{{ else }}
     --with-gstreamer \
+{{ endif }}
 {{ if staging }}
     --with-xattr \
     --without-gtk3 \

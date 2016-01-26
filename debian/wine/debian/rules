@@ -22,7 +22,9 @@ ifeq ($(DEB_BUILD_ARCH), amd64)
 				--mandir=\$${prefix}/share/man \
 				--infodir=\$${prefix}/share/info \
 				--enable-win64 \
-{{ if debian_version >= 8 }}
+{{ if stable }}
+				--without-gstreamer \
+{{ elif debian_version >= 8 }}
 				--with-gstreamer \
 {{ endif }}
 				--with-xattr \
@@ -32,7 +34,9 @@ else
 				--libdir=\$${prefix}/lib \
 				--mandir=\$${prefix}/share/man \
 				--infodir=\$${prefix}/share/info \
-{{ if debian_version >= 8 }}
+{{ if stable }}
+				--without-gstreamer \
+{{ elif debian_version >= 8 }}
 				--with-gstreamer \
 {{ endif }}
 				--with-xattr \
