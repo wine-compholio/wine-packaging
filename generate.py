@@ -42,7 +42,7 @@ WINE_STABLE_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-stable",
     "package_version"   : "1.8",
-    "wine_sha"          : "e4d3d2f80fe2ef2308430fb77df4440f4708ddf3b8d92a09ef60ac7001c103e3",
+    "wine_sha"          : None, # FIXME: Snapshot builds no longer available
     "compat_package"    : "winehq-stable",
     "prefix"            : "/opt/wine-stable",
     "stable"            : True,
@@ -54,8 +54,8 @@ WINE_STABLE_CONFIG = {
 WINE_DEVEL_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-devel",
-    "package_version"   : "1.9.2",
-    "wine_sha"          : "04f6fda904cd27d695679b03c9ddbd3332383077c92b9cc426488d05df653270",
+    "package_version"   : "1.9.3",
+    "wine_sha"          : "475f54855534c8ec45bb4be70d84fb98e7fe8467fb1a35f66b3c0e92f4ea090d",
     "compat_package"    : "winehq-devel",
     "prefix"            : "/opt/wine-devel",
     "stable"            : False,
@@ -68,7 +68,7 @@ WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
     "package_version"   : "1.9.2",
-    "wine_sha"          : "04f6fda904cd27d695679b03c9ddbd3332383077c92b9cc426488d05df653270",
+    "wine_sha"          : None, # FIXME: Snapshot builds no longer available
     "staging_sha"       : "adb44c597a8a1a4f0f7f3283a12d2deda9aadfc750f629ca45aaf0bbe949b64d",
     "compat_package"    : "winehq-staging",
     "prefix"            : "/opt/wine-staging",
@@ -413,6 +413,8 @@ if __name__ == '__main__':
             fp = tempfile.NamedTemporaryFile(prefix="download-", delete=False)
             fp.close()
 
+            print ""
+            print "Downloading %s" % url
             subprocess.call(["curl", "-L", "-o", fp.name, "--", url])
 
             m = hashlib.sha256()

@@ -6,8 +6,9 @@ dnf clean metadata
 dnf upgrade -y
 
 {{
-	url = "https://source.winehq.org/git/wine.git/snapshot"
-	version = "master" if package_daily else "wine-%s" % package_version
+	# FIXME: Fix support for daily builds - snapshot urls are no longer available
+	url = "https://dl.winehq.org/wine/source"
+	version = "%s/wine-%s" % (".".join(package_version.split(".")[:2]), package_version)
 	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version), wine_sha)
 }}
 
