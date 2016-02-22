@@ -67,9 +67,9 @@ WINE_DEVEL_CONFIG = {
 WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
-    "package_version"   : "1.9.2",
-    "wine_sha"          : None, # FIXME: Snapshot builds no longer available
-    "staging_sha"       : "adb44c597a8a1a4f0f7f3283a12d2deda9aadfc750f629ca45aaf0bbe949b64d",
+    "package_version"   : "1.9.3",
+    "wine_sha"          : "475f54855534c8ec45bb4be70d84fb98e7fe8467fb1a35f66b3c0e92f4ea090d",
+    "staging_sha"       : "84c98e0fd04a1deb76a40d2d04810421c94b02e2670fec6a8718bb2286fac4b6",
     "compat_package"    : "winehq-staging",
     "prefix"            : "/opt/wine-staging",
     "stable"            : False,
