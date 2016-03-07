@@ -43,6 +43,8 @@ rm wine.tar.bz2
 su builder -c "tar -xf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
 make -C "patches" DESTDIR="$(pwd)" install
+{{ else }}
+su builder -c "cat *.patch | patch -p1"
 {{ endif }}
 
 # FIXME: We don't explicitly install dependencies for the host system yet,
