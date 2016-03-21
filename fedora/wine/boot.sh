@@ -15,7 +15,8 @@ dnf upgrade -y
 {{ if staging }}
 {{
 	url = "https://github.com/wine-compholio/wine-staging/archive"
-	version = "master" if package_daily else "v%s" % package_version
+	# version = "master" if package_daily else "v%s" % package_version
+	version = "ffad0e5c7b87b81937c84d3a72a7e0a2976ea813"
 	download("wine-staging.tar.gz", "%s/%s.tar.gz" % (url, version), staging_sha)
 }}
 {{ endif }}

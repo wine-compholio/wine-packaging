@@ -28,6 +28,7 @@ ifeq ($(DEB_BUILD_ARCH), amd64)
 				--with-gstreamer \
 {{ endif }}
 				--with-xattr \
+				--with-xcb \
 				$(CONFFLAGS)
 else
 	./configure --prefix={{ =prefix }} \
@@ -40,6 +41,7 @@ else
 				--with-gstreamer \
 {{ endif }}
 				--with-xattr \
+				--with-xcb \
 				$(CONFFLAGS)
 endif
 

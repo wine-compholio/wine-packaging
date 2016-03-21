@@ -84,6 +84,7 @@ BuildRequires:  libusb-devel
 BuildRequires:  libv4l-devel
 {{ ="BuildRequires:  libva-devel\n"     if staging else "" }}
 BuildRequires:  libX11-devel
+BuildRequires:  libxcb-devel
 BuildRequires:  libXcomposite-devel
 BuildRequires:  libXcursor-devel
 BuildRequires:  libXext-devel
@@ -150,6 +151,7 @@ Requires:   %dlopenreq png
 Requires:   %dlopenreq sane
 Requires:   %dlopenreq tiff
 Requires:   %dlopenreq v4l1
+Requires:   %dlopenreq X11-xcb
 Requires:   %dlopenreq Xcomposite
 Requires:   %dlopenreq Xcursor
 Requires:   %dlopenreq Xi
@@ -238,6 +240,7 @@ export CFLAGS="$(echo "%{optflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//')"
 {{ endif }}
 {{ if staging }}
     --with-xattr \
+    --with-xcb \
 {{ endif }}
 %ifarch x86_64
     --enable-win64 \

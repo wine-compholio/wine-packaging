@@ -58,6 +58,7 @@ Build-Depends: autotools-dev,
                libv4l-dev,
 {{ ="               libva-dev,\n"                        if staging else "" }}
                libx11-dev,
+               libxcb1-dev,
                libxcomposite-dev,
                libxcursor-dev,
                libxext-dev,
@@ -111,6 +112,7 @@ Recommends: libcapi20-3,
             libv4l-0,
 {{ ="            libva-drm1,\n"                       if staging else "" }}
 {{ ="            libva-x11-1,\n"                      if staging else "" }}
+            libxcb1,
             libxcomposite1,
             libxcursor1,
             libxi6,
@@ -165,6 +167,7 @@ Recommends: libcapi20-3,
             libv4l-0,
 {{ ="            libva-drm1,\n"                       if staging else "" }}
 {{ ="            libva-x11-1,\n"                      if staging else "" }}
+            libxcb1,
             libxcomposite1,
             libxcursor1,
             libxi6,
@@ -219,6 +222,7 @@ Recommends: libcapi20-3,
             libv4l-0,
 {{ ="            libva-drm1,\n"                       if staging else "" }}
 {{ ="            libva-x11-1,\n"                      if staging else "" }}
+            libxcb1,
             libxcomposite1,
             libxcursor1,
             libxi6,

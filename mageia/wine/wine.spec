@@ -84,6 +84,7 @@ BuildRequires:  librsvg
 BuildRequires:  libsm-devel
 BuildRequires:  libv4l-devel
 BuildRequires:  libx11-devel
+BuildRequires:  libxcb-devel
 BuildRequires:  libxcomposite-devel
 BuildRequires:  libxcursor-devel
 BuildRequires:  libxext-devel
@@ -153,6 +154,7 @@ Requires:   %dlopenreq sane
 Requires:   %dlopenreq ssl
 Requires:   %dlopenreq tiff
 Requires:   %dlopenreq v4l1
+Requires:   %dlopenreq X11-xcb
 Requires:   %dlopenreq Xcomposite
 Requires:   %dlopenreq Xcursor
 Requires:   %dlopenreq Xi
@@ -241,6 +243,7 @@ make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
 {{ endif }}
 {{ if staging }}
     --with-xattr \
+    --with-xcb \
     --without-gtk3 \
 {{ endif }}
 %ifarch x86_64
