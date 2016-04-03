@@ -68,6 +68,7 @@ WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
     "package_version"   : "1.9.6",
+    "package_release"   : 1,
     "wine_sha"          : "3d2b862feefd89eca954c1cbc16a28e0ce851aeea1555bc1842ffc9aab2c1557",
     "staging_sha"       : "1df3976d991cc472eee9a1809cb97c4122b8a9fd0009e9aae3bfdfc953ba0fc6",
     "compat_package"    : "winehq-staging",

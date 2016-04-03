@@ -84,7 +84,6 @@ BuildRequires:  librsvg
 BuildRequires:  libsm-devel
 BuildRequires:  libv4l-devel
 BuildRequires:  libx11-devel
-BuildRequires:  libxcb-devel
 BuildRequires:  libxcomposite-devel
 BuildRequires:  libxcursor-devel
 BuildRequires:  libxext-devel
@@ -154,7 +153,9 @@ Requires:   %dlopenreq sane
 Requires:   %dlopenreq ssl
 Requires:   %dlopenreq tiff
 Requires:   %dlopenreq v4l1
+{{ if staging }}
 Requires:   %dlopenreq X11-xcb
+{{ endif }}
 Requires:   %dlopenreq Xcomposite
 Requires:   %dlopenreq Xcursor
 Requires:   %dlopenreq Xi
