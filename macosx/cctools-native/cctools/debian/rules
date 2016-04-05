@@ -4,4 +4,8 @@
 
 override_dh_auto_configure:
 	./autogen.sh
+{{ if is_64bit }}
+	dh_auto_configure -- --target=x86_64-apple-darwin12 --libexecdir=/usr/lib/cctools64
+{{ else }}
 	dh_auto_configure -- --target=i686-apple-darwin12
+{{ endif }}

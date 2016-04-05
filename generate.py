@@ -172,7 +172,17 @@ MACOSX_BASE = {
     "ubuntu_version" : 0,
     "debian_version" : 9,
     "debian_codename": "stretch",
-    "debian_time"    : formatdate()
+    "debian_time"    : formatdate(),
+    "is_64bit"       : False,
+}
+
+MACOSX64_BASE = {
+    "distribution"   : "macosx",
+    "ubuntu_version" : 0,
+    "debian_version" : 9,
+    "debian_codename": "stretch",
+    "debian_time"    : formatdate(),
+    "is_64bit"       : True,
 }
 
 MAGEIA_BASE = {
@@ -226,6 +236,7 @@ PACKAGE_CONFIGS = {
     "macosx-llvm-defaults-native": _m( LLVM_DEFAULTS_CONFIG,MACOSX_BASE ),
     "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
     "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
+    "macosx64-cctools-native"    : _m( CCTOOLS_CONFIG,      MACOSX64_BASE ),
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
     "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
     "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
