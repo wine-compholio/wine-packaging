@@ -35,27 +35,30 @@ def parse_version(v):
         else: yield {".": 2, "-": 1, "~": -1}[c]
     yield 0
 
-packages = {}
+def remove_outdated_pkgs(extension):
+    packages = {}
 
-for filename in os.listdir(DEPENDENCIES):
-    full_path = os.path.join(DEPENDENCIES, filename)
-    if not filename.endswith("-osx.tar.gz") and \
-       not filename.endswith("-osx64.tar.gz"): continue
-    if not os.path.isfile(full_path): continue
+    for filename in os.listdir(DEPENDENCIES):
+        full_path = os.path.join(DEPENDENCIES, filename)
+        if not filename.endswith(extension): continue
+        if not os.path.isfile(full_path): continue
 
-    parts = filename[:-11].split("-")
-    for i in xrange(1, len(parts)):
-        version = "-".join(parts[i:])
-        if re.match("^[0-9]+([-.~][a-z]*[0-9]+)*$", version) is None: continue
-        name = "-".join(parts[:i])
-        if not packages.has_key(name): packages[name] = []
-        packages[name].append((full_path, tuple(parse_version(version))))
-        break
+        parts = filename[:-len(extension)].split("-")
+        for i in xrange(1, len(parts)):
+            version = "-".join(parts[i:])
+            if re.match("^[0-9]+([-.~][a-z]*[0-9]+)*$", version) is None: continue
+            name = "-".join(parts[:i])
+            if not packages.has_key(name): packages[name] = []
+            packages[name].append((full_path, tuple(parse_version(version))))
+            break
 
-for name, candidates in packages.iteritems():
-    candidates.sort(key=lambda x: x[1], reverse=True)
-    print "Using %s to provide %s" % (os.path.basename(candidates[0][0]), name)
-    for filename, _ in candidates[1:]:
-        os.rename(filename, "%s.disabled" % filename)
+    for name, candidates in packages.iteritems():
+        candidates.sort(key=lambda x: x[1], reverse=True)
+        print "Using %s to provide %s" % (os.path.basename(candidates[0][0]), name)
+        for filename, _ in candidates[1:]:
+            os.rename(filename, "%s.disabled" % filename)
+
+remove_outdated_pkgs("-osx.tar.gz")
+remove_outdated_pkgs("-osx64.tar.gz")
 
 END
