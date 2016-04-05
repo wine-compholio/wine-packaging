@@ -8,7 +8,7 @@ set -e -x
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y git devscripts build-essential nasm automake
+apt-get install -y git devscripts build-essential yasm automake
 
 {{ =include("../macosx-common.sh") }}
 
@@ -24,11 +24,19 @@ rm libjpeg-turbo.tar.gz
 su builder -c "cat *.patch | patch -p1"
 su builder -c "autoreconf -i"
 
+{{ if is_64bit }}
+su builder -c "./configure --prefix=/usr --host x86_64-apple-darwin12 --libdir=/usr/lib64"
+{{ else }}
 su builder -c "./configure --prefix=/usr --host i686-apple-darwin12"
+{{ endif }}
 cp /build/source/config.log /build/
 su builder -c "make"
 su builder -c "mkdir /build/tmp"
 su builder -c "make install DESTDIR=/build/tmp/"
 su builder -c "cp -a LICENSE.txt /build/tmp/usr/share/doc/libjpeg-turbo"
 su builder -c "./fixup-import.py --destdir /build/tmp --verbose"
+{{ if is_64bit }}
+su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/{{ =output }}-osx64.tar.gz .)"
+{{ else }}
 su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
+{{ endif }}
