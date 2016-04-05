@@ -1,20 +1,20 @@
-From 3062c675d5f2b659c1615aaaada7c465946c4e01 Mon Sep 17 00:00:00 2001
+From 381dcdc40a24d7687df1012063f98acb3b97645b Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
-Date: Thu, 9 Jul 2015 02:02:28 +0200
+Date: Mon, 4 Apr 2016 23:57:51 +0200
 Subject: Add ms_hook_prologue attribute.
 
 ---
- include/clang/Basic/Attr.td               | 6 ++++++
- lib/CodeGen/CodeGenModule.cpp             | 3 +++
- lib/Sema/SemaDeclAttr.cpp                 | 3 +++
- test/Index/recursive-cxx-member-calls.cpp | 1 +
+ clang/include/clang/Basic/Attr.td               | 6 ++++++
+ clang/lib/CodeGen/CodeGenModule.cpp             | 3 +++
+ clang/lib/Sema/SemaDeclAttr.cpp                 | 3 +++
+ clang/test/Index/recursive-cxx-member-calls.cpp | 1 +
  4 files changed, 13 insertions(+)
 
 diff --git a/clang/include/clang/Basic/Attr.td b/clang/include/clang/Basic/Attr.td
-index fb1eb58..1891a5b 100644
+index d5ba722..e5d7f83 100644
 --- a/clang/include/clang/Basic/Attr.td
 +++ b/clang/include/clang/Basic/Attr.td
-@@ -849,6 +849,12 @@ def Naked : InheritableAttr {
+@@ -888,6 +888,12 @@ def Naked : InheritableAttr {
    let Documentation = [Undocumented];
  }
  
@@ -28,12 +28,12 @@ index fb1eb58..1891a5b 100644
    let Spellings = [GNU<"neon_polyvector_type">];
    let Args = [IntArgument<"NumElements">];
 diff --git a/clang/lib/CodeGen/CodeGenModule.cpp b/clang/lib/CodeGen/CodeGenModule.cpp
-index b905bd2..f7bf10d 100644
+index 97b1662..5a1f369 100644
 --- a/clang/lib/CodeGen/CodeGenModule.cpp
 +++ b/clang/lib/CodeGen/CodeGenModule.cpp
-@@ -737,6 +737,9 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
-   if (!hasUnwindExceptions(LangOpts))
-     B.addAttribute(llvm::Attribute::NoUnwind);
+@@ -838,6 +838,9 @@ void CodeGenModule::SetLLVMFunctionAttributesForDefinition(const Decl *D,
+     return;
+   }
  
 +  if (D->hasAttr<MsHookPrologueAttr>())
 +    B.addAttribute(llvm::Attribute::MsHookPrologue);
@@ -42,10 +42,10 @@ index b905bd2..f7bf10d 100644
      // Naked implies noinline: we should not be inlining such functions.
      B.addAttribute(llvm::Attribute::Naked);
 diff --git a/clang/lib/Sema/SemaDeclAttr.cpp b/clang/lib/Sema/SemaDeclAttr.cpp
-index b8d0830..9448160 100644
+index f94c822..a8ae00c 100644
 --- a/clang/lib/Sema/SemaDeclAttr.cpp
 +++ b/clang/lib/Sema/SemaDeclAttr.cpp
-@@ -4737,6 +4737,9 @@ static void ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D,
+@@ -5125,6 +5125,9 @@ static void ProcessDeclAttribute(Sema &S, Scope *scope, Decl *D,
    case AttributeList::AT_Hot:
      handleHotAttr(S, D, Attr);
      break;
@@ -53,7 +53,7 @@ index b8d0830..9448160 100644
 +    handleSimpleAttribute<MsHookPrologueAttr>(S, D, Attr);
 +    break;
    case AttributeList::AT_Naked:
-     handleSimpleAttribute<NakedAttr>(S, D, Attr);
+     handleNakedAttr(S, D, Attr);
      break;
 diff --git a/clang/test/Index/recursive-cxx-member-calls.cpp b/clang/test/Index/recursive-cxx-member-calls.cpp
 index 34a5652..ad72379 100644
@@ -68,5 +68,5 @@ index 34a5652..ad72379 100644
      .Case("nodebug", AT_nodebug)
      .Case("nonnull", AT_nonnull)
 -- 
-2.1.0
+2.8.0.rc3
 
