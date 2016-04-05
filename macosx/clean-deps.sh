@@ -39,7 +39,8 @@ packages = {}
 
 for filename in os.listdir(DEPENDENCIES):
     full_path = os.path.join(DEPENDENCIES, filename)
-    if not filename.endswith("-osx.tar.gz"): continue
+    if not filename.endswith("-osx.tar.gz") and \
+       not filename.endswith("-osx64.tar.gz"): continue
     if not os.path.isfile(full_path): continue
 
     parts = filename[:-11].split("-")
