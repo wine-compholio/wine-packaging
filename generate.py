@@ -165,8 +165,8 @@ DEBIAN_BASE = {
 MACOSX_BASE = {
     "distribution"   : "macosx",
     "ubuntu_version" : 0,
-    "debian_version" : 8,
-    "debian_codename": "jessie",
+    "debian_version" : 9,
+    "debian_codename": "stretch",
     "debian_time"    : formatdate()
 }
 
