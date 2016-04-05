@@ -83,6 +83,11 @@ CLANG_CONFIG = {
     "package"           : "clang",
 }
 
+LLVM_DEFAULTS_CONFIG = {
+    "__src"             : "llvm-defaults-native",
+    "package"           : "llvm-defaults",
+}
+
 BOMUTILS_CONFIG = {
     "__src"             : "bomutils-native",
     "package"           : "bomutils",
@@ -218,6 +223,7 @@ PACKAGE_CONFIGS = {
 
     # Mac OS X
     "macosx-clang-native"        : _m( CLANG_CONFIG,        MACOSX_BASE ),
+    "macosx-llvm-defaults-native": _m( LLVM_DEFAULTS_CONFIG,MACOSX_BASE ),
     "macosx-bomutils-native"     : _m( BOMUTILS_CONFIG,     MACOSX_BASE ),
     "macosx-cctools-native"      : _m( CCTOOLS_CONFIG,      MACOSX_BASE ),
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
