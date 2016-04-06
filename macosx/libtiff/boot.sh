@@ -12,8 +12,8 @@ apt-get install -y git devscripts build-essential
 
 {{ =include("../macosx-common.sh") }}
 (
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx64.tar.gz
 ) > /build/source/deps/filelist.txt
 
 {{
@@ -22,14 +22,24 @@ apt-get install -y git devscripts build-essential
 	download("libtiff.tar.gz", "%s/tiff-%s.tar.gz" % (url, package_version), sha)
 }}
 
-su builder -c "tar -xvf libtiff.tar.gz --strip-components 1"
-rm libtiff.tar.gz
+{{ for (host, arch) in [("i686-apple-darwin12", ""), ("x86_64-apple-darwin12", "64")] }}
 
-su builder -c "./configure --prefix=/usr --host i686-apple-darwin12"
-cp /build/source/config.log /build/
-su builder -c "make"
-su builder -c "mkdir /build/tmp"
-su builder -c "make install DESTDIR=/build/tmp/"
+su builder -c "mkdir build{{ =arch }}"
+cd build{{ =arch }}
+su builder -c "tar -xvf ../libtiff.tar.gz --strip-components 1"
+
+su builder -c "./configure --prefix=/usr --host {{ =host }}"
+cp config.log /build/config{{ =arch }}.log
+su builder -c "make -j3"
+su builder -c "mkdir /build/tmp{{ =arch }}"
+su builder -c "make install DESTDIR=/build/tmp{{ =arch }}/"
 # "make install" already copies license files to usr/share/doc/tiff-4.0.6
-su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
+su builder -c "../fixup-import.py --destdir /build/tmp{{ =arch }} --filelist /build/source/deps/filelist.txt --verbose"
+
+cd ..
+
+{{ endfor }}
+
 su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
+su builder -c "./make-universal.py --dir32 /build/tmp --dir64 /build/tmp64"
+su builder -c "(cd /build/tmp64; fakeroot tar -cvzf /build/{{ =output }}-osx64.tar.gz .)"
