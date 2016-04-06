@@ -239,7 +239,6 @@ PACKAGE_CONFIGS = {
     "macosx64-cctools-native"    : _m( CCTOOLS_CONFIG,      MACOSX64_BASE ),
     "macosx-xar-native"          : _m( XAR_CONFIG,          MACOSX_BASE ),
     "macosx-libjpeg-turbo"       : _m( LIBJPEG_TURBO_CONFIG,MACOSX_BASE ),
-    "macosx64-libjpeg-turbo"     : _m( LIBJPEG_TURBO_CONFIG,MACOSX64_BASE ),
     "macosx-libtiff"             : _m( LIBTIFF_CONFIG,      MACOSX_BASE ),
     "macosx-liblcms2"            : _m( LIBLCMS2_CONFIG,     MACOSX_BASE ),
     "macosx-liblzma"             : _m( LIBLZMA_CONFIG,      MACOSX_BASE ),

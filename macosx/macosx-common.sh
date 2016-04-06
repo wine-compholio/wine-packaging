@@ -34,15 +34,8 @@ mkdir /build/macos-rootfs
 chown root:builder /build/macos-rootfs
 chmod 0775 /build/macos-rootfs
 
-# Extract MacOS 64 bit rootfs
-mkdir /build/macos-rootfs64
-(cd /build/macos-rootfs64; tar -xf ../source/deps/MacOSX10.8.sdk.tar.xz --strip-components 1)
-chown root:builder /build/macos-rootfs64
-chmod 0775 /build/macos-rootfs64
-
 # Create an empty filelist
 echo -n "" > /build/source/deps/filelist.txt
-echo -n "" > /build/source/deps/filelist64.txt
 
 # Create wrapper for clang
 (
@@ -56,7 +49,7 @@ ln -s /usr/bin/i686-apple-darwin12-clang /usr/bin/i686-apple-darwin12-gcc
 # Create wrapper for clang (64 bit)
 (
   echo "#!/bin/bash"
-  echo "clang -target x86_64-apple-darwin12 -mlinker-version=0.0 -isysroot \"/build/macos-rootfs64\" \"\$@\""
+  echo "clang -target x86_64-apple-darwin12 -mlinker-version=0.0 -isysroot \"/build/macos-rootfs\" \"\$@\""
 ) > /usr/bin/x86_64-apple-darwin12-clang
 chmod +x /usr/bin/x86_64-apple-darwin12-clang
 
@@ -75,7 +68,7 @@ ln -s /usr/bin/i686-apple-darwin12-clang++ /usr/bin/i686-apple-darwin12-cpp
 # Create wrapper for clang++ (64 bit)
 (
   echo "#!/bin/bash"
-  echo "clang++ -target x86_64-apple-darwin12 -mlinker-version=0.0 -isysroot \"/build/macos-rootfs64\" \"\$@\""
+  echo "clang++ -target x86_64-apple-darwin12 -mlinker-version=0.0 -isysroot \"/build/macos-rootfs\" \"\$@\""
 ) > /usr/bin/x86_64-apple-darwin12-clang++
 chmod +x /usr/bin/x86_64-apple-darwin12-clang++
 
@@ -92,15 +85,7 @@ ln -s /usr/bin/x86_64-apple-darwin12-clang++ /usr/bin/x86_64-apple-darwin12-cpp
 ) > /usr/bin/i686-apple-darwin12-pkg-config
 chmod +x /usr/bin/i686-apple-darwin12-pkg-config
 
-# Create wrapper for pkg-config (64 bit)
-(
-  echo "#!/bin/bash"
-  echo "export PKG_CONFIG_DIR="
-  echo "export PKG_CONFIG_SYSROOT_DIR=/build/macos-rootfs64"
-  echo "export PKG_CONFIG_LIBDIR=/build/macos-rootfs64/usr/lib/pkgconfig:/build/macos-rootfs64/usr/lib64/pkgconfig:/build/macos-rootfs64/opt/X11/lib/pkgconfig"
-  echo "pkg-config \"\$@\""
-) > /usr/bin/x86_64-apple-darwin12-pkg-config
-chmod +x /usr/bin/x86_64-apple-darwin12-pkg-config
+ln -s /usr/bin/i686-apple-darwin12-pkg-config /usr/bin/x86_64-apple-darwin12-pkg-config
 
 # Create stub for dsymutil
 (
@@ -109,9 +94,4 @@ chmod +x /usr/bin/x86_64-apple-darwin12-pkg-config
 ) > /usr/bin/i686-apple-darwin12-dsymutil
 chmod +x /usr/bin/i686-apple-darwin12-dsymutil
 
-# Create stub for dsymutil (64 bit)
-(
-  echo "#!/bin/bash"
-  echo "echo \"dsymutil stub: \$@\" >&2"
-) > /usr/bin/x86_64-apple-darwin12-dsymutil
-chmod +x /usr/bin/x86_64-apple-darwin12-dsymutil
+ln -s /usr/bin/i686-apple-darwin12-dsymutil /usr/bin/x86_64-apple-darwin12-dsymutil
