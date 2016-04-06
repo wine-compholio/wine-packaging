@@ -13,15 +13,15 @@ apt-get install -y git devscripts build-essential python-magic python-lxml
 {{ =include("../macosx-common.sh") }}
 tar --skip-old-files -C /build/macos-rootfs -xf /build/source/deps/xquartz-*.tar.xz
 (
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/liblcms2-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libopenal-soft-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx.tar.gz
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libxslt-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libjpeg-turbo-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/liblcms2-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/liblzma-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libopenal-soft-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libtiff-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx64.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libxslt-*-osx64.tar.gz
 {{ if staging }}
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libtxc-dxtn-s2tc-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libtxc-dxtn-s2tc-*-osx64.tar.gz
 {{ endif }}
 ) > /build/source/deps/filelist.txt
 
@@ -43,8 +43,6 @@ rm wine.tar.bz2
 su builder -c "tar -xf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
 make -C "patches" DESTDIR="$(pwd)" install
-{{ else }}
-su builder -c "cat *.patch | patch -p1"
 {{ endif }}
 
 # FIXME: We don't explicitly install dependencies for the host system yet,
@@ -53,7 +51,7 @@ su builder -c "cat *.patch | patch -p1"
 # Build tools
 su builder -c "mkdir /build/wine-tools"
 cd /build/wine-tools
-su builder -c "../source/configure"
+su builder -c "../source/configure --enable-win64"
 cp /build/wine-tools/config.log /build/config-tools.log
 su builder -c "make __tooldeps__ -j3"
 
@@ -62,7 +60,7 @@ su builder -c "mkdir /build/wine-cross"
 cd /build/wine-cross
 su builder -c "../source/configure --prefix=/usr --host i686-apple-darwin12 --with-wine-tools=../wine-tools \
 				--x-includes=/build/macos-rootfs/opt/X11/include --x-libraries=/build/macos-rootfs/opt/X11/lib \
-				LDFLAGS='-Wl,-rpath,/opt/x11/lib'"
+				LDFLAGS='-Wl,-rpath,/opt/x11/lib' CFLAGS='-msse2'"
 cp /build/wine-cross/config.log /build/config-cross.log
 su builder -c "make -j3"
 su builder -c "mkdir /build/tmp"
