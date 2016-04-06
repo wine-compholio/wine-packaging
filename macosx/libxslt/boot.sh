@@ -12,7 +12,7 @@ apt-get install -y git devscripts build-essential
 
 {{ =include("../macosx-common.sh") }}
 (
-	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx.tar.gz
+	tar -C /build/macos-rootfs -xvf /build/source/deps/libxml2-*-osx64.tar.gz
 ) > /build/source/deps/filelist.txt
 
 {{
@@ -21,14 +21,27 @@ apt-get install -y git devscripts build-essential
 	download("libxslt.tar.gz", "%s/libxslt-%s.tar.gz" % (url, package_version), sha)
 }}
 
-su builder -c "tar -xvf libxslt.tar.gz --strip-components 1"
-rm libxslt.tar.gz
+{{ for (host, arch) in [("i686-apple-darwin12", ""), ("x86_64-apple-darwin12", "64")] }}
 
-su builder -c "./configure --prefix=/usr --host i686-apple-darwin12"
-cp /build/source/config.log /build/
-su builder -c "make"
-su builder -c "mkdir /build/tmp"
-su builder -c "make install DESTDIR=/build/tmp/"
-su builder -c "cp -a Copyright /build/tmp/usr/share/doc/libxslt-{{ =package_version }}"
-su builder -c "./fixup-import.py --destdir /build/tmp --filelist /build/source/deps/filelist.txt --verbose"
+su builder -c "mkdir build{{ =arch }}"
+cd build{{ =arch }}
+su builder -c "tar -xvf ../libxslt.tar.gz --strip-components 1"
+
+su builder -c "cat ../*.patch | patch -p1"
+su builder -c "autoreconf -i"
+
+su builder -c "./configure --prefix=/usr --host {{ =host }} --with-libxml-prefix=/build/macos-rootfs/usr"
+cp config.log /build/config{{ =arch }}.log
+su builder -c "make -j3"
+su builder -c "mkdir /build/tmp{{ =arch }}"
+su builder -c "make install DESTDIR=/build/tmp{{ =arch }}/"
+su builder -c "cp -a Copyright /build/tmp{{ =arch }}/usr/share/doc/libxslt-{{ =package_version }}"
+su builder -c "../fixup-import.py --destdir /build/tmp{{ =arch }} --filelist /build/source/deps/filelist.txt --verbose"
+
+cd ..
+
+{{ endfor }}
+
 su builder -c "(cd /build/tmp; fakeroot tar -cvzf /build/{{ =output }}-osx.tar.gz .)"
+su builder -c "./make-universal.py --dir32 /build/tmp --dir64 /build/tmp64"
+su builder -c "(cd /build/tmp64; fakeroot tar -cvzf /build/{{ =output }}-osx64.tar.gz .)"
