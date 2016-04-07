@@ -9,13 +9,14 @@ apt-get install -y git devscripts build-essential
 {{ =include("../clang-common.sh") }}
 
 {{
-	download("cctools.tar.gz", "https://github.com/tpoechtrager/cctools-port/archive/7d405492b09fa27546caaa989b8493829365deab.tar.gz",
-			 "d443a058de338384391d6594f8c895fc32b18414a4027dca7a45a4d1bdc29478")
+	download("cctools.tar.gz", "https://github.com/tpoechtrager/cctools-port/archive/5467d1afcc18632ad4dc6410ce46dd26f39868f7.tar.gz",
+			 "ceee4980f3e217277fbcf26ac52ccc53069b7f7238f5cede1725ecca201be6ee")
 }}
 
 su builder -c "tar -xvf cctools.tar.gz --strip-components 1"
 rm cctools.tar.gz
 
+su builder -c "cat *.patch | patch -p1"
 cd cctools
 mk-build-deps -i -r -t "apt-get -y" debian/control
 su builder -c "debuild -us -uc -b -j3"
