@@ -350,7 +350,7 @@ if __name__ == '__main__':
     settings_parser.add_argument('--welcome', help="welcome file for installer", required=False)
     settings_parser.add_argument('--conclusion', help="conclusion file for installer", required=False)
     settings_parser.add_argument('--architecture', help="possible architectures (i386 includes x86_64)", nargs='+', required=False, choices=['i386', 'x86_64', 'ppc'])
-    settings_parser.add_argument('--allow-customization', help="allow the user to change options", required=False, choices=['true','false'])
+    settings_parser.add_argument('--allow-customization', help="allow the user to change options", required=False, choices=['allow','always','never'])
     settings_parser.add_argument('--allow-external-scripts', help="enable run / runOnce JS functions", required=False, choices=['true','false'])
     settings_parser.add_argument('--target-any-volume', help="allow to install the package on any volume", required=False, choices=['true','false'])
     settings_parser.add_argument('--target-user-home', help="allow to install the package into home directory", required=False, choices=['true','false'])
