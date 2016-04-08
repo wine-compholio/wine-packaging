@@ -244,7 +244,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--id choice2 \
 				--title '32 bit only files' \
 				--description 'Files that are only required for non WOW 64 support.' \
-				--visible true \
+				--visible false \
 				--enabled false \
 				--start-selected true \
 				--selected \"!choices['choice3'].selected\" \
