@@ -61,6 +61,13 @@ def is_mach_dylib(path):
     if buf[4:8] != "\x07\x00\x00\x00" and buf[4:8] != "\x07\x00\x00\x01": return False
     return (buf[12:16] == "\x06\x00\x00\x00" or buf[12:16] == "\x08\x00\x00\x00")
 
+# Check if a file is a universal library
+def is_universal_dylib(path):
+    with open(path, "rb") as f:
+        buf = f.read(4)
+
+    return (buf == "\xCA\xFE\xBA\xBE")
+
 # Get install name from dylib
 def get_install_name(path):
     lines = subprocess.check_output(["i686-apple-darwin12-otool", "-D", path])
@@ -136,7 +143,7 @@ def fix_install_name(destdir, path, dependency_list, args):
     if not path.endswith(".dylib") and not path.endswith(".so"):
         return
 
-    assert is_mach_dylib(full_path)
+    assert is_mach_dylib(full_path) or is_universal_dylib(full_path)
 
     if args.verbose:
         print "Fixing install_name for %s:" % path
