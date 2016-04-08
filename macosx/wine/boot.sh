@@ -78,27 +78,38 @@ cd ..
 {{ endfor }}
 
 # Unpack dependencies
-{{ for arch in ["", "64"] }}
+{{ for (dir, arch) in [("32", ""), ("", "64")] }}
 
-su builder -c "mkdir /build/tmp-deps{{ =arch }}"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libjpeg-turbo-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/liblcms2-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/liblzma-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libopenal-soft-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libtiff-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libxml2-*-osx{{ =arch }}.tar.gz"
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libxslt-*-osx{{ =arch }}.tar.gz"
+su builder -c "mkdir /build/tmp-deps{{ =dir }}"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libjpeg-turbo-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/liblcms2-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/liblzma-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libopenal-soft-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libtiff-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libxml2-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libxslt-*-osx{{ =arch }}.tar.gz"
 {{ if staging }}
-su builder -c "tar -C /build/tmp-deps{{ =arch }} -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx{{ =arch }}.tar.gz"
+su builder -c "tar -C /build/tmp-deps{{ =dir }} -xf /build/source/deps/libtxc-dxtn-s2tc-*-osx{{ =arch }}.tar.gz"
 {{ endif }}
-su builder -c "/build/source/fixup-import.py --destdir /build/tmp-deps{{ =arch }} --install_name --verbose"
+su builder -c "/build/source/fixup-import.py --destdir /build/tmp-deps{{ =dir }} --install_name --verbose"
 
 {{ endfor }}
+
+# We need to create symlinks from lib64 -> lib
+# Our dependencies are universal binaries but
+# Wine64 only searches in PREFIX/lib64.
+su builder -c "mkdir -p /build/tmp-deps64/usr/lib64"
+su builder -c "(cd /build/tmp-deps/usr/lib; for lib in *.dylib; \
+               do ln -s \"../lib/\$lib\" \"/build/tmp-deps64/usr/lib64/\$lib\"; done)"
+
+# /build/tmp-deps 	- universal libraries
+# /build/tmp-deps32 - 32-bit libraries
+# /build/tmp-deps64 - lib64 symlinks for Wine compatibility
 
 # Create 32 bit portable tar
 su builder -c "mkdir /build/tmp-portable32"
 su builder -c "cp -ar /build/tmp/usr /build/tmp-portable32/"
-su builder -c "cp -ar /build/tmp-deps/usr /build/tmp-portable32/"
+su builder -c "cp -ar /build/tmp-deps32/usr /build/tmp-portable32/"
 su builder -c "(cd /build/tmp-portable32/; fakeroot tar -cvzf /build/portable-{{ =output }}-osx.tar.gz .)"
 rm -rf /build/tmp-portable32
 
@@ -114,6 +125,7 @@ su builder -c "/build/source/move-duplicates.py --dir32 /build/tmp --dir64 /buil
 su builder -c "mkdir /build/tmp-portable64"
 su builder -c "cp -ar /build/tmp/usr /build/tmp-portable64/"
 su builder -c "cp -ar /build/tmp64/usr /build/tmp-portable64/"
+su builder -c "cp -ar /build/tmp-deps/usr /build/tmp-portable64/"
 su builder -c "cp -ar /build/tmp-deps64/usr /build/tmp-portable64/"
 su builder -c "(cd /build/tmp-portable64/; fakeroot tar -cvzf /build/portable-{{ =output }}-osx64.tar.gz .)"
 rm -rf /build/tmp-portable64
@@ -135,13 +147,18 @@ su builder -c "cp -ar /build/tmp64/usr /build/tmp-osx-payload64/Contents/Resourc
 
 # Create payload directory for dep files
 su builder -c "mkdir -p /build/tmp-osx-payload-deps/Contents/Resources"
-su builder -c "cp -ar /build/tmp-deps64/usr /build/tmp-osx-payload-deps/Contents/Resources/wine"
+su builder -c "cp -ar /build/tmp-deps/usr /build/tmp-osx-payload-deps/Contents/Resources/wine"
+
+# Create payload directory for dep 64 symlink files
+su builder -c "mkdir -p /build/tmp-osx-payload-deps64/Contents/Resources"
+su builder -c "cp -ar /build/tmp-deps64/usr /build/tmp-osx-payload-deps64/Contents/Resources/wine"
 
 # Clean up remaining build files
 rm -rf /build/tmp
 rm -rf /build/tmp32
 rm -rf /build/tmp64
 rm -rf /build/tmp-deps
+rm -rf /build/tmp-deps32
 rm -rf /build/tmp-deps64
 
 # Assemble package
@@ -195,6 +212,13 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
 				--install-location '/Applications/{{ =pretty_name }}.app' \
 				--payload /build/tmp-osx-payload-deps"
 
+# pkg - symlinks for 64 bit dependencies
+su builder -c "./osx-package.py -C /build/tmp-osx-pkg pkg-add \
+				--identifier org.winehq.{{ =package }}-deps64 \
+				--version {{ =package_version }} \
+				--install-location '/Applications/{{ =pretty_name }}.app' \
+				--payload /build/tmp-osx-payload-deps64"
+
 # choice - dependencies (required)
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--id choice0 \
@@ -234,7 +258,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg choice-add \
 				--visible true \
 				--enabled true \
 				--start-selected false \
-				--pkgs org.winehq.{{ =package }}64"
+				--pkgs org.winehq.{{ =package }}64 org.winehq.{{ =package }}-deps64"
 
 su builder -c "./osx-package.py -C /build/tmp-osx-pkg generate \
 				--output /build/{{ =output }}.pkg"
