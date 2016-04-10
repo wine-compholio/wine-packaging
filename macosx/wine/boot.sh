@@ -173,6 +173,7 @@ su builder -c "./osx-package.py -C /build/tmp-osx-pkg settings \
 				--title '{{ =pretty_name }}' \
 				--welcome 'welcome.html' \
 				--conclusion 'conclusion.html' \
+				--background 'background.png' \
 				--architecture i386 x86_64 \
 				--allow-customization always \
 				--allow-external-scripts false \
