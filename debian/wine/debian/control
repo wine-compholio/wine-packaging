@@ -48,7 +48,8 @@ Build-Depends: autotools-dev,
                libopenal-dev (>= 1:1.12),
                libosmesa6-dev,
                libpcap-dev,
-               libpng12-dev,
+{{ ="               libpng-dev,\n"                       if debian_version >= 9 else "" }}
+{{ ="               libpng12-dev,\n"                     if debian_version < 9 else "" }}
                libpulse-dev,
                libsane-dev,
                libssl-dev,
@@ -103,7 +104,8 @@ Recommends: libcapi20-3,
 {{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
             libosmesa6,
             libpcap0.8,
-            libpng12-0,
+{{ ="            libpng16-16,\n"                      if debian_version >= 9 else "" }}
+{{ ="            libpng12-0,\n"                       if debian_version < 9 else "" }}
             libpulse0,
 {{ ="            libsane,\n"                          if debian_version < 9 else "" }}
             libssl1.0.0,
@@ -158,7 +160,8 @@ Recommends: libcapi20-3,
 {{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
             libosmesa6,
             libpcap0.8,
-            libpng12-0,
+{{ ="            libpng16-16,\n"                      if debian_version >= 9 else "" }}
+{{ ="            libpng12-0,\n"                       if debian_version < 9 else "" }}
             libpulse0,
 {{ ="            libsane,\n"                          if debian_version < 9 else "" }}
             libssl1.0.0,
@@ -213,7 +216,8 @@ Recommends: libcapi20-3,
 {{ ="            libjpeg8,\n"                         if debian_version < 8 else "" }}
             libosmesa6,
             libpcap0.8,
-            libpng12-0,
+{{ ="            libpng16-16,\n"                      if debian_version >= 9 else "" }}
+{{ ="            libpng12-0,\n"                       if debian_version < 9 else "" }}
             libpulse0,
 {{ ="            libsane,\n"                          if debian_version < 9 else "" }}
             libssl1.0.0,
