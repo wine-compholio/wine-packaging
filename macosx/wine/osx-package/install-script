@@ -1,7 +1,7 @@
 function pm_install_check() {
-    if(!(system.compareVersions(system.version.ProductVersion,'$minver') >= 0)) {
+    if(!(system.compareVersions(system.version.ProductVersion,'10.8') >= 0)) {
         my.result.title = 'Failure';
-        my.result.message = 'You need at least Mac OS X $minver to install $title.';
+        my.result.message = 'You need at least Mac OS X 10.8 to install this program.';
         my.result.type = 'Fatal';
         return false;
     }
