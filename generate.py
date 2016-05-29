@@ -54,8 +54,8 @@ WINE_STABLE_CONFIG = {
 WINE_DEVEL_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-devel",
-    "package_version"   : "1.9.10",
-    "wine_sha"          : "8d4900dff6542c973c3e6112fe23da6d85c28be9a4f842a9d0041e8530861bbf",
+    "package_version"   : "1.9.11",
+    "wine_sha"          : "728f794280fcb5b5d8814e38542d769e2d54ee0d6bf27c7ed74de34fbacdab96",
     "compat_package"    : "winehq-devel",
     "prefix"            : "/opt/wine-devel",
     "stable"            : False,
