@@ -232,6 +232,8 @@ tar -xvf "%{SOURCE0}" --strip-components 1
 {{ if staging }}
 tar -xvf "%{SOURCE1}" --strip-components 1
 make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
+{{ else }}
+sed -i 's/typedef struct _WS_XML_NODE_POSITION WS_XML_NODE_POSITION;//' include/webservices.h
 {{ endif }}
 
 %build

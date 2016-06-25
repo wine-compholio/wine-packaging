@@ -43,6 +43,8 @@ rm wine.tar.bz2
 su builder -c "tar -xf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
 make -C "patches" DESTDIR="$(pwd)" install
+{{ else }}
+sed -i 's/typedef struct _WS_XML_NODE_POSITION WS_XML_NODE_POSITION;//' include/webservices.h
 {{ endif }}
 
 # FIXME: We don't explicitly install dependencies for the host system yet,

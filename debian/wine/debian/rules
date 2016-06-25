@@ -13,6 +13,8 @@ override_dh_auto_configure:
 {{ if staging }}
 	# Apply our patches, reconfigure, and update the wineserver protocol request data
 	"$(CURDIR)/patches/patchinstall.sh" DESTDIR="$(CURDIR)" --all
+{{ else }}
+	sed -i 's/typedef struct _WS_XML_NODE_POSITION WS_XML_NODE_POSITION;//' "$(CURDIR)/include/webservices.h"
 {{ endif }}
 
 	# Run configure
