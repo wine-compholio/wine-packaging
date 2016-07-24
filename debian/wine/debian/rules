@@ -13,9 +13,6 @@ override_dh_auto_configure:
 {{ if staging }}
 	# Apply our patches, reconfigure, and update the wineserver protocol request data
 	"$(CURDIR)/patches/patchinstall.sh" DESTDIR="$(CURDIR)" --all
-{{ else }}
-	awk '/#define GNUTLS_CIPHER_AES_256_GCM 94/ {print; print ""; print "#define GNUTLS_KX_ANON_ECDH     11"; print "#define GNUTLS_KX_ECDHE_RSA     12"; print "#define GNUTLS_KX_ECDHE_ECDSA   13"; print "#define GNUTLS_KX_ECDHE_PSK     14"; next}1' "$(CURDIR)/dlls/secur32/schannel_gnutls.c" > "$(CURDIR)/dlls/secur32/schannel_gnutls.c.new"
-	mv "$(CURDIR)/dlls/secur32/schannel_gnutls.c.new" "$(CURDIR)/dlls/secur32/schannel_gnutls.c"
 {{ endif }}
 
 	# Run configure
