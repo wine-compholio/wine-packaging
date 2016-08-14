@@ -239,6 +239,8 @@ PACKAGE_CONFIGS = {
     "macosx-wine-stable"         : _m( WINE_STABLE_CONFIG,  MACOSX_BASE ),
     "macosx-wine-development"    : _m( WINE_DEVEL_CONFIG,   MACOSX_BASE ),
     "macosx-wine-staging"        : _m( WINE_STAGING_CONFIG, MACOSX_BASE ),
+
+    "debian-jessie-xar"          : _m( XAR_CONFIG,          MACOSX_BASE, dict(debian_version=8,   debian_codename="jessie") ),
 }
 
 
