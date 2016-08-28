@@ -94,6 +94,16 @@ endif
 		ln -s "{{ =prefix }}/share/man/$$_dir/wine.1" "debian/{{ =compat_package }}/usr/share/man/$$_dir/wine.1"; \
 	done
 
+	# Generate list of recommendations
+ifeq ($(DEB_HOST_ARCH),amd64)
+	./debian/recommendations.sh "-m64" "include/config.h" "debian/{{ =package }}-amd64.substvars"
+else ifeq ($(DEB_HOST_ARCH),armhf)
+	./debian/recommendations.sh "-m32" "include/config.h" "debian/{{ =package }}-arm.substvars"
+else
+	./debian/recommendations.sh "-m32" "include/config.h" "debian/{{ =package }}-i386.substvars"
+endif
+
+
 override_dh_strip:
 	dh_strip -Xwine-pthread -Xwine-kthread --dbg-package={{ =package }}-dbg
 
