@@ -80,6 +80,7 @@ BuildRequires:  librsvg2
 BuildRequires:  librsvg2-devel
 BuildRequires:  libstdc++-devel
 BuildRequires:  libtiff-devel
+BuildRequires:  libudev-devel
 BuildRequires:  libusb-devel
 BuildRequires:  libv4l-devel
 {{ ="BuildRequires:  libva-devel\n"     if staging else "" }}

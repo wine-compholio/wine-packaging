@@ -54,6 +54,7 @@ Build-Depends: autotools-dev,
                libstdc++6-4.5-dev | libstdc++-dev,
                libtiff5-dev | libtiff4-dev | libtiff-dev,
 {{ ="               libtxc-dxtn-s2tc-dev,\n"             if staging else "" }}
+               libudev-dev,
                libv4l-dev,
 {{ ="               libva-dev,\n"                        if staging else "" }}
                libx11-dev,

@@ -82,6 +82,7 @@ BuildRequires:  libmpg123-devel
 BuildRequires:  libpcap-devel
 BuildRequires:  librsvg
 BuildRequires:  libsm-devel
+BuildRequires:  libudev-devel
 BuildRequires:  libv4l-devel
 BuildRequires:  libx11-devel
 BuildRequires:  libxcomposite-devel
