@@ -67,9 +67,9 @@ WINE_DEVEL_CONFIG = {
 WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
-    "package_version"   : "1.9.19",
-    "wine_sha"          : "b5fe29a84e712f94f4d33b5f2952b45233c13b49ba3459dcee8a50b06147a888",
-    "staging_sha"       : "2060ba8f26512fc2104d1d15b7d36136d55e600c9576bc6d747e610e1f3d28d9",
+    "package_version"   : "1.9.20",
+    "wine_sha"          : "2769f30642329916f12696f7be225644d28fc54d1b9181c979381d70b9a279df",
+    "staging_sha"       : "201506a3e58fd46b590cfc2f9f70d2e3ba6d3bcff5640da135cee9118e71babc",
     "compat_package"    : "winehq-staging",
     "prefix"            : "/opt/wine-staging",
     "stable"            : False,
