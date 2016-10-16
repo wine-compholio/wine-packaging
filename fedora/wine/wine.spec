@@ -222,6 +222,9 @@ tar -xvf "%{SOURCE0}" --strip-components 1
 {{ if staging }}
 tar -xvf "%{SOURCE1}" --strip-components 1
 %make -C "patches" DESTDIR="%{_builddir}/wine-%{version}" install
+{{ else }}
+sed -i 's/typedef struct _EVENT_FILTER_DESCRIPTOR .*;//'                include/evntrace.h
+sed -i 's/PEVENT_FILTER_DESCRIPTOR /struct _EVENT_FILTER_DESCRIPTOR */' include/evntrace.h
 {{ endif }}
 
 %build

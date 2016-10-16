@@ -13,6 +13,9 @@ override_dh_auto_configure:
 {{ if staging }}
 	# Apply our patches, reconfigure, and update the wineserver protocol request data
 	"$(CURDIR)/patches/patchinstall.sh" DESTDIR="$(CURDIR)" --all
+{{ else }}
+	sed -i 's/typedef struct _EVENT_FILTER_DESCRIPTOR .*;//'                "$(CURDIR)/include/evntrace.h"
+	sed -i 's/PEVENT_FILTER_DESCRIPTOR /struct _EVENT_FILTER_DESCRIPTOR */' "$(CURDIR)/include/evntrace.h"
 {{ endif }}
 
 	# Run configure

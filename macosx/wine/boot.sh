@@ -43,6 +43,9 @@ rm wine.tar.bz2
 su builder -c "tar -xf wine-staging.tar.gz --strip-components 1"
 rm wine-staging.tar.gz
 make -C "patches" DESTDIR="$(pwd)" install
+{{ else }}
+sed -i 's/typedef struct _EVENT_FILTER_DESCRIPTOR .*;//'                include/evntrace.h
+sed -i 's/PEVENT_FILTER_DESCRIPTOR /struct _EVENT_FILTER_DESCRIPTOR */' include/evntrace.h
 {{ endif }}
 
 # FIXME: We don't explicitly install dependencies for the host system yet,
