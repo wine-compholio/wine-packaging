@@ -26,4 +26,4 @@ rm wine-staging.tar.gz
 {{ endif }}
 
 mk-build-deps -i -r -t "apt-get -y" debian/control
-su builder -c "debuild -us -uc -b -j3"
+su builder -c "debuild --no-lintian -us -uc -b -j3"
