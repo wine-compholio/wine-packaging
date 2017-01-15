@@ -27,7 +27,11 @@ Build-Depends: autotools-dev,
                libfreetype6-dev,
                libgl1-mesa-dev,
                libglu1-mesa-dev,
+{{ if ubuntu_version }}
                libgnutls-dev | libgnutls28-dev,
+{{ else }}
+               libgnutls28-dev | libgnutls-dev,
+{{ endif }}
                libgphoto2-dev | libgphoto2-6-dev | libgphoto2-2-dev (>= 2.4.6),
                libgsm1-dev,
 {{ if ubuntu_version }}

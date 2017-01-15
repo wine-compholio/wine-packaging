@@ -54,8 +54,8 @@ WINE_STABLE_CONFIG = {
 WINE_DEVEL_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-devel",
-    "package_version"   : "2.0-rc3",
-    "wine_sha"          : "1e75f4a8fb005a1704b6e8540c128228c3f86fdf47ecbb56510282714fa4086b",
+    "package_version"   : "2.0-rc4",
+    "wine_sha"          : "e067b870a8c55fdf0574ec3a19f385ef06ed69cc382aad5a17690ab5ad90dab2",
     "compat_package"    : "winehq-devel",
     "prefix"            : "/opt/wine-devel",
     "stable"            : False,
@@ -67,9 +67,9 @@ WINE_DEVEL_CONFIG = {
 WINE_STAGING_CONFIG = {
     "__src"             : "wine",
     "package"           : "wine-staging",
-    "package_version"   : "2.0-rc3",
-    "wine_sha"          : "1e75f4a8fb005a1704b6e8540c128228c3f86fdf47ecbb56510282714fa4086b",
-    "staging_sha"       : "6b5c2449ca762fb94e623b03915364ae5cc8a239b2b5dbb0ff60b2ff52a834e3",
+    "package_version"   : "2.0-rc4",
+    "wine_sha"          : "e067b870a8c55fdf0574ec3a19f385ef06ed69cc382aad5a17690ab5ad90dab2",
+    "staging_sha"       : "36730fcff6d5b3d295cba0a4db772c21d26ded3ac471c4de8461c260a88230fb",
     "compat_package"    : "winehq-staging",
     "prefix"            : "/opt/wine-staging",
     "stable"            : False,
