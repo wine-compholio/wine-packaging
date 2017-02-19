@@ -8,12 +8,11 @@ apt-get install -y git devscripts build-essential
 
 {{
 	# FIXME: Fix support for daily builds - snapshot urls are no longer available
-	url = "https://dl.winehq.org/wine/source"
-	version = "%s/wine-%s" % (".".join(package_version.split("-")[0].split(".")[:2]), package_version)
-	download("wine.tar.bz2", "%s/%s.tar.bz2" % (url, version), wine_sha)
+	url = "https://dl.winehq.org/wine/source/2.x"
+	download("wine.tar.xz", "%s/wine-%s.tar.xz" % (url, package_version), wine_sha)
 }}
-su builder -c "tar -xvf wine.tar.bz2 --strip-components 1"
-rm wine.tar.bz2
+su builder -c "tar -xvf wine.tar.xz --strip-components 1"
+rm wine.tar.xz
 
 {{ if staging }}
 {{

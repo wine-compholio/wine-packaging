@@ -27,11 +27,11 @@ License:    LGPLv2+
 Group:      Emulators
 {{ if staging }}
 URL:        http://www.wine-staging.com/
-Source0:    wine.tar.bz2
+Source0:    wine.tar.xz
 Source1:    wine-staging.tar.gz
 {{ else }}
 URL:        https://www.winehq.org/
-Source0:    wine.tar.bz2
+Source0:    wine.tar.xz
 {{ endif }}
 
 %ifarch x86_64
