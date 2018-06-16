@@ -1,3 +1,0 @@
-xar (1.6.1-1~{{ =debian_codename }}) unstable; urgency=low
-  * Auto build.
- -- Michael Müller <michael@fds-team.de>  {{ =debian_time }}

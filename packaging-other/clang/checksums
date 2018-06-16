@@ -1,0 +1,8 @@
+2a124fa7ab4d6ee2829e5471aa57271dbf6191f6cf81608e094fb378d5011d45  llvm-toolchain-3.8_3.8.1-17.debian.tar.xz
+3edb39a9df41cc696c7376d006f4b691f1f91a5e828de842aa5a35375cbe0737  llvm-toolchain-3.8_3.8.1.orig-clang.tar.bz2
+788500834305622c7189b1ca9e328f1871b92b234c9397ac7fdde9ca2361dbfc  llvm-toolchain-3.8_3.8.1.orig-clang-tools-extra.tar.bz2
+3e69e63516b51a0158ad1845b4a98a78bb9f93df5642b7cdf04b3e6e328abe31  llvm-toolchain-3.8_3.8.1.orig-compiler-rt.tar.bz2
+ff85776e2157f45aa04b03fe34cdd880f8567ae41cb05964dc26a3cb9a252e19  llvm-toolchain-3.8_3.8.1.orig-lldb.tar.bz2
+317e850d90cc9b63e732cc9e95c071fef5bf5e364dcc568aaf56cd1a0e76be09  llvm-toolchain-3.8_3.8.1.orig-polly.tar.bz2
+49bb76301db200454025966887960741a2756a7d0bdb2c44a69436859357c73c  llvm-toolchain-3.8_3.8.1.orig.tar.bz2
+da97064e2ad80a09141a5948dd1f9bbd16dfc95c6c7a516b031f7307e6407097  llvm-toolchain-3.8_3.8.1-17.dsc

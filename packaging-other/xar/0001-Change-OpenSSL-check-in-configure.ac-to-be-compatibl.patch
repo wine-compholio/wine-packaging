@@ -1,0 +1,26 @@
+From 9cfded2fdd7a520a52b31d5227ad62c3c189ab68 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Fri, 17 Mar 2017 01:04:14 +0100
+Subject: Change OpenSSL check in configure.ac to be compatible with OpenSSL
+ 1.1.
+
+---
+ xar/configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index 812b5ff..090d9c8 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -329,7 +329,7 @@ dnl Configure libcrypto (part of OpenSSL).
+ dnl 
+ have_libcrypto="1"
+ AC_CHECK_HEADERS([openssl/evp.h], , [have_libcrypto="0"])
+-AC_CHECK_LIB([crypto], [OpenSSL_add_all_ciphers], , [have_libcrypto="0"])
++AC_CHECK_LIB([crypto], [OpenSSL_version], , [have_libcrypto="0"])
+ if test "x${have_libcrypto}" = "x0" ; then
+   AC_MSG_ERROR([Cannot build without libcrypto (OpenSSL)])
+ fi
+-- 
+2.11.0
+

@@ -1,0 +1,11 @@
+Source: cctools
+Maintainer: Michael Mueller <michael@fds-team.de>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 8), automake, autogen, libtool, clang, uuid-dev, libssl-dev, llvm-dev
+
+Package: cctools-x86-64-darwin12
+Architecture: amd64 i386
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: port of 32 bit Mac OS X 10.8 cctools

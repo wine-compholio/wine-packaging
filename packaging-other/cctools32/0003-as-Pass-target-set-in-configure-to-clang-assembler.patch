@@ -1,0 +1,38 @@
+From d2deae081f9ab9b9be374b3543176eb68346b8bf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michael=20M=C3=BCller?= <michael@fds-team.de>
+Date: Thu, 7 Apr 2016 22:22:59 +0200
+Subject: as: Pass target set in configure to clang assembler.
+
+---
+ cctools/as/Makefile.am | 2 +-
+ cctools/as/driver.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cctools/as/Makefile.am b/cctools/as/Makefile.am
+index f5e9ff4..3089467 100644
+--- a/cctools/as/Makefile.am
++++ b/cctools/as/Makefile.am
+@@ -4,6 +4,6 @@ bin_PROGRAMS = as
+ as_LDADD =  \
+         $(top_builddir)/libstuff/libstuff.la
+ 
+-as_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/include/foreign -I$(top_srcdir)/libstuff $(WARNINGS) $(LTO_DEF) -DNeXT_MOD -DASLIBEXECDIR="\"$(ASLIBEXECDIR)/\"" -D__DARWIN_UNIX03 $(ENDIAN_FLAG) -DTARGET_$(target_cpu)
++as_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/include/foreign -I$(top_srcdir)/libstuff $(WARNINGS) $(LTO_DEF) -DNeXT_MOD -DASLIBEXECDIR="\"$(ASLIBEXECDIR)/\"" -D__DARWIN_UNIX03 $(ENDIAN_FLAG) -DTARGET_$(target_cpu) -DTARGET_ALIAS="\"$(target_alias)/\""
+ 
+ as_SOURCES = driver.c 
+diff --git a/cctools/as/driver.c b/cctools/as/driver.c
+index 8a5c2b8..57cc0dd 100644
+--- a/cctools/as/driver.c
++++ b/cctools/as/driver.c
+@@ -369,7 +369,7 @@ char **envp)
+ #ifndef __APPLE__
+ 	    new_argv[j] = "-target";
+ 	    j++;
+-	    new_argv[j] = target_triple ? target_triple : "unknown-apple-darwin";
++	    new_argv[j] = target_triple ? target_triple : TARGET_ALIAS;
+ 	    j++;
+ #endif /* ! __APPLE__ */
+ 	    /* cctools-port end */
+-- 
+2.11.0
+
