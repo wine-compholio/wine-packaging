@@ -21,8 +21,10 @@ Build-Depends: autotools-dev,
                libcapi20-dev,
                libcups2-dev,
                libdbus-1-dev,
+{{ if ubuntu_version < 1804 }}
                libesd0 | libesd-alsa0,
                libesd0-dev,
+{{ endif }}
                libfontconfig1-dev | libfontconfig-dev,
                libfreetype6-dev,
                libgl1-mesa-dev,
@@ -61,7 +63,9 @@ Build-Depends: autotools-dev,
                libssl-dev,
                libstdc++6-4.5-dev | libstdc++-dev,
                libtiff5-dev | libtiff4-dev | libtiff-dev,
+{{ if ubuntu_version < 1804 }}
 {{ ="               libtxc-dxtn-s2tc-dev,\n"             if staging else "" }}
+{{ endif }}
                libudev-dev,
                libv4l-dev,
 {{ ="               libva-dev,\n"                        if staging else "" }}
